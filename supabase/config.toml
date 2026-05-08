@@ -1,1 +1,7 @@
 project_id = "uazsekwxdldlkisyvcvh"
+
+[functions.fedapay-create-payment]
+verify_jwt = true
+
+[functions.fedapay-webhook]
+verify_jwt = false
