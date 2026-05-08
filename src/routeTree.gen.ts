@@ -14,14 +14,20 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardParentIndexRouteImport } from './routes/dashboard.parent.index'
 import { Route as DashboardEncadreurIndexRouteImport } from './routes/dashboard.encadreur.index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard.admin.index'
+import { Route as DashboardParentProfilRouteImport } from './routes/dashboard.parent.profil'
+import { Route as DashboardParentParametresRouteImport } from './routes/dashboard.parent.parametres'
 import { Route as DashboardParentPaiementsRouteImport } from './routes/dashboard.parent.paiements'
 import { Route as DashboardParentCorrespondancesRouteImport } from './routes/dashboard.parent.correspondances'
 import { Route as DashboardParentCatalogueRouteImport } from './routes/dashboard.parent.catalogue'
+import { Route as DashboardEncadreurProfilRouteImport } from './routes/dashboard.encadreur.profil'
+import { Route as DashboardEncadreurParametresRouteImport } from './routes/dashboard.encadreur.parametres'
 import { Route as DashboardEncadreurPaiementsRouteImport } from './routes/dashboard.encadreur.paiements'
 import { Route as DashboardEncadreurCorrespondancesRouteImport } from './routes/dashboard.encadreur.correspondances'
 import { Route as DashboardEncadreurCatalogueRouteImport } from './routes/dashboard.encadreur.catalogue'
 import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
+import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.admin.profil'
+import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -49,6 +55,17 @@ const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardParentProfilRoute = DashboardParentProfilRouteImport.update({
+  id: '/parent/profil',
+  path: '/parent/profil',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardParentParametresRoute =
+  DashboardParentParametresRouteImport.update({
+    id: '/parent/parametres',
+    path: '/parent/parametres',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardParentPaiementsRoute =
   DashboardParentPaiementsRouteImport.update({
     id: '/parent/paiements',
@@ -65,6 +82,18 @@ const DashboardParentCatalogueRoute =
   DashboardParentCatalogueRouteImport.update({
     id: '/parent/catalogue',
     path: '/parent/catalogue',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurProfilRoute =
+  DashboardEncadreurProfilRouteImport.update({
+    id: '/encadreur/profil',
+    path: '/encadreur/profil',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurParametresRoute =
+  DashboardEncadreurParametresRouteImport.update({
+    id: '/encadreur/parametres',
+    path: '/encadreur/parametres',
     getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardEncadreurPaiementsRoute =
@@ -96,6 +125,17 @@ const DashboardAdminUsersRoute = DashboardAdminUsersRouteImport.update({
   path: '/admin/users',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAdminProfilRoute = DashboardAdminProfilRouteImport.update({
+  id: '/admin/profil',
+  path: '/admin/profil',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminParametresRoute =
+  DashboardAdminParametresRouteImport.update({
+    id: '/admin/parametres',
+    path: '/admin/parametres',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
   id: '/admin/paiements',
   path: '/admin/paiements',
@@ -106,14 +146,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
+  '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
+  '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
   '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
   '/dashboard/encadreur/correspondances': typeof DashboardEncadreurCorrespondancesRoute
   '/dashboard/encadreur/paiements': typeof DashboardEncadreurPaiementsRoute
+  '/dashboard/encadreur/parametres': typeof DashboardEncadreurParametresRoute
+  '/dashboard/encadreur/profil': typeof DashboardEncadreurProfilRoute
   '/dashboard/parent/catalogue': typeof DashboardParentCatalogueRoute
   '/dashboard/parent/correspondances': typeof DashboardParentCorrespondancesRoute
   '/dashboard/parent/paiements': typeof DashboardParentPaiementsRoute
+  '/dashboard/parent/parametres': typeof DashboardParentParametresRoute
+  '/dashboard/parent/profil': typeof DashboardParentProfilRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/encadreur/': typeof DashboardEncadreurIndexRoute
   '/dashboard/parent/': typeof DashboardParentIndexRoute
@@ -122,14 +168,20 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
+  '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
+  '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
   '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
   '/dashboard/encadreur/correspondances': typeof DashboardEncadreurCorrespondancesRoute
   '/dashboard/encadreur/paiements': typeof DashboardEncadreurPaiementsRoute
+  '/dashboard/encadreur/parametres': typeof DashboardEncadreurParametresRoute
+  '/dashboard/encadreur/profil': typeof DashboardEncadreurProfilRoute
   '/dashboard/parent/catalogue': typeof DashboardParentCatalogueRoute
   '/dashboard/parent/correspondances': typeof DashboardParentCorrespondancesRoute
   '/dashboard/parent/paiements': typeof DashboardParentPaiementsRoute
+  '/dashboard/parent/parametres': typeof DashboardParentParametresRoute
+  '/dashboard/parent/profil': typeof DashboardParentProfilRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
   '/dashboard/encadreur': typeof DashboardEncadreurIndexRoute
   '/dashboard/parent': typeof DashboardParentIndexRoute
@@ -139,14 +191,20 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
+  '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
+  '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
   '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
   '/dashboard/encadreur/correspondances': typeof DashboardEncadreurCorrespondancesRoute
   '/dashboard/encadreur/paiements': typeof DashboardEncadreurPaiementsRoute
+  '/dashboard/encadreur/parametres': typeof DashboardEncadreurParametresRoute
+  '/dashboard/encadreur/profil': typeof DashboardEncadreurProfilRoute
   '/dashboard/parent/catalogue': typeof DashboardParentCatalogueRoute
   '/dashboard/parent/correspondances': typeof DashboardParentCorrespondancesRoute
   '/dashboard/parent/paiements': typeof DashboardParentPaiementsRoute
+  '/dashboard/parent/parametres': typeof DashboardParentParametresRoute
+  '/dashboard/parent/profil': typeof DashboardParentProfilRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/encadreur/': typeof DashboardEncadreurIndexRoute
   '/dashboard/parent/': typeof DashboardParentIndexRoute
@@ -157,14 +215,20 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/admin/paiements'
+    | '/dashboard/admin/parametres'
+    | '/dashboard/admin/profil'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
     | '/dashboard/encadreur/catalogue'
     | '/dashboard/encadreur/correspondances'
     | '/dashboard/encadreur/paiements'
+    | '/dashboard/encadreur/parametres'
+    | '/dashboard/encadreur/profil'
     | '/dashboard/parent/catalogue'
     | '/dashboard/parent/correspondances'
     | '/dashboard/parent/paiements'
+    | '/dashboard/parent/parametres'
+    | '/dashboard/parent/profil'
     | '/dashboard/admin/'
     | '/dashboard/encadreur/'
     | '/dashboard/parent/'
@@ -173,14 +237,20 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/admin/paiements'
+    | '/dashboard/admin/parametres'
+    | '/dashboard/admin/profil'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
     | '/dashboard/encadreur/catalogue'
     | '/dashboard/encadreur/correspondances'
     | '/dashboard/encadreur/paiements'
+    | '/dashboard/encadreur/parametres'
+    | '/dashboard/encadreur/profil'
     | '/dashboard/parent/catalogue'
     | '/dashboard/parent/correspondances'
     | '/dashboard/parent/paiements'
+    | '/dashboard/parent/parametres'
+    | '/dashboard/parent/profil'
     | '/dashboard/admin'
     | '/dashboard/encadreur'
     | '/dashboard/parent'
@@ -189,14 +259,20 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/admin/paiements'
+    | '/dashboard/admin/parametres'
+    | '/dashboard/admin/profil'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
     | '/dashboard/encadreur/catalogue'
     | '/dashboard/encadreur/correspondances'
     | '/dashboard/encadreur/paiements'
+    | '/dashboard/encadreur/parametres'
+    | '/dashboard/encadreur/profil'
     | '/dashboard/parent/catalogue'
     | '/dashboard/parent/correspondances'
     | '/dashboard/parent/paiements'
+    | '/dashboard/parent/parametres'
+    | '/dashboard/parent/profil'
     | '/dashboard/admin/'
     | '/dashboard/encadreur/'
     | '/dashboard/parent/'
@@ -244,6 +320,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/parent/profil': {
+      id: '/dashboard/parent/profil'
+      path: '/parent/profil'
+      fullPath: '/dashboard/parent/profil'
+      preLoaderRoute: typeof DashboardParentProfilRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/parametres': {
+      id: '/dashboard/parent/parametres'
+      path: '/parent/parametres'
+      fullPath: '/dashboard/parent/parametres'
+      preLoaderRoute: typeof DashboardParentParametresRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/parent/paiements': {
       id: '/dashboard/parent/paiements'
       path: '/parent/paiements'
@@ -263,6 +353,20 @@ declare module '@tanstack/react-router' {
       path: '/parent/catalogue'
       fullPath: '/dashboard/parent/catalogue'
       preLoaderRoute: typeof DashboardParentCatalogueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/profil': {
+      id: '/dashboard/encadreur/profil'
+      path: '/encadreur/profil'
+      fullPath: '/dashboard/encadreur/profil'
+      preLoaderRoute: typeof DashboardEncadreurProfilRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/parametres': {
+      id: '/dashboard/encadreur/parametres'
+      path: '/encadreur/parametres'
+      fullPath: '/dashboard/encadreur/parametres'
+      preLoaderRoute: typeof DashboardEncadreurParametresRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/encadreur/paiements': {
@@ -300,6 +404,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminUsersRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/admin/profil': {
+      id: '/dashboard/admin/profil'
+      path: '/admin/profil'
+      fullPath: '/dashboard/admin/profil'
+      preLoaderRoute: typeof DashboardAdminProfilRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/parametres': {
+      id: '/dashboard/admin/parametres'
+      path: '/admin/parametres'
+      fullPath: '/dashboard/admin/parametres'
+      preLoaderRoute: typeof DashboardAdminParametresRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/admin/paiements': {
       id: '/dashboard/admin/paiements'
       path: '/admin/paiements'
@@ -312,14 +430,20 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
+  DashboardAdminParametresRoute: typeof DashboardAdminParametresRoute
+  DashboardAdminProfilRoute: typeof DashboardAdminProfilRoute
   DashboardAdminUsersRoute: typeof DashboardAdminUsersRoute
   DashboardAdminValidationsRoute: typeof DashboardAdminValidationsRoute
   DashboardEncadreurCatalogueRoute: typeof DashboardEncadreurCatalogueRoute
   DashboardEncadreurCorrespondancesRoute: typeof DashboardEncadreurCorrespondancesRoute
   DashboardEncadreurPaiementsRoute: typeof DashboardEncadreurPaiementsRoute
+  DashboardEncadreurParametresRoute: typeof DashboardEncadreurParametresRoute
+  DashboardEncadreurProfilRoute: typeof DashboardEncadreurProfilRoute
   DashboardParentCatalogueRoute: typeof DashboardParentCatalogueRoute
   DashboardParentCorrespondancesRoute: typeof DashboardParentCorrespondancesRoute
   DashboardParentPaiementsRoute: typeof DashboardParentPaiementsRoute
+  DashboardParentParametresRoute: typeof DashboardParentParametresRoute
+  DashboardParentProfilRoute: typeof DashboardParentProfilRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
   DashboardEncadreurIndexRoute: typeof DashboardEncadreurIndexRoute
   DashboardParentIndexRoute: typeof DashboardParentIndexRoute
@@ -327,15 +451,21 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
+  DashboardAdminParametresRoute: DashboardAdminParametresRoute,
+  DashboardAdminProfilRoute: DashboardAdminProfilRoute,
   DashboardAdminUsersRoute: DashboardAdminUsersRoute,
   DashboardAdminValidationsRoute: DashboardAdminValidationsRoute,
   DashboardEncadreurCatalogueRoute: DashboardEncadreurCatalogueRoute,
   DashboardEncadreurCorrespondancesRoute:
     DashboardEncadreurCorrespondancesRoute,
   DashboardEncadreurPaiementsRoute: DashboardEncadreurPaiementsRoute,
+  DashboardEncadreurParametresRoute: DashboardEncadreurParametresRoute,
+  DashboardEncadreurProfilRoute: DashboardEncadreurProfilRoute,
   DashboardParentCatalogueRoute: DashboardParentCatalogueRoute,
   DashboardParentCorrespondancesRoute: DashboardParentCorrespondancesRoute,
   DashboardParentPaiementsRoute: DashboardParentPaiementsRoute,
+  DashboardParentParametresRoute: DashboardParentParametresRoute,
+  DashboardParentProfilRoute: DashboardParentProfilRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
   DashboardEncadreurIndexRoute: DashboardEncadreurIndexRoute,
   DashboardParentIndexRoute: DashboardParentIndexRoute,
@@ -352,3 +482,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
