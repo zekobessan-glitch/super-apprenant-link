@@ -32,12 +32,22 @@ function ParentCatalogue() {
       { data: corr },
     ] = await Promise.all([
       supabase.from("apprenants").select("*").eq("parent_id", user.id).maybeSingle(),
-      supabase.from("encadreurs").select("*, profiles(nom, prenoms, email, telephone, photo_url)"),
+      supabase.from("public_encadreurs" as any).select("*, public_profiles!public_encadreurs_profile_id_fkey(nom, prenoms, photo_url)"),
       supabase.from("contacts_credits").select("credits_restants").eq("parent_id", user.id).maybeSingle(),
       supabase.from("correspondances").select("encadreur_id, contact_debloque").eq("parent_id", user.id),
     ]);
     setApprenant(app);
-    setEncadreurs(encs ?? []);
+    // Fetch unlocked contact details (full profile) for already-debloqued encadreurs
+    const unlockedIds = (corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id);
+    let contactsMap: Record<string, any> = {};
+    if (unlockedIds.length > 0) {
+      const { data: contacts } = await supabase.from("profiles").select("id, email, telephone").in("id", unlockedIds);
+      contactsMap = Object.fromEntries((contacts ?? []).map((p) => [p.id, p]));
+    }
+    setEncadreurs((encs ?? []).map((e: any) => ({
+      ...e,
+      profiles: { ...e.public_profiles, ...(contactsMap[e.profile_id] ?? {}) },
+    })));
     setCredits(cred?.credits_restants ?? 0);
     setDebloques(new Set((corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id)));
     setLoading(false);
