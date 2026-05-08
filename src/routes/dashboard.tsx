@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import logo from "@/assets/logo.jpg";
 import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck } from "lucide-react";
+import { NotificationsBell } from "@/components/NotificationsBell";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
@@ -61,10 +62,11 @@ function DashboardLayout() {
             <div className="bg-white rounded-lg p-1.5">
               <img src={logo} alt="logo" className="h-8 w-auto" />
             </div>
-            <div className="text-sm">
+            <div className="text-sm flex-1">
               <div className="font-bold">SUPER@PPRENANT</div>
               <div className="text-xs opacity-80 capitalize">{role}</div>
             </div>
+            <NotificationsBell />
           </div>
           <nav className="flex-1 p-3 space-y-1">
             {items.map((it) => {
