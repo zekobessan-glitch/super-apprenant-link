@@ -11,7 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardParentIndexRouteImport } from './routes/dashboard.parent.index'
+import { Route as DashboardEncadreurIndexRouteImport } from './routes/dashboard.encadreur.index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard.admin.index'
+import { Route as DashboardParentPaiementsRouteImport } from './routes/dashboard.parent.paiements'
+import { Route as DashboardParentCorrespondancesRouteImport } from './routes/dashboard.parent.correspondances'
+import { Route as DashboardParentCatalogueRouteImport } from './routes/dashboard.parent.catalogue'
+import { Route as DashboardEncadreurPaiementsRouteImport } from './routes/dashboard.encadreur.paiements'
+import { Route as DashboardEncadreurCorrespondancesRouteImport } from './routes/dashboard.encadreur.correspondances'
+import { Route as DashboardEncadreurCatalogueRouteImport } from './routes/dashboard.encadreur.catalogue'
 import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
@@ -26,11 +34,57 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardParentIndexRoute = DashboardParentIndexRouteImport.update({
+  id: '/parent/',
+  path: '/parent/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEncadreurIndexRoute = DashboardEncadreurIndexRouteImport.update({
+  id: '/encadreur/',
+  path: '/encadreur/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardParentPaiementsRoute =
+  DashboardParentPaiementsRouteImport.update({
+    id: '/parent/paiements',
+    path: '/parent/paiements',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentCorrespondancesRoute =
+  DashboardParentCorrespondancesRouteImport.update({
+    id: '/parent/correspondances',
+    path: '/parent/correspondances',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentCatalogueRoute =
+  DashboardParentCatalogueRouteImport.update({
+    id: '/parent/catalogue',
+    path: '/parent/catalogue',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurPaiementsRoute =
+  DashboardEncadreurPaiementsRouteImport.update({
+    id: '/encadreur/paiements',
+    path: '/encadreur/paiements',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurCorrespondancesRoute =
+  DashboardEncadreurCorrespondancesRouteImport.update({
+    id: '/encadreur/correspondances',
+    path: '/encadreur/correspondances',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurCatalogueRoute =
+  DashboardEncadreurCatalogueRouteImport.update({
+    id: '/encadreur/catalogue',
+    path: '/encadreur/catalogue',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardAdminValidationsRoute =
   DashboardAdminValidationsRouteImport.update({
     id: '/admin/validations',
@@ -54,7 +108,15 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
+  '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
+  '/dashboard/encadreur/correspondances': typeof DashboardEncadreurCorrespondancesRoute
+  '/dashboard/encadreur/paiements': typeof DashboardEncadreurPaiementsRoute
+  '/dashboard/parent/catalogue': typeof DashboardParentCatalogueRoute
+  '/dashboard/parent/correspondances': typeof DashboardParentCorrespondancesRoute
+  '/dashboard/parent/paiements': typeof DashboardParentPaiementsRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
+  '/dashboard/encadreur/': typeof DashboardEncadreurIndexRoute
+  '/dashboard/parent/': typeof DashboardParentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,7 +124,15 @@ export interface FileRoutesByTo {
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
+  '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
+  '/dashboard/encadreur/correspondances': typeof DashboardEncadreurCorrespondancesRoute
+  '/dashboard/encadreur/paiements': typeof DashboardEncadreurPaiementsRoute
+  '/dashboard/parent/catalogue': typeof DashboardParentCatalogueRoute
+  '/dashboard/parent/correspondances': typeof DashboardParentCorrespondancesRoute
+  '/dashboard/parent/paiements': typeof DashboardParentPaiementsRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
+  '/dashboard/encadreur': typeof DashboardEncadreurIndexRoute
+  '/dashboard/parent': typeof DashboardParentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,7 +141,15 @@ export interface FileRoutesById {
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
+  '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
+  '/dashboard/encadreur/correspondances': typeof DashboardEncadreurCorrespondancesRoute
+  '/dashboard/encadreur/paiements': typeof DashboardEncadreurPaiementsRoute
+  '/dashboard/parent/catalogue': typeof DashboardParentCatalogueRoute
+  '/dashboard/parent/correspondances': typeof DashboardParentCorrespondancesRoute
+  '/dashboard/parent/paiements': typeof DashboardParentPaiementsRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
+  '/dashboard/encadreur/': typeof DashboardEncadreurIndexRoute
+  '/dashboard/parent/': typeof DashboardParentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,7 +159,15 @@ export interface FileRouteTypes {
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
+    | '/dashboard/encadreur/catalogue'
+    | '/dashboard/encadreur/correspondances'
+    | '/dashboard/encadreur/paiements'
+    | '/dashboard/parent/catalogue'
+    | '/dashboard/parent/correspondances'
+    | '/dashboard/parent/paiements'
     | '/dashboard/admin/'
+    | '/dashboard/encadreur/'
+    | '/dashboard/parent/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,7 +175,15 @@ export interface FileRouteTypes {
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
+    | '/dashboard/encadreur/catalogue'
+    | '/dashboard/encadreur/correspondances'
+    | '/dashboard/encadreur/paiements'
+    | '/dashboard/parent/catalogue'
+    | '/dashboard/parent/correspondances'
+    | '/dashboard/parent/paiements'
     | '/dashboard/admin'
+    | '/dashboard/encadreur'
+    | '/dashboard/parent'
   id:
     | '__root__'
     | '/'
@@ -97,7 +191,15 @@ export interface FileRouteTypes {
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
+    | '/dashboard/encadreur/catalogue'
+    | '/dashboard/encadreur/correspondances'
+    | '/dashboard/encadreur/paiements'
+    | '/dashboard/parent/catalogue'
+    | '/dashboard/parent/correspondances'
+    | '/dashboard/parent/paiements'
     | '/dashboard/admin/'
+    | '/dashboard/encadreur/'
+    | '/dashboard/parent/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -121,11 +223,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/parent/': {
+      id: '/dashboard/parent/'
+      path: '/parent'
+      fullPath: '/dashboard/parent/'
+      preLoaderRoute: typeof DashboardParentIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/': {
+      id: '/dashboard/encadreur/'
+      path: '/encadreur'
+      fullPath: '/dashboard/encadreur/'
+      preLoaderRoute: typeof DashboardEncadreurIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/admin/': {
       id: '/dashboard/admin/'
       path: '/admin'
       fullPath: '/dashboard/admin/'
       preLoaderRoute: typeof DashboardAdminIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/paiements': {
+      id: '/dashboard/parent/paiements'
+      path: '/parent/paiements'
+      fullPath: '/dashboard/parent/paiements'
+      preLoaderRoute: typeof DashboardParentPaiementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/correspondances': {
+      id: '/dashboard/parent/correspondances'
+      path: '/parent/correspondances'
+      fullPath: '/dashboard/parent/correspondances'
+      preLoaderRoute: typeof DashboardParentCorrespondancesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/catalogue': {
+      id: '/dashboard/parent/catalogue'
+      path: '/parent/catalogue'
+      fullPath: '/dashboard/parent/catalogue'
+      preLoaderRoute: typeof DashboardParentCatalogueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/paiements': {
+      id: '/dashboard/encadreur/paiements'
+      path: '/encadreur/paiements'
+      fullPath: '/dashboard/encadreur/paiements'
+      preLoaderRoute: typeof DashboardEncadreurPaiementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/correspondances': {
+      id: '/dashboard/encadreur/correspondances'
+      path: '/encadreur/correspondances'
+      fullPath: '/dashboard/encadreur/correspondances'
+      preLoaderRoute: typeof DashboardEncadreurCorrespondancesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/catalogue': {
+      id: '/dashboard/encadreur/catalogue'
+      path: '/encadreur/catalogue'
+      fullPath: '/dashboard/encadreur/catalogue'
+      preLoaderRoute: typeof DashboardEncadreurCatalogueRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/admin/validations': {
@@ -156,14 +314,31 @@ interface DashboardRouteChildren {
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
   DashboardAdminUsersRoute: typeof DashboardAdminUsersRoute
   DashboardAdminValidationsRoute: typeof DashboardAdminValidationsRoute
+  DashboardEncadreurCatalogueRoute: typeof DashboardEncadreurCatalogueRoute
+  DashboardEncadreurCorrespondancesRoute: typeof DashboardEncadreurCorrespondancesRoute
+  DashboardEncadreurPaiementsRoute: typeof DashboardEncadreurPaiementsRoute
+  DashboardParentCatalogueRoute: typeof DashboardParentCatalogueRoute
+  DashboardParentCorrespondancesRoute: typeof DashboardParentCorrespondancesRoute
+  DashboardParentPaiementsRoute: typeof DashboardParentPaiementsRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
+  DashboardEncadreurIndexRoute: typeof DashboardEncadreurIndexRoute
+  DashboardParentIndexRoute: typeof DashboardParentIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
   DashboardAdminUsersRoute: DashboardAdminUsersRoute,
   DashboardAdminValidationsRoute: DashboardAdminValidationsRoute,
+  DashboardEncadreurCatalogueRoute: DashboardEncadreurCatalogueRoute,
+  DashboardEncadreurCorrespondancesRoute:
+    DashboardEncadreurCorrespondancesRoute,
+  DashboardEncadreurPaiementsRoute: DashboardEncadreurPaiementsRoute,
+  DashboardParentCatalogueRoute: DashboardParentCatalogueRoute,
+  DashboardParentCorrespondancesRoute: DashboardParentCorrespondancesRoute,
+  DashboardParentPaiementsRoute: DashboardParentPaiementsRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
+  DashboardEncadreurIndexRoute: DashboardEncadreurIndexRoute,
+  DashboardParentIndexRoute: DashboardParentIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
