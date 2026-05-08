@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard.admin.index'
+import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
+import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
+import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -22,31 +26,83 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminValidationsRoute =
+  DashboardAdminValidationsRouteImport.update({
+    id: '/admin/validations',
+    path: '/admin/validations',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAdminUsersRoute = DashboardAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
+  id: '/admin/paiements',
+  path: '/admin/paiements',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
+  '/dashboard/admin/users': typeof DashboardAdminUsersRoute
+  '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
+  '/dashboard/admin/': typeof DashboardAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
+  '/dashboard/admin/users': typeof DashboardAdminUsersRoute
+  '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
+  '/dashboard/admin': typeof DashboardAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
+  '/dashboard/admin/users': typeof DashboardAdminUsersRoute
+  '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
+  '/dashboard/admin/': typeof DashboardAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/admin/paiements'
+    | '/dashboard/admin/users'
+    | '/dashboard/admin/validations'
+    | '/dashboard/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard'
-  id: '__root__' | '/' | '/dashboard'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/admin/paiements'
+    | '/dashboard/admin/users'
+    | '/dashboard/admin/validations'
+    | '/dashboard/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dashboard/admin/paiements'
+    | '/dashboard/admin/users'
+    | '/dashboard/admin/validations'
+    | '/dashboard/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +121,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/admin/': {
+      id: '/dashboard/admin/'
+      path: '/admin'
+      fullPath: '/dashboard/admin/'
+      preLoaderRoute: typeof DashboardAdminIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/validations': {
+      id: '/dashboard/admin/validations'
+      path: '/admin/validations'
+      fullPath: '/dashboard/admin/validations'
+      preLoaderRoute: typeof DashboardAdminValidationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/users': {
+      id: '/dashboard/admin/users'
+      path: '/admin/users'
+      fullPath: '/dashboard/admin/users'
+      preLoaderRoute: typeof DashboardAdminUsersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/paiements': {
+      id: '/dashboard/admin/paiements'
+      path: '/admin/paiements'
+      fullPath: '/dashboard/admin/paiements'
+      preLoaderRoute: typeof DashboardAdminPaiementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
+  DashboardAdminUsersRoute: typeof DashboardAdminUsersRoute
+  DashboardAdminValidationsRoute: typeof DashboardAdminValidationsRoute
+  DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
+  DashboardAdminUsersRoute: DashboardAdminUsersRoute,
+  DashboardAdminValidationsRoute: DashboardAdminValidationsRoute,
+  DashboardAdminIndexRoute: DashboardAdminIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
