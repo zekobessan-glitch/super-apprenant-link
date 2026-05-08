@@ -68,6 +68,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "apprenants_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       contacts_credits: {
@@ -95,6 +102,13 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_credits_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: true
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -142,8 +156,29 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "correspondances_apprenant_id_fkey"
+            columns: ["apprenant_id"]
+            isOneToOne: false
+            referencedRelation: "public_apprenants"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "correspondances_encadreur_id_fkey"
             columns: ["encadreur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "correspondances_encadreur_id_fkey"
+            columns: ["encadreur_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "correspondances_parent_id_fkey"
+            columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -152,7 +187,7 @@ export type Database = {
             foreignKeyName: "correspondances_parent_id_fkey"
             columns: ["parent_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -233,6 +268,13 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "encadreurs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -375,6 +417,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "quiz_responses_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_roles: {
@@ -400,7 +449,150 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_apprenants: {
+        Row: {
+          age: number | null
+          classe: string | null
+          id: string | null
+          matieres: string[] | null
+          niveau: Database["public"]["Enums"]["niveau_type"] | null
+          parent_id: string | null
+          profil_apprentissage: string | null
+          serie: Database["public"]["Enums"]["serie_type"] | null
+          zone_residence: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Insert: {
+          age?: number | null
+          classe?: string | null
+          id?: string | null
+          matieres?: string[] | null
+          niveau?: Database["public"]["Enums"]["niveau_type"] | null
+          parent_id?: string | null
+          profil_apprentissage?: string | null
+          serie?: Database["public"]["Enums"]["serie_type"] | null
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Update: {
+          age?: number | null
+          classe?: string | null
+          id?: string | null
+          matieres?: string[] | null
+          niveau?: Database["public"]["Enums"]["niveau_type"] | null
+          parent_id?: string | null
+          profil_apprentissage?: string | null
+          serie?: Database["public"]["Enums"]["serie_type"] | null
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "apprenants_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "apprenants_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      public_encadreurs: {
+        Row: {
+          classes_college: string[] | null
+          classes_lycee: string[] | null
+          classes_primaire: string[] | null
+          dernier_diplome: string | null
+          experience_pro: boolean | null
+          genre: Database["public"]["Enums"]["genre_type"] | null
+          id: string | null
+          matieres_college: string[] | null
+          matieres_lycee: string[] | null
+          niveaux: Database["public"]["Enums"]["niveau_type"][] | null
+          premium: boolean | null
+          profil_pedagogique: string | null
+          profile_id: string | null
+          series_lycee: Database["public"]["Enums"]["serie_type"][] | null
+          zone_residence: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Insert: {
+          classes_college?: string[] | null
+          classes_lycee?: string[] | null
+          classes_primaire?: string[] | null
+          dernier_diplome?: string | null
+          experience_pro?: boolean | null
+          genre?: Database["public"]["Enums"]["genre_type"] | null
+          id?: string | null
+          matieres_college?: string[] | null
+          matieres_lycee?: string[] | null
+          niveaux?: Database["public"]["Enums"]["niveau_type"][] | null
+          premium?: boolean | null
+          profil_pedagogique?: string | null
+          profile_id?: string | null
+          series_lycee?: Database["public"]["Enums"]["serie_type"][] | null
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Update: {
+          classes_college?: string[] | null
+          classes_lycee?: string[] | null
+          classes_primaire?: string[] | null
+          dernier_diplome?: string | null
+          experience_pro?: boolean | null
+          genre?: Database["public"]["Enums"]["genre_type"] | null
+          id?: string | null
+          matieres_college?: string[] | null
+          matieres_lycee?: string[] | null
+          niveaux?: Database["public"]["Enums"]["niveau_type"][] | null
+          premium?: boolean | null
+          profil_pedagogique?: string | null
+          profile_id?: string | null
+          series_lycee?: Database["public"]["Enums"]["serie_type"][] | null
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "encadreurs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "encadreurs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      public_profiles: {
+        Row: {
+          id: string | null
+          nom: string | null
+          photo_url: string | null
+          prenoms: string | null
+          zone_residence: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Insert: {
+          id?: string | null
+          nom?: string | null
+          photo_url?: string | null
+          prenoms?: string | null
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Update: {
+          id?: string | null
+          nom?: string | null
+          photo_url?: string | null
+          prenoms?: string | null
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_user_role: {
