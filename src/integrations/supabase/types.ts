@@ -14,16 +14,419 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      apprenants: {
+        Row: {
+          age: number
+          classe: string
+          created_at: string
+          id: string
+          matieres: string[] | null
+          niveau: Database["public"]["Enums"]["niveau_type"]
+          nom: string
+          parent_id: string
+          prenoms: string
+          profil_apprentissage: string | null
+          serie: Database["public"]["Enums"]["serie_type"] | null
+          updated_at: string
+          zone_residence: Database["public"]["Enums"]["zone_residence"]
+        }
+        Insert: {
+          age: number
+          classe: string
+          created_at?: string
+          id?: string
+          matieres?: string[] | null
+          niveau: Database["public"]["Enums"]["niveau_type"]
+          nom: string
+          parent_id: string
+          prenoms: string
+          profil_apprentissage?: string | null
+          serie?: Database["public"]["Enums"]["serie_type"] | null
+          updated_at?: string
+          zone_residence: Database["public"]["Enums"]["zone_residence"]
+        }
+        Update: {
+          age?: number
+          classe?: string
+          created_at?: string
+          id?: string
+          matieres?: string[] | null
+          niveau?: Database["public"]["Enums"]["niveau_type"]
+          nom?: string
+          parent_id?: string
+          prenoms?: string
+          profil_apprentissage?: string | null
+          serie?: Database["public"]["Enums"]["serie_type"] | null
+          updated_at?: string
+          zone_residence?: Database["public"]["Enums"]["zone_residence"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "apprenants_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts_credits: {
+        Row: {
+          credits_restants: number
+          id: string
+          parent_id: string
+          updated_at: string
+        }
+        Insert: {
+          credits_restants?: number
+          id?: string
+          parent_id: string
+          updated_at?: string
+        }
+        Update: {
+          credits_restants?: number
+          id?: string
+          parent_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_credits_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      correspondances: {
+        Row: {
+          apprenant_id: string | null
+          contact_debloque: boolean
+          created_at: string
+          encadreur_id: string
+          id: string
+          initiateur: Database["public"]["Enums"]["app_role"]
+          parent_id: string
+          statut: Database["public"]["Enums"]["correspondance_statut"]
+          updated_at: string
+        }
+        Insert: {
+          apprenant_id?: string | null
+          contact_debloque?: boolean
+          created_at?: string
+          encadreur_id: string
+          id?: string
+          initiateur: Database["public"]["Enums"]["app_role"]
+          parent_id: string
+          statut?: Database["public"]["Enums"]["correspondance_statut"]
+          updated_at?: string
+        }
+        Update: {
+          apprenant_id?: string | null
+          contact_debloque?: boolean
+          created_at?: string
+          encadreur_id?: string
+          id?: string
+          initiateur?: Database["public"]["Enums"]["app_role"]
+          parent_id?: string
+          statut?: Database["public"]["Enums"]["correspondance_statut"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "correspondances_apprenant_id_fkey"
+            columns: ["apprenant_id"]
+            isOneToOne: false
+            referencedRelation: "apprenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "correspondances_encadreur_id_fkey"
+            columns: ["encadreur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "correspondances_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      encadreurs: {
+        Row: {
+          classes_college: string[] | null
+          classes_lycee: string[] | null
+          classes_primaire: string[] | null
+          created_at: string
+          dernier_diplome: string
+          experience_detail: string | null
+          experience_pro: boolean
+          formation_super_apprenant: boolean
+          formation_validee: boolean
+          genre: Database["public"]["Enums"]["genre_type"]
+          id: string
+          matieres_college: string[] | null
+          matieres_lycee: string[] | null
+          motivation: string
+          niveaux: Database["public"]["Enums"]["niveau_type"][]
+          premium: boolean
+          profil_pedagogique: string | null
+          profile_id: string
+          series_lycee: Database["public"]["Enums"]["serie_type"][] | null
+          updated_at: string
+          zone_residence: Database["public"]["Enums"]["zone_residence"]
+        }
+        Insert: {
+          classes_college?: string[] | null
+          classes_lycee?: string[] | null
+          classes_primaire?: string[] | null
+          created_at?: string
+          dernier_diplome: string
+          experience_detail?: string | null
+          experience_pro?: boolean
+          formation_super_apprenant?: boolean
+          formation_validee?: boolean
+          genre: Database["public"]["Enums"]["genre_type"]
+          id?: string
+          matieres_college?: string[] | null
+          matieres_lycee?: string[] | null
+          motivation: string
+          niveaux?: Database["public"]["Enums"]["niveau_type"][]
+          premium?: boolean
+          profil_pedagogique?: string | null
+          profile_id: string
+          series_lycee?: Database["public"]["Enums"]["serie_type"][] | null
+          updated_at?: string
+          zone_residence: Database["public"]["Enums"]["zone_residence"]
+        }
+        Update: {
+          classes_college?: string[] | null
+          classes_lycee?: string[] | null
+          classes_primaire?: string[] | null
+          created_at?: string
+          dernier_diplome?: string
+          experience_detail?: string | null
+          experience_pro?: boolean
+          formation_super_apprenant?: boolean
+          formation_validee?: boolean
+          genre?: Database["public"]["Enums"]["genre_type"]
+          id?: string
+          matieres_college?: string[] | null
+          matieres_lycee?: string[] | null
+          motivation?: string
+          niveaux?: Database["public"]["Enums"]["niveau_type"][]
+          premium?: boolean
+          profil_pedagogique?: string | null
+          profile_id?: string
+          series_lycee?: Database["public"]["Enums"]["serie_type"][] | null
+          updated_at?: string
+          zone_residence?: Database["public"]["Enums"]["zone_residence"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "encadreurs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          lien: string | null
+          lu: boolean
+          message: string
+          titre: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lien?: string | null
+          lu?: boolean
+          message: string
+          titre: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lien?: string | null
+          lu?: boolean
+          message?: string
+          titre?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      paiements: {
+        Row: {
+          created_at: string
+          fedapay_ref: string | null
+          id: string
+          metadata: Json | null
+          montant: number
+          statut: Database["public"]["Enums"]["paiement_statut"]
+          type: Database["public"]["Enums"]["paiement_type"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          fedapay_ref?: string | null
+          id?: string
+          metadata?: Json | null
+          montant: number
+          statut?: Database["public"]["Enums"]["paiement_statut"]
+          type: Database["public"]["Enums"]["paiement_type"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          fedapay_ref?: string | null
+          id?: string
+          metadata?: Json | null
+          montant?: number
+          statut?: Database["public"]["Enums"]["paiement_statut"]
+          type?: Database["public"]["Enums"]["paiement_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nom: string
+          photo_url: string | null
+          prenoms: string
+          profession: string | null
+          telephone: string
+          updated_at: string
+          username: string
+          zone_residence: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          nom: string
+          photo_url?: string | null
+          prenoms: string
+          profession?: string | null
+          telephone: string
+          updated_at?: string
+          username: string
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nom?: string
+          photo_url?: string | null
+          prenoms?: string
+          profession?: string | null
+          telephone?: string
+          updated_at?: string
+          username?: string
+          zone_residence?: Database["public"]["Enums"]["zone_residence"] | null
+        }
+        Relationships: []
+      }
+      quiz_responses: {
+        Row: {
+          created_at: string
+          id: string
+          profil_calcule: string | null
+          profile_id: string
+          reponses: Json
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profil_calcule?: string | null
+          profile_id: string
+          reponses: Json
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profil_calcule?: string | null
+          profile_id?: string
+          reponses?: Json
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_responses_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "encadreur" | "parent"
+      correspondance_statut: "en_attente" | "acceptee" | "refusee" | "debloquee"
+      genre_type: "homme" | "femme"
+      niveau_type: "primaire" | "college" | "lycee"
+      paiement_statut: "en_attente" | "reussi" | "echoue"
+      paiement_type:
+        | "premium_encadreur"
+        | "contact_unique_encadreur"
+        | "pack_contacts_parent"
+      serie_type: "A" | "C" | "D"
+      zone_residence: "zone1" | "zone2" | "zone3"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +553,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "encadreur", "parent"],
+      correspondance_statut: ["en_attente", "acceptee", "refusee", "debloquee"],
+      genre_type: ["homme", "femme"],
+      niveau_type: ["primaire", "college", "lycee"],
+      paiement_statut: ["en_attente", "reussi", "echoue"],
+      paiement_type: [
+        "premium_encadreur",
+        "contact_unique_encadreur",
+        "pack_contacts_parent",
+      ],
+      serie_type: ["A", "C", "D"],
+      zone_residence: ["zone1", "zone2", "zone3"],
+    },
   },
 } as const
