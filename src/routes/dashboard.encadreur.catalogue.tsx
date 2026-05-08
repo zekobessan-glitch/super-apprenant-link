@@ -29,12 +29,27 @@ function EncadreurCatalogue() {
     if (!user) return;
     const [{ data: enc }, { data: apps }, { data: corr }] = await Promise.all([
       supabase.from("encadreurs").select("*").eq("profile_id", user.id).maybeSingle(),
-      supabase.from("apprenants").select("*, profiles!apprenants_parent_id_fkey(nom, prenoms, email, telephone)"),
-      supabase.from("correspondances").select("apprenant_id, contact_debloque").eq("encadreur_id", user.id),
+      supabase.from("public_apprenants" as any).select("*"),
+      supabase.from("correspondances").select("apprenant_id, parent_id, contact_debloque").eq("encadreur_id", user.id),
     ]);
     setEncadreur(enc);
-    setApprenants(apps ?? []);
-    setDebloques(new Set((corr ?? []).filter((c) => c.contact_debloque && c.apprenant_id).map((c) => c.apprenant_id!)));
+    const unlockedAppIds = (corr ?? []).filter((c) => c.contact_debloque && c.apprenant_id).map((c) => c.apprenant_id!);
+    let nameMap: Record<string, any> = {};
+    let parentMap: Record<string, any> = {};
+    if (unlockedAppIds.length > 0) {
+      const { data: fullApps } = await supabase.from("apprenants").select("id, nom, prenoms, parent_id").in("id", unlockedAppIds);
+      nameMap = Object.fromEntries((fullApps ?? []).map((a) => [a.id, a]));
+      const parentIds = (fullApps ?? []).map((a) => a.parent_id);
+      if (parentIds.length) {
+        const { data: parents } = await supabase.from("profiles").select("id, nom, prenoms, email, telephone").in("id", parentIds);
+        parentMap = Object.fromEntries((parents ?? []).map((p) => [p.id, p]));
+      }
+    }
+    setApprenants((apps ?? []).map((a: any) => {
+      const full = nameMap[a.id];
+      return { ...a, nom: full?.nom ?? "—", prenoms: full?.prenoms ?? "", profiles: full ? parentMap[full.parent_id] : undefined };
+    }));
+    setDebloques(new Set(unlockedAppIds));
     setLoading(false);
   };
 
