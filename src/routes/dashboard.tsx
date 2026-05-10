@@ -38,6 +38,7 @@ function DashboardLayout() {
           { to: `${base}/users`, icon: Users, label: "Utilisateurs" },
           { to: `${base}/validations`, icon: ShieldCheck, label: "Validations" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
+          { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
         ]
       : role === "encadreur"
       ? [
@@ -45,12 +46,14 @@ function DashboardLayout() {
           { to: `${base}/catalogue`, icon: Users, label: "Catalogue parents" },
           { to: `${base}/correspondances`, icon: Bell, label: "Correspondances" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
+          { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
         ]
       : [
           { to: base, icon: LayoutDashboard, label: "Vue d'ensemble" },
           { to: `${base}/catalogue`, icon: Users, label: "Catalogue encadreurs" },
           { to: `${base}/correspondances`, icon: Bell, label: "Mes contacts" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
+          { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
         ];
 
   return (
