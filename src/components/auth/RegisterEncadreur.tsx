@@ -221,15 +221,15 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
         <div className="space-y-3">
           <h3 className="font-semibold text-primary">Niveaux et matières</h3>
           <div>
-            <Label>Niveaux à enseigner *</Label>
-            <div className="space-y-1 mt-1">
+            <Label>Niveau à enseigner *</Label>
+            <RadioGroup value={niveau} onValueChange={(v) => setNiveau(v as Niveau)} className="space-y-1 mt-1">
               {(["primaire", "college", "lycee"] as Niveau[]).map((n) => (
                 <div key={n} className="flex items-center gap-2">
-                  <Checkbox id={`n-${n}`} checked={niveaux.includes(n)} onCheckedChange={() => toggleArr(niveaux, n, setNiveaux)} />
+                  <RadioGroupItem id={`n-${n}`} value={n} />
                   <Label htmlFor={`n-${n}`} className="capitalize">{n}</Label>
                 </div>
               ))}
-            </div>
+            </RadioGroup>
           </div>
 
           {niveaux.includes("primaire") && (
