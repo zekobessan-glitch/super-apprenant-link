@@ -72,8 +72,9 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
   const [experience, setExperience] = useState(false);
   const [experienceDetail, setExperienceDetail] = useState("");
 
-  // Step 3 — pédagogie
-  const [niveaux, setNiveaux] = useState<Niveau[]>([]);
+  // Step 3 — pédagogie (un seul niveau)
+  const [niveau, setNiveau] = useState<Niveau | "">("");
+  const niveaux: Niveau[] = niveau ? [niveau] : [];
   const [classesPrim, setClassesPrim] = useState<string[]>([]);
   const [classesColl, setClassesColl] = useState<string[]>([]);
   const [classesLyc, setClassesLyc] = useState<string[]>([]);
@@ -220,20 +221,20 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
         <div className="space-y-3">
           <h3 className="font-semibold text-primary">Niveaux et matières</h3>
           <div>
-            <Label>Niveaux à enseigner *</Label>
-            <div className="space-y-1 mt-1">
+            <Label>Niveau à enseigner *</Label>
+            <RadioGroup value={niveau} onValueChange={(v) => setNiveau(v as Niveau)} className="space-y-1 mt-1">
               {(["primaire", "college", "lycee"] as Niveau[]).map((n) => (
                 <div key={n} className="flex items-center gap-2">
-                  <Checkbox id={`n-${n}`} checked={niveaux.includes(n)} onCheckedChange={() => toggleArr(niveaux, n, setNiveaux)} />
+                  <RadioGroupItem id={`n-${n}`} value={n} />
                   <Label htmlFor={`n-${n}`} className="capitalize">{n}</Label>
                 </div>
               ))}
-            </div>
+            </RadioGroup>
           </div>
 
           {niveaux.includes("primaire") && (
             <div>
-              <Label>Classes primaire</Label>
+              <Label>Classes primaire *</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {CLASSES_PRIMAIRE.map((c) => (
                   <div key={c} className="flex items-center gap-1">
@@ -248,7 +249,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           {niveaux.includes("college") && (
             <>
               <div>
-                <Label>Classes collège</Label>
+                <Label>Classes collège *</Label>
                 <div className="grid grid-cols-4 gap-2 mt-1">
                   {CLASSES_COLLEGE.map((c) => (
                     <div key={c} className="flex items-center gap-1">
@@ -259,7 +260,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div>
-                <Label>Disciplines collège (max 2)</Label>
+                <Label>Disciplines collège (max 2) *</Label>
                 <div className="grid grid-cols-2 gap-1 mt-1">
                   {MATIERES.map((m) => (
                     <div key={m} className="flex items-center gap-1">
@@ -275,7 +276,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           {niveaux.includes("lycee") && (
             <>
               <div>
-                <Label>Classes lycée</Label>
+                <Label>Classes lycée *</Label>
                 <div className="grid grid-cols-3 gap-2 mt-1">
                   {CLASSES_LYCEE.map((c) => (
                     <div key={c} className="flex items-center gap-1">
@@ -286,7 +287,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div>
-                <Label>Séries</Label>
+                <Label>Séries *</Label>
                 <div className="flex gap-3 mt-1">
                   {SERIES.map((s) => (
                     <div key={s} className="flex items-center gap-1">
@@ -297,7 +298,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div>
-                <Label>Disciplines lycée (max 2)</Label>
+                <Label>Disciplines lycée (max 2) *</Label>
                 <div className="grid grid-cols-2 gap-1 mt-1">
                   {MATIERES.map((m) => (
                     <div key={m} className="flex items-center gap-1">
@@ -316,7 +317,19 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => setStep(2)} className="flex-1">Précédent</Button>
-            <Button className="flex-1 bg-brand text-white" onClick={() => setStep(4)} disabled={niveaux.length === 0 || !motivation}>Suivant</Button>
+            <Button
+              className="flex-1 bg-brand text-white"
+              onClick={() => setStep(4)}
+              disabled={
+                !niveau ||
+                !motivation ||
+                (niveau === "primaire" && classesPrim.length === 0) ||
+                (niveau === "college" && (classesColl.length === 0 || matieresColl.length === 0)) ||
+                (niveau === "lycee" && (classesLyc.length === 0 || seriesLyc.length === 0 || matieresLyc.length === 0))
+              }
+            >
+              Suivant
+            </Button>
           </div>
         </div>
       )}
