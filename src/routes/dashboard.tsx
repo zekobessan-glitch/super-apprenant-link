@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import logo from "@/assets/logo.jpg";
-import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck, MessageSquare } from "lucide-react";
 import { NotificationsBell } from "@/components/NotificationsBell";
 
 export const Route = createFileRoute("/dashboard")({
