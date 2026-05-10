@@ -155,13 +155,23 @@ function ParentCatalogue() {
                 {enc.niveaux?.map((n: string) => <Badge key={n} variant="outline" className="text-xs capitalize">{n}</Badge>)}
               </div>
               {isDebloque ? (
-                <div className="bg-muted/50 rounded-lg p-3 text-sm space-y-1">
-                  <div className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-primary" /> {enc.profiles?.telephone}</div>
-                  <div className="flex items-center gap-2"><Mail className="h-3.5 w-3.5 text-primary" /> {enc.profiles?.email}</div>
+                <div className="bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>Demande envoyée. L'encadreur vous contactera prochainement.</span>
                 </div>
               ) : (
-                <Button onClick={() => unlock(enc)} disabled={unlocking === enc.profile_id} className="w-full bg-brand text-white">
-                  {unlocking === enc.profile_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Lock className="h-4 w-4 mr-2" /> Débloquer le contact</>}
+                <Button
+                  onClick={() => unlock(enc)}
+                  disabled={unlocking === enc.profile_id || credits < 1}
+                  className="w-full bg-brand text-white"
+                >
+                  {unlocking === enc.profile_id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : credits < 1 ? (
+                    <><Lock className="h-4 w-4 mr-2" /> Achetez un pack pour contacter</>
+                  ) : (
+                    <><MessageCircle className="h-4 w-4 mr-2" /> Contacter</>
+                  )}
                 </Button>
               )}
             </Card>
