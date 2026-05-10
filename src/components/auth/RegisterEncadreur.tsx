@@ -72,8 +72,9 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
   const [experience, setExperience] = useState(false);
   const [experienceDetail, setExperienceDetail] = useState("");
 
-  // Step 3 — pédagogie
-  const [niveaux, setNiveaux] = useState<Niveau[]>([]);
+  // Step 3 — pédagogie (un seul niveau)
+  const [niveau, setNiveau] = useState<Niveau | "">("");
+  const niveaux: Niveau[] = niveau ? [niveau] : [];
   const [classesPrim, setClassesPrim] = useState<string[]>([]);
   const [classesColl, setClassesColl] = useState<string[]>([]);
   const [classesLyc, setClassesLyc] = useState<string[]>([]);
