@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Mail } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard/parent/correspondances")({
   component: ParentCorrespondances,
@@ -16,7 +16,7 @@ function ParentCorrespondances() {
   useEffect(() => {
     if (!user) return;
     supabase.from("correspondances")
-      .select("*, encadreur:profiles!correspondances_encadreur_id_fkey(nom, prenoms, email, telephone)")
+      .select("*, encadreur:profiles!correspondances_encadreur_id_fkey(nom, prenoms)")
       .eq("parent_id", user.id)
       .order("created_at", { ascending: false })
       .then(({ data }) => setRows(data ?? []));
@@ -33,9 +33,9 @@ function ParentCorrespondances() {
               <Badge variant={r.contact_debloque ? "default" : "outline"}>{r.statut}</Badge>
             </div>
             {r.contact_debloque && (
-              <div className="text-sm space-y-1 pt-2 border-t">
-                <div className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-primary" /> {r.encadreur?.telephone}</div>
-                <div className="flex items-center gap-2"><Mail className="h-3.5 w-3.5 text-primary" /> {r.encadreur?.email}</div>
+              <div className="text-sm flex items-start gap-2 pt-2 border-t text-muted-foreground">
+                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <span>Demande envoyée. L'encadreur vous contactera prochainement.</span>
               </div>
             )}
           </Card>
