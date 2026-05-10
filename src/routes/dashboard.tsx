@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import logo from "@/assets/logo.jpg";
-import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck, MessageSquare } from "lucide-react";
 import { NotificationsBell } from "@/components/NotificationsBell";
 
 export const Route = createFileRoute("/dashboard")({
@@ -38,6 +38,7 @@ function DashboardLayout() {
           { to: `${base}/users`, icon: Users, label: "Utilisateurs" },
           { to: `${base}/validations`, icon: ShieldCheck, label: "Validations" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
+          { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
         ]
       : role === "encadreur"
       ? [
@@ -45,12 +46,14 @@ function DashboardLayout() {
           { to: `${base}/catalogue`, icon: Users, label: "Catalogue parents" },
           { to: `${base}/correspondances`, icon: Bell, label: "Correspondances" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
+          { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
         ]
       : [
           { to: base, icon: LayoutDashboard, label: "Vue d'ensemble" },
           { to: `${base}/catalogue`, icon: Users, label: "Catalogue encadreurs" },
           { to: `${base}/correspondances`, icon: Bell, label: "Mes contacts" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
+          { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
         ];
 
   return (

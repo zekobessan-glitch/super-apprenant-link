@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
 import { Route as DashboardParentIndexRouteImport } from './routes/dashboard.parent.index'
 import { Route as DashboardEncadreurIndexRouteImport } from './routes/dashboard.encadreur.index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard.admin.index'
@@ -39,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardParentIndexRoute = DashboardParentIndexRouteImport.update({
   id: '/parent/',
@@ -145,6 +151,7 @@ const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
@@ -167,6 +174,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/dashboard/messages'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/dashboard/messages'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
@@ -258,6 +269,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dashboard/messages'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
@@ -298,6 +310,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/messages': {
+      id: '/dashboard/messages'
+      path: '/messages'
+      fullPath: '/dashboard/messages'
+      preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/parent/': {
       id: '/dashboard/parent/'
@@ -429,6 +448,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteChildren {
+  DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
   DashboardAdminParametresRoute: typeof DashboardAdminParametresRoute
   DashboardAdminProfilRoute: typeof DashboardAdminProfilRoute
@@ -450,6 +470,7 @@ interface DashboardRouteChildren {
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
   DashboardAdminParametresRoute: DashboardAdminParametresRoute,
   DashboardAdminProfilRoute: DashboardAdminProfilRoute,
