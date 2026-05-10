@@ -317,7 +317,19 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => setStep(2)} className="flex-1">Précédent</Button>
-            <Button className="flex-1 bg-brand text-white" onClick={() => setStep(4)} disabled={niveaux.length === 0 || !motivation}>Suivant</Button>
+            <Button
+              className="flex-1 bg-brand text-white"
+              onClick={() => setStep(4)}
+              disabled={
+                !niveau ||
+                !motivation ||
+                (niveau === "primaire" && classesPrim.length === 0) ||
+                (niveau === "college" && (classesColl.length === 0 || matieresColl.length === 0)) ||
+                (niveau === "lycee" && (classesLyc.length === 0 || seriesLyc.length === 0 || matieresLyc.length === 0))
+              }
+            >
+              Suivant
+            </Button>
           </div>
         </div>
       )}
