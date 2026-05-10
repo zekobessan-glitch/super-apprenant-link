@@ -35,6 +35,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Plateforme de mise en relation entre parents/élèves et encadreurs en Côte d'Ivoire.",
       },
+      { property: "og:title", content: "SUPER@PPRENANT-I — Chaque jour plus fort à l'école" },
+      { name: "twitter:title", content: "SUPER@PPRENANT-I — Chaque jour plus fort à l'école" },
+      { name: "description", content: "Super Learner Connect is a responsive website connecting parents with tutors and tutors with students." },
+      { property: "og:description", content: "Super Learner Connect is a responsive website connecting parents with tutors and tutors with students." },
+      { name: "twitter:description", content: "Super Learner Connect is a responsive website connecting parents with tutors and tutors with students." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a6ab33b3-8e3e-4cf4-a022-0f9268298621/id-preview-36f5468e--6f0382c0-26c2-4075-8b42-8d62f8bf8762.lovable.app-1778455480230.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a6ab33b3-8e3e-4cf4-a022-0f9268298621/id-preview-36f5468e--6f0382c0-26c2-4075-8b42-8d62f8bf8762.lovable.app-1778455480230.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
