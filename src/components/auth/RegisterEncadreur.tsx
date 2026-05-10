@@ -234,7 +234,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
 
           {niveaux.includes("primaire") && (
             <div>
-              <Label>Classes primaire</Label>
+              <Label>Classes primaire *</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {CLASSES_PRIMAIRE.map((c) => (
                   <div key={c} className="flex items-center gap-1">
@@ -249,7 +249,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           {niveaux.includes("college") && (
             <>
               <div>
-                <Label>Classes collège</Label>
+                <Label>Classes collège *</Label>
                 <div className="grid grid-cols-4 gap-2 mt-1">
                   {CLASSES_COLLEGE.map((c) => (
                     <div key={c} className="flex items-center gap-1">
@@ -260,7 +260,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div>
-                <Label>Disciplines collège (max 2)</Label>
+                <Label>Disciplines collège (max 2) *</Label>
                 <div className="grid grid-cols-2 gap-1 mt-1">
                   {MATIERES.map((m) => (
                     <div key={m} className="flex items-center gap-1">
@@ -276,7 +276,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           {niveaux.includes("lycee") && (
             <>
               <div>
-                <Label>Classes lycée</Label>
+                <Label>Classes lycée *</Label>
                 <div className="grid grid-cols-3 gap-2 mt-1">
                   {CLASSES_LYCEE.map((c) => (
                     <div key={c} className="flex items-center gap-1">
@@ -287,7 +287,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div>
-                <Label>Séries</Label>
+                <Label>Séries *</Label>
                 <div className="flex gap-3 mt-1">
                   {SERIES.map((s) => (
                     <div key={s} className="flex items-center gap-1">
@@ -298,7 +298,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div>
-                <Label>Disciplines lycée (max 2)</Label>
+                <Label>Disciplines lycée (max 2) *</Label>
                 <div className="grid grid-cols-2 gap-1 mt-1">
                   {MATIERES.map((m) => (
                     <div key={m} className="flex items-center gap-1">
