@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Crown, Lock, Phone, Mail, MapPin, GraduationCap, Loader2 } from "lucide-react";
+import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2 } from "lucide-react";
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
@@ -43,17 +43,12 @@ function ParentCatalogue() {
       : { data: [] as any[] };
     const profMap: Record<string, any> = Object.fromEntries((pubProfiles ?? []).map((p: any) => [p.id, p]));
     const unlockedIds = (corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id);
-    let contactsMap: Record<string, any> = {};
-    if (unlockedIds.length > 0) {
-      const { data: contacts } = await supabase.from("profiles").select("id, email, telephone").in("id", unlockedIds);
-      contactsMap = Object.fromEntries((contacts ?? []).map((p) => [p.id, p]));
-    }
     setEncadreurs((encs ?? []).map((e: any) => ({
       ...e,
-      profiles: { ...(profMap[e.profile_id] ?? {}), ...(contactsMap[e.profile_id] ?? {}) },
+      profiles: profMap[e.profile_id] ?? {},
     })));
     setCredits(cred?.credits_restants ?? 0);
-    setDebloques(new Set((corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id)));
+    setDebloques(new Set(unlockedIds));
     setLoading(false);
   };
 
@@ -160,13 +155,23 @@ function ParentCatalogue() {
                 {enc.niveaux?.map((n: string) => <Badge key={n} variant="outline" className="text-xs capitalize">{n}</Badge>)}
               </div>
               {isDebloque ? (
-                <div className="bg-muted/50 rounded-lg p-3 text-sm space-y-1">
-                  <div className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-primary" /> {enc.profiles?.telephone}</div>
-                  <div className="flex items-center gap-2"><Mail className="h-3.5 w-3.5 text-primary" /> {enc.profiles?.email}</div>
+                <div className="bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>Demande envoyée. L'encadreur vous contactera prochainement.</span>
                 </div>
               ) : (
-                <Button onClick={() => unlock(enc)} disabled={unlocking === enc.profile_id} className="w-full bg-brand text-white">
-                  {unlocking === enc.profile_id ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Lock className="h-4 w-4 mr-2" /> Débloquer le contact</>}
+                <Button
+                  onClick={() => unlock(enc)}
+                  disabled={unlocking === enc.profile_id || credits < 1}
+                  className="w-full bg-brand text-white"
+                >
+                  {unlocking === enc.profile_id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : credits < 1 ? (
+                    <><Lock className="h-4 w-4 mr-2" /> Achetez un pack pour contacter</>
+                  ) : (
+                    <><MessageCircle className="h-4 w-4 mr-2" /> Contacter</>
+                  )}
                 </Button>
               )}
             </Card>
