@@ -43,17 +43,12 @@ function ParentCatalogue() {
       : { data: [] as any[] };
     const profMap: Record<string, any> = Object.fromEntries((pubProfiles ?? []).map((p: any) => [p.id, p]));
     const unlockedIds = (corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id);
-    let contactsMap: Record<string, any> = {};
-    if (unlockedIds.length > 0) {
-      const { data: contacts } = await supabase.from("profiles").select("id, email, telephone").in("id", unlockedIds);
-      contactsMap = Object.fromEntries((contacts ?? []).map((p) => [p.id, p]));
-    }
     setEncadreurs((encs ?? []).map((e: any) => ({
       ...e,
-      profiles: { ...(profMap[e.profile_id] ?? {}), ...(contactsMap[e.profile_id] ?? {}) },
+      profiles: profMap[e.profile_id] ?? {},
     })));
     setCredits(cred?.credits_restants ?? 0);
-    setDebloques(new Set((corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id)));
+    setDebloques(new Set(unlockedIds));
     setLoading(false);
   };
 
