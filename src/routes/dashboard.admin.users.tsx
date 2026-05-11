@@ -5,8 +5,11 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Trash2, Eye } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Trash2, Eye, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard/admin/users")({
@@ -42,6 +45,9 @@ function AdminUsers() {
   const [selected, setSelected] = useState<Row | null>(null);
   const [details, setDetails] = useState<any>(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({ nom: "", prenoms: "", email: "", telephone: "", password: "", role: "admin" as "admin" | "encadreur" | "parent" });
 
   const load = async () => {
     const { data: profiles } = await supabase.from("profiles").select("id, nom, prenoms, email, telephone");
@@ -76,9 +82,30 @@ function AdminUsers() {
     else { toast.success("Supprimé"); load(); }
   };
 
+  const handleCreate = async () => {
+    if (!form.email || !form.password || !form.nom || !form.prenoms) {
+      toast.error("Renseignez tous les champs obligatoires");
+      return;
+    }
+    setCreating(true);
+    const { data, error } = await supabase.functions.invoke("admin-create-user", { body: form });
+    setCreating(false);
+    if (error || (data as any)?.error) {
+      toast.error((data as any)?.error ?? error?.message ?? "Erreur");
+      return;
+    }
+    toast.success("Utilisateur créé");
+    setCreateOpen(false);
+    setForm({ nom: "", prenoms: "", email: "", telephone: "", password: "", role: "admin" });
+    load();
+  };
+
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-3xl font-bold text-primary">Utilisateurs</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-primary">Utilisateurs</h1>
+        <Button onClick={() => setCreateOpen(true)}><UserPlus className="h-4 w-4" /> Ajouter</Button>
+      </div>
       <Card className="overflow-hidden">
         <Table>
           <TableHeader>
@@ -186,6 +213,36 @@ function AdminUsers() {
               )}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Ajouter un utilisateur</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div><Label>Nom *</Label><Input value={form.nom} onChange={(e) => setForm({ ...form, nom: e.target.value })} /></div>
+              <div><Label>Prénoms *</Label><Input value={form.prenoms} onChange={(e) => setForm({ ...form, prenoms: e.target.value })} /></div>
+            </div>
+            <div><Label>Email *</Label><Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
+            <div><Label>Téléphone</Label><Input value={form.telephone} onChange={(e) => setForm({ ...form, telephone: e.target.value })} /></div>
+            <div><Label>Mot de passe *</Label><Input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
+            <div>
+              <Label>Rôle *</Label>
+              <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v as any })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Administrateur</SelectItem>
+                  <SelectItem value="encadreur">Encadreur</SelectItem>
+                  <SelectItem value="parent">Parent / Élève</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateOpen(false)}>Annuler</Button>
+            <Button onClick={handleCreate} disabled={creating}>{creating ? "Création…" : "Créer"}</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
