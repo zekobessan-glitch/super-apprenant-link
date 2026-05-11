@@ -154,7 +154,7 @@ function Validations() {
           <DialogFooter>
             {selected && !selected.formation_validee && (
               <>
-                <Button variant="destructive" onClick={() => reject(selected.id, selected.profile_id)}>
+                <Button variant="destructive" onClick={() => { setMotif(""); setRejectOpen(true); }}>
                   Ne pas accepter
                 </Button>
                 <Button onClick={() => validate(selected.id, selected.profile_id)} className="bg-brand text-white">
