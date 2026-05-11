@@ -57,6 +57,23 @@ function Validations() {
     load();
   };
 
+  const reject = async (id: string, profile_id: string) => {
+    if (!confirm("Refuser la validation Super Apprenant pour cet encadreur ?")) return;
+    const { error } = await supabase
+      .from("encadreurs")
+      .update({ formation_super_apprenant: false, formation_validee: false, premium: false })
+      .eq("id", id);
+    if (error) return toast.error(error.message);
+    await supabase.from("notifications").insert({
+      user_id: profile_id,
+      titre: "Demande non acceptée",
+      message: "Votre demande de validation Super Apprenant n'a pas été acceptée.",
+    });
+    toast.success("Demande refusée");
+    setSelected(null);
+    load();
+  };
+
   return (
     <div className="p-6 space-y-4">
       <h1 className="text-3xl font-bold text-primary">Validations encadreurs</h1>
@@ -126,9 +143,14 @@ function Validations() {
           )}
           <DialogFooter>
             {selected && !selected.formation_validee && (
-              <Button onClick={() => validate(selected.id, selected.profile_id)} className="bg-brand text-white">
-                Valider en Premium
-              </Button>
+              <>
+                <Button variant="destructive" onClick={() => reject(selected.id, selected.profile_id)}>
+                  Ne pas accepter
+                </Button>
+                <Button onClick={() => validate(selected.id, selected.profile_id)} className="bg-brand text-white">
+                  Valider en Premium
+                </Button>
+              </>
             )}
             <Button variant="ghost" onClick={() => setSelected(null)}>Fermer</Button>
           </DialogFooter>
