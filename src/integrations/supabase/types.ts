@@ -192,6 +192,33 @@ export type Database = {
           },
         ]
       }
+      encadreur_refus: {
+        Row: {
+          admin_id: string
+          created_at: string
+          encadreur_id: string
+          encadreur_profile_id: string
+          id: string
+          motif: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          encadreur_id: string
+          encadreur_profile_id: string
+          id?: string
+          motif: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          encadreur_id?: string
+          encadreur_profile_id?: string
+          id?: string
+          motif?: string
+        }
+        Relationships: []
+      }
       encadreurs: {
         Row: {
           classes_college: string[] | null

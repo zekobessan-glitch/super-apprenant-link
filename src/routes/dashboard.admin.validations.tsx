@@ -71,10 +71,24 @@ function Validations() {
       .update({ formation_super_apprenant: false, formation_validee: false, premium: false })
       .eq("id", selected.id);
     if (error) { setSubmitting(false); return toast.error(error.message); }
+    const { data: { user } } = await supabase.auth.getUser();
+    const motifText = motif.trim();
+    const { data: refus, error: refusError } = await supabase
+      .from("encadreur_refus")
+      .insert({
+        encadreur_id: selected.id,
+        encadreur_profile_id: selected.profile_id,
+        admin_id: user?.id,
+        motif: motifText,
+      })
+      .select()
+      .single();
+    if (refusError) { setSubmitting(false); return toast.error(refusError.message); }
     await supabase.from("notifications").insert({
       user_id: selected.profile_id,
       titre: "Demande non acceptée",
-      message: `Votre demande de validation Super Apprenant n'a pas été acceptée.\n\nMotif : ${motif.trim()}`,
+      message: `Votre demande de validation Super Apprenant n'a pas été acceptée.\n\nMotif : ${motifText}`,
+      lien: `refus:${refus.id}`,
     });
     toast.success("Demande refusée");
     setSubmitting(false);
