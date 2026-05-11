@@ -78,7 +78,7 @@ function Validations() {
       .insert({
         encadreur_id: selected.id,
         encadreur_profile_id: selected.profile_id,
-        admin_id: user?.id,
+        admin_id: user!.id,
         motif: motifText,
       })
       .select()
