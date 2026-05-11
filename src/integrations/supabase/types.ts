@@ -202,7 +202,7 @@ export type Database = {
           motif: string
         }
         Insert: {
-          admin_id: string
+          admin_id?: string
           created_at?: string
           encadreur_id: string
           encadreur_profile_id: string
