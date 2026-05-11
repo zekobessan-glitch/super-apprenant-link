@@ -32,6 +32,9 @@ function Field({ label, value }: { label: string; value: any }) {
 function Validations() {
   const [rows, setRows] = useState<any[]>([]);
   const [selected, setSelected] = useState<any>(null);
+  const [rejectOpen, setRejectOpen] = useState(false);
+  const [motif, setMotif] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const load = async () => {
     const { data } = await supabase
