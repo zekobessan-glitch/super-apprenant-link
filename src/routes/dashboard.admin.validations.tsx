@@ -143,9 +143,14 @@ function Validations() {
           )}
           <DialogFooter>
             {selected && !selected.formation_validee && (
-              <Button onClick={() => validate(selected.id, selected.profile_id)} className="bg-brand text-white">
-                Valider en Premium
-              </Button>
+              <>
+                <Button variant="destructive" onClick={() => reject(selected.id, selected.profile_id)}>
+                  Ne pas accepter
+                </Button>
+                <Button onClick={() => validate(selected.id, selected.profile_id)} className="bg-brand text-white">
+                  Valider en Premium
+                </Button>
+              </>
             )}
             <Button variant="ghost" onClick={() => setSelected(null)}>Fermer</Button>
           </DialogFooter>
