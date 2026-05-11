@@ -19,7 +19,8 @@ export function NotificationsBell() {
   useEffect(() => {
     load();
     if (!user) return;
-    const ch = supabase.channel(`notifs:${user.id}`).on(
+    const ch = supabase.channel(`notifs:${user.id}:${Math.random().toString(36).slice(2)}`);
+    ch.on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
       () => load()
