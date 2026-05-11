@@ -62,19 +62,24 @@ function Validations() {
     load();
   };
 
-  const reject = async (id: string, profile_id: string) => {
-    if (!confirm("Refuser la validation Super Apprenant pour cet encadreur ?")) return;
+  const reject = async () => {
+    if (!selected) return;
+    if (!motif.trim()) return toast.error("Veuillez saisir un motif");
+    setSubmitting(true);
     const { error } = await supabase
       .from("encadreurs")
       .update({ formation_super_apprenant: false, formation_validee: false, premium: false })
-      .eq("id", id);
-    if (error) return toast.error(error.message);
+      .eq("id", selected.id);
+    if (error) { setSubmitting(false); return toast.error(error.message); }
     await supabase.from("notifications").insert({
-      user_id: profile_id,
+      user_id: selected.profile_id,
       titre: "Demande non acceptée",
-      message: "Votre demande de validation Super Apprenant n'a pas été acceptée.",
+      message: `Votre demande de validation Super Apprenant n'a pas été acceptée.\n\nMotif : ${motif.trim()}`,
     });
     toast.success("Demande refusée");
+    setSubmitting(false);
+    setRejectOpen(false);
+    setMotif("");
     setSelected(null);
     load();
   };
