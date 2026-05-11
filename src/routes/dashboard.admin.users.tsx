@@ -45,6 +45,9 @@ function AdminUsers() {
   const [selected, setSelected] = useState<Row | null>(null);
   const [details, setDetails] = useState<any>(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({ nom: "", prenoms: "", email: "", telephone: "", password: "", role: "admin" as "admin" | "encadreur" | "parent" });
 
   const load = async () => {
     const { data: profiles } = await supabase.from("profiles").select("id, nom, prenoms, email, telephone");
