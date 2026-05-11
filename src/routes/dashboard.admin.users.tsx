@@ -82,9 +82,30 @@ function AdminUsers() {
     else { toast.success("Supprimé"); load(); }
   };
 
+  const handleCreate = async () => {
+    if (!form.email || !form.password || !form.nom || !form.prenoms) {
+      toast.error("Renseignez tous les champs obligatoires");
+      return;
+    }
+    setCreating(true);
+    const { data, error } = await supabase.functions.invoke("admin-create-user", { body: form });
+    setCreating(false);
+    if (error || (data as any)?.error) {
+      toast.error((data as any)?.error ?? error?.message ?? "Erreur");
+      return;
+    }
+    toast.success("Utilisateur créé");
+    setCreateOpen(false);
+    setForm({ nom: "", prenoms: "", email: "", telephone: "", password: "", role: "admin" });
+    load();
+  };
+
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-3xl font-bold text-primary">Utilisateurs</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-primary">Utilisateurs</h1>
+        <Button onClick={() => setCreateOpen(true)}><UserPlus className="h-4 w-4" /> Ajouter</Button>
+      </div>
       <Card className="overflow-hidden">
         <Table>
           <TableHeader>
