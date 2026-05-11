@@ -4,7 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Eye } from "lucide-react";
 
@@ -30,6 +32,9 @@ function Field({ label, value }: { label: string; value: any }) {
 function Validations() {
   const [rows, setRows] = useState<any[]>([]);
   const [selected, setSelected] = useState<any>(null);
+  const [rejectOpen, setRejectOpen] = useState(false);
+  const [motif, setMotif] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const load = async () => {
     const { data } = await supabase
@@ -57,19 +62,24 @@ function Validations() {
     load();
   };
 
-  const reject = async (id: string, profile_id: string) => {
-    if (!confirm("Refuser la validation Super Apprenant pour cet encadreur ?")) return;
+  const reject = async () => {
+    if (!selected) return;
+    if (!motif.trim()) return toast.error("Veuillez saisir un motif");
+    setSubmitting(true);
     const { error } = await supabase
       .from("encadreurs")
       .update({ formation_super_apprenant: false, formation_validee: false, premium: false })
-      .eq("id", id);
-    if (error) return toast.error(error.message);
+      .eq("id", selected.id);
+    if (error) { setSubmitting(false); return toast.error(error.message); }
     await supabase.from("notifications").insert({
-      user_id: profile_id,
+      user_id: selected.profile_id,
       titre: "Demande non acceptée",
-      message: "Votre demande de validation Super Apprenant n'a pas été acceptée.",
+      message: `Votre demande de validation Super Apprenant n'a pas été acceptée.\n\nMotif : ${motif.trim()}`,
     });
     toast.success("Demande refusée");
+    setSubmitting(false);
+    setRejectOpen(false);
+    setMotif("");
     setSelected(null);
     load();
   };
@@ -144,7 +154,7 @@ function Validations() {
           <DialogFooter>
             {selected && !selected.formation_validee && (
               <>
-                <Button variant="destructive" onClick={() => reject(selected.id, selected.profile_id)}>
+                <Button variant="destructive" onClick={() => { setMotif(""); setRejectOpen(true); }}>
                   Ne pas accepter
                 </Button>
                 <Button onClick={() => validate(selected.id, selected.profile_id)} className="bg-brand text-white">
@@ -153,6 +163,35 @@ function Validations() {
               </>
             )}
             <Button variant="ghost" onClick={() => setSelected(null)}>Fermer</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={rejectOpen} onOpenChange={(o) => { if (!submitting) { setRejectOpen(o); if (!o) setMotif(""); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Refuser la demande</DialogTitle>
+            <DialogDescription>
+              Indiquez le motif du refus. Il sera transmis à l'encadreur.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="motif">Motif</Label>
+            <Textarea
+              id="motif"
+              value={motif}
+              onChange={(e) => setMotif(e.target.value)}
+              placeholder="Expliquez les raisons du refus..."
+              rows={5}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" disabled={submitting} onClick={() => { setRejectOpen(false); setMotif(""); }}>
+              Annuler
+            </Button>
+            <Button variant="destructive" disabled={submitting || !motif.trim()} onClick={reject}>
+              Confirmer le refus
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
