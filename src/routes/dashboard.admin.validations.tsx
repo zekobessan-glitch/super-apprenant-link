@@ -166,6 +166,35 @@ function Validations() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={rejectOpen} onOpenChange={(o) => { if (!submitting) { setRejectOpen(o); if (!o) setMotif(""); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Refuser la demande</DialogTitle>
+            <DialogDescription>
+              Indiquez le motif du refus. Il sera transmis à l'encadreur.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="motif">Motif</Label>
+            <Textarea
+              id="motif"
+              value={motif}
+              onChange={(e) => setMotif(e.target.value)}
+              placeholder="Expliquez les raisons du refus..."
+              rows={5}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" disabled={submitting} onClick={() => { setRejectOpen(false); setMotif(""); }}>
+              Annuler
+            </Button>
+            <Button variant="destructive" disabled={submitting || !motif.trim()} onClick={reject}>
+              Confirmer le refus
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
