@@ -1,0 +1,1 @@
+ALTER TABLE public.encadreur_refus ALTER COLUMN admin_id SET DEFAULT auth.uid();

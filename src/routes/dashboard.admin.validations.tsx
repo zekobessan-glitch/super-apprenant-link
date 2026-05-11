@@ -71,18 +71,12 @@ function Validations() {
       .update({ formation_super_apprenant: false, formation_validee: false, premium: false })
       .eq("id", selected.id);
     if (error) { setSubmitting(false); return toast.error(error.message); }
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-      setSubmitting(false);
-      return toast.error("Session administrateur introuvable, veuillez vous reconnecter.");
-    }
     const motifText = motif.trim();
     const { data: refus, error: refusError } = await supabase
       .from("encadreur_refus")
       .insert({
         encadreur_id: selected.id,
         encadreur_profile_id: selected.profile_id,
-        admin_id: user.id,
         motif: motifText,
       })
       .select()
