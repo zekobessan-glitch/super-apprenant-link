@@ -23,20 +23,40 @@ function SupportPage() {
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("support_messages")
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
+    if (error) {
+      console.error("[support] load error", error);
+      toast.error("Impossible de charger l'historique");
+    }
     setItems(data ?? []);
     setLoading(false);
   };
 
   useEffect(() => {
     load();
-  }, [user]);
+    if (!user) return;
+    const channel = supabase
+      .channel(`support-${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "support_messages", filter: `user_id=eq.${user.id}` },
+        () => load(),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
