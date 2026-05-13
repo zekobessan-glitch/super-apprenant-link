@@ -83,7 +83,7 @@ Deno.serve(async (req) => {
           firstname: profile?.prenoms || "Client",
           lastname: profile?.nom || "Test",
           email: profile?.email ?? user.email,
-          phone_number: { number: customerPhone, country: "CI" },
+          ...(customerPhone ? { phone_number: { number: customerPhone, country: "CI" } } : {}),
         },
         custom_metadata: { paiement_id: paiement.id, user_id: user.id },
       }),
