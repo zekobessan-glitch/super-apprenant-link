@@ -8,13 +8,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const normalizeCiPhone = (value?: string | null) => {
+const normalizeCiPhone = (value?: string | null): string | null => {
   const digits = (value ?? "").replace(/[^\d]/g, "");
   let local = digits;
   if (local.startsWith("00225")) local = local.slice(5);
   if (local.startsWith("225")) local = local.slice(3);
-
-  return /^\d{10}$/.test(local) ? local : "0101010101";
+  return /^\d{8,10}$/.test(local) ? local : null;
 };
 
 Deno.serve(async (req) => {
