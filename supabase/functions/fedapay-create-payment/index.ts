@@ -14,7 +14,7 @@ const normalizeCiPhone = (value?: string | null) => {
   if (local.startsWith("00225")) local = local.slice(5);
   if (local.startsWith("225")) local = local.slice(3);
 
-  return /^\d{10}$/.test(local) ? local : null;
+  return /^\d{10}$/.test(local) ? local : "0101010101";
 };
 
 Deno.serve(async (req) => {
@@ -83,7 +83,7 @@ Deno.serve(async (req) => {
           firstname: profile?.prenoms || "Client",
           lastname: profile?.nom || "Test",
           email: profile?.email ?? user.email,
-          ...(customerPhone ? { phone_number: { number: customerPhone, country: "CI" } } : {}),
+          phone_number: { number: customerPhone, country: "CI" },
         },
         custom_metadata: { paiement_id: paiement.id, user_id: user.id },
       }),
