@@ -66,12 +66,23 @@ Deno.serve(async (req) => {
         amount: montant,
         currency: { iso: "XOF" },
         callback_url: `${Deno.env.get("SUPABASE_URL")!.replace("supabase.co", "lovable.app")}/dashboard`,
-        customer: {
-          firstname: profile?.prenoms ?? "Client",
-          lastname: profile?.nom ?? "",
-          email: profile?.email ?? user.email,
-          phone_number: { number: profile?.telephone ?? "0000", country: "ci" },
-        },
+        customer: (() => {
+          const raw = (profile?.telephone ?? "").replace(/[^\d]/g, "");
+          // Strip leading country code 229 (BJ) if present, keep last 8-10 digits
+          let local = raw;
+          if (local.startsWith("229")) local = local.slice(3);
+          if (local.startsWith("00229")) local = local.slice(5);
+          const valid = local.length >= 8 && local.length <= 10;
+          const base: any = {
+            firstname: profile?.prenoms || "Client",
+            lastname: profile?.nom || "Test",
+            email: profile?.email ?? user.email,
+          };
+          if (valid) {
+            base.phone_number = { number: local, country: "bj" };
+          }
+          return base;
+        })(),
         custom_metadata: { paiement_id: paiement.id, user_id: user.id },
       }),
     });
