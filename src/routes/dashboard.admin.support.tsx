@@ -95,7 +95,7 @@ function AdminSupportPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge className={`${statutColor(it.statut)} text-white`}>{it.statut}</Badge>
-                  <Select value={it.statut} onValueChange={(v) => changeStatut(it.id, v)}>
+                  <Select value={it.statut} onValueChange={(v) => changeStatut(it.id, v as "ouvert" | "en_cours" | "resolu")}>
                     <SelectTrigger className="h-8 w-32"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="ouvert">Ouvert</SelectItem>
