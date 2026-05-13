@@ -60,7 +60,7 @@ function AdminSupportPage() {
     load();
   };
 
-  const changeStatut = async (id: string, statut: string) => {
+  const changeStatut = async (id: string, statut: "ouvert" | "en_cours" | "resolu") => {
     await supabase.from("support_messages").update({ statut }).eq("id", id);
     load();
   };
