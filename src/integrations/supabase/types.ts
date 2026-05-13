@@ -453,6 +453,42 @@ export type Database = {
           },
         ]
       }
+      support_messages: {
+        Row: {
+          admin_id: string | null
+          created_at: string
+          id: string
+          message: string
+          reponse_admin: string | null
+          statut: Database["public"]["Enums"]["support_statut"]
+          sujet: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          reponse_admin?: string | null
+          statut?: Database["public"]["Enums"]["support_statut"]
+          sujet: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          reponse_admin?: string | null
+          statut?: Database["public"]["Enums"]["support_statut"]
+          sujet?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -645,6 +681,7 @@ export type Database = {
         | "contact_unique_encadreur"
         | "pack_contacts_parent"
       serie_type: "A" | "C" | "D"
+      support_statut: "ouvert" | "en_cours" | "resolu"
       zone_residence: "zone1" | "zone2" | "zone3"
     }
     CompositeTypes: {
@@ -784,6 +821,7 @@ export const Constants = {
         "pack_contacts_parent",
       ],
       serie_type: ["A", "C", "D"],
+      support_statut: ["ouvert", "en_cours", "resolu"],
       zone_residence: ["zone1", "zone2", "zone3"],
     },
   },

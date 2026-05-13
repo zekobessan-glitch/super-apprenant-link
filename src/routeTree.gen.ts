@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
 import { Route as DashboardParentIndexRouteImport } from './routes/dashboard.parent.index'
 import { Route as DashboardEncadreurIndexRouteImport } from './routes/dashboard.encadreur.index'
@@ -27,6 +28,7 @@ import { Route as DashboardEncadreurCorrespondancesRouteImport } from './routes/
 import { Route as DashboardEncadreurCatalogueRouteImport } from './routes/dashboard.encadreur.catalogue'
 import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
+import { Route as DashboardAdminSupportRouteImport } from './routes/dashboard.admin.support'
 import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.admin.profil'
 import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
@@ -40,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardSupportRoute = DashboardSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
   id: '/messages',
@@ -131,6 +138,11 @@ const DashboardAdminUsersRoute = DashboardAdminUsersRouteImport.update({
   path: '/admin/users',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAdminSupportRoute = DashboardAdminSupportRouteImport.update({
+  id: '/admin/support',
+  path: '/admin/support',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAdminProfilRoute = DashboardAdminProfilRouteImport.update({
   id: '/admin/profil',
   path: '/admin/profil',
@@ -152,9 +164,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
+  '/dashboard/admin/support': typeof DashboardAdminSupportRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
   '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
@@ -175,9 +189,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
+  '/dashboard/admin/support': typeof DashboardAdminSupportRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
   '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
@@ -199,9 +215,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
+  '/dashboard/admin/support': typeof DashboardAdminSupportRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
   '/dashboard/encadreur/catalogue': typeof DashboardEncadreurCatalogueRoute
@@ -224,9 +242,11 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/messages'
+    | '/dashboard/support'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
+    | '/dashboard/admin/support'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
     | '/dashboard/encadreur/catalogue'
@@ -247,9 +267,11 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/messages'
+    | '/dashboard/support'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
+    | '/dashboard/admin/support'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
     | '/dashboard/encadreur/catalogue'
@@ -270,9 +292,11 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/messages'
+    | '/dashboard/support'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
+    | '/dashboard/admin/support'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
     | '/dashboard/encadreur/catalogue'
@@ -310,6 +334,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/support': {
+      id: '/dashboard/support'
+      path: '/support'
+      fullPath: '/dashboard/support'
+      preLoaderRoute: typeof DashboardSupportRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/messages': {
       id: '/dashboard/messages'
@@ -423,6 +454,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminUsersRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/admin/support': {
+      id: '/dashboard/admin/support'
+      path: '/admin/support'
+      fullPath: '/dashboard/admin/support'
+      preLoaderRoute: typeof DashboardAdminSupportRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/admin/profil': {
       id: '/dashboard/admin/profil'
       path: '/admin/profil'
@@ -449,9 +487,11 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardSupportRoute: typeof DashboardSupportRoute
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
   DashboardAdminParametresRoute: typeof DashboardAdminParametresRoute
   DashboardAdminProfilRoute: typeof DashboardAdminProfilRoute
+  DashboardAdminSupportRoute: typeof DashboardAdminSupportRoute
   DashboardAdminUsersRoute: typeof DashboardAdminUsersRoute
   DashboardAdminValidationsRoute: typeof DashboardAdminValidationsRoute
   DashboardEncadreurCatalogueRoute: typeof DashboardEncadreurCatalogueRoute
@@ -471,9 +511,11 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardSupportRoute: DashboardSupportRoute,
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
   DashboardAdminParametresRoute: DashboardAdminParametresRoute,
   DashboardAdminProfilRoute: DashboardAdminProfilRoute,
+  DashboardAdminSupportRoute: DashboardAdminSupportRoute,
   DashboardAdminUsersRoute: DashboardAdminUsersRoute,
   DashboardAdminValidationsRoute: DashboardAdminValidationsRoute,
   DashboardEncadreurCatalogueRoute: DashboardEncadreurCatalogueRoute,
