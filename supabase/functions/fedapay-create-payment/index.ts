@@ -8,6 +8,15 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const normalizeCiPhone = (value?: string | null) => {
+  const digits = (value ?? "").replace(/[^\d]/g, "");
+  let local = digits;
+  if (local.startsWith("00225")) local = local.slice(5);
+  if (local.startsWith("225")) local = local.slice(3);
+
+  return /^\d{10}$/.test(local) ? local : null;
+};
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -57,6 +66,10 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: payErr?.message ?? "DB error" }), { status: 500, headers: corsHeaders });
     }
 
+    const origin = req.headers.get("origin");
+    const appUrl = origin && /^https?:\/\//.test(origin) ? origin : "https://super-apprenant-link.lovable.app";
+    const customerPhone = normalizeCiPhone(profile?.telephone);
+
     // Create FedaPay transaction
     const tx = await fetch(`${baseUrl}/transactions`, {
       method: "POST",
@@ -65,24 +78,13 @@ Deno.serve(async (req) => {
         description: `SUPER@PPRENANT-I — ${type}`,
         amount: montant,
         currency: { iso: "XOF" },
-        callback_url: `${Deno.env.get("SUPABASE_URL")!.replace("supabase.co", "lovable.app")}/dashboard`,
-        customer: (() => {
-          const raw = (profile?.telephone ?? "").replace(/[^\d]/g, "");
-          // Strip leading country code 229 (BJ) if present, keep last 8-10 digits
-          let local = raw;
-          if (local.startsWith("229")) local = local.slice(3);
-          if (local.startsWith("00229")) local = local.slice(5);
-          const valid = local.length >= 8 && local.length <= 10;
-          const base: any = {
-            firstname: profile?.prenoms || "Client",
-            lastname: profile?.nom || "Test",
-            email: profile?.email ?? user.email,
-          };
-          if (valid) {
-            base.phone_number = { number: local, country: "bj" };
-          }
-          return base;
-        })(),
+        callback_url: `${appUrl}/dashboard/parent/paiements?paiement_id=${paiement.id}`,
+        customer: {
+          firstname: profile?.prenoms || "Client",
+          lastname: profile?.nom || "Test",
+          email: profile?.email ?? user.email,
+          ...(customerPhone ? { phone_number: { number: customerPhone, country: "CI" } } : {}),
+        },
         custom_metadata: { paiement_id: paiement.id, user_id: user.id },
       }),
     });
@@ -90,6 +92,7 @@ Deno.serve(async (req) => {
     const txData = await tx.json();
     if (!tx.ok || !txData?.["v1/transaction"]) {
       console.error("FedaPay error", txData);
+      await admin.from("paiements").update({ statut: "echoue", metadata: { ...(metadata ?? {}), fedapay_error: txData } }).eq("id", paiement.id);
       return new Response(JSON.stringify({ error: "Erreur FedaPay", detail: txData }), { status: 502, headers: corsHeaders });
     }
 
@@ -103,8 +106,14 @@ Deno.serve(async (req) => {
     });
     const tokenData = await token.json();
 
+    if (!token.ok || !tokenData?.url) {
+      console.error("FedaPay token error", tokenData);
+      await admin.from("paiements").update({ statut: "echoue", metadata: { ...(metadata ?? {}), fedapay_error: tokenData } }).eq("id", paiement.id);
+      return new Response(JSON.stringify({ error: "Erreur FedaPay", detail: tokenData }), { status: 502, headers: corsHeaders });
+    }
+
     return new Response(JSON.stringify({
-      payment_url: tokenData?.url ?? null,
+      payment_url: tokenData.url,
       paiement_id: paiement.id,
       transaction_id: txId,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
