@@ -78,6 +78,7 @@ Deno.serve(async (req) => {
         description: `SUPER@PPRENANT-I — ${type}`,
         amount: montant,
         currency: { iso: "XOF" },
+        ...(isLive ? {} : { mode: "momo_test" }),
         callback_url: `${appUrl}/dashboard/parent/paiements?paiement_id=${paiement.id}`,
         customer: {
           firstname: profile?.prenoms || "Client",
