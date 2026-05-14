@@ -88,20 +88,20 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
 
     if (updateCreditsError) throw new Error(updateCreditsError.message);
 
-    const { data: encProfile } = await supabaseAdmin
-      .from("profiles")
-      .select("nom, prenoms")
-      .eq("id", data.encadreurId)
-      .maybeSingle();
+    const [{ data: encProfile }, { data: parentProfile }] = await Promise.all([
+      supabaseAdmin.from("profiles").select("nom, prenoms").eq("id", data.encadreurId).maybeSingle(),
+      supabaseAdmin.from("profiles").select("nom, prenoms").eq("id", userId).maybeSingle(),
+    ]);
 
     const encNom = `${encProfile?.prenoms ?? ""} ${encProfile?.nom ?? ""}`.trim();
+    const parentNom = `${parentProfile?.prenoms ?? ""} ${parentProfile?.nom ?? ""}`.trim();
     const apprenantNom = `${apprenant.prenoms} ${apprenant.nom}`.trim();
 
     const { error: notificationError } = await supabaseAdmin.from("notifications").insert([
       {
         user_id: data.encadreurId,
         titre: "Nouveau parent intéressé",
-        message: `Un parent/élève a payé et souhaite vous contacter pour ${apprenantNom} (${apprenant.classe}).`,
+        message: `${parentNom || "Un parent/élève"} a payé et souhaite vous contacter pour ${apprenantNom} (${apprenant.classe}).`,
         lien: "/dashboard/encadreur/correspondances",
       },
       {
