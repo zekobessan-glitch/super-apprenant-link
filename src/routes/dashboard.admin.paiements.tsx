@@ -12,8 +12,27 @@ export const Route = createFileRoute("/dashboard/admin/paiements")({
 function AdminPaiements() {
   const [rows, setRows] = useState<any[]>([]);
   useEffect(() => {
-    supabase.from("paiements").select("*, profiles(nom, prenoms, email)").order("created_at", { ascending: false })
-      .then(({ data }) => setRows(data ?? []));
+    (async () => {
+      const { data: paiements, error } = await supabase
+        .from("paiements")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) {
+        console.error("paiements error", error);
+        setRows([]);
+        return;
+      }
+      const ids = Array.from(new Set((paiements ?? []).map((p) => p.user_id)));
+      let profilesMap: Record<string, any> = {};
+      if (ids.length) {
+        const { data: profs } = await supabase
+          .from("profiles")
+          .select("id, nom, prenoms, email")
+          .in("id", ids);
+        profilesMap = Object.fromEntries((profs ?? []).map((p) => [p.id, p]));
+      }
+      setRows((paiements ?? []).map((p) => ({ ...p, profiles: profilesMap[p.user_id] })));
+    })();
   }, []);
   return (
     <div className="p-6 space-y-4">
