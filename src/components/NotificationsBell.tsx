@@ -45,14 +45,20 @@ export function NotificationsBell() {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0 max-h-96 overflow-auto">
-        <div className="p-3 border-b font-semibold">Notifications</div>
+        <div className="p-3 border-b font-semibold flex items-center justify-between">
+          <span>Notifications</span>
+          <Link to="/dashboard/messages" className="text-xs text-primary hover:underline">Voir tout</Link>
+        </div>
         {notifs.length === 0 ? (
           <div className="p-6 text-center text-sm text-muted-foreground">Aucune notification</div>
         ) : (
           notifs.map((n) => (
             <div
               key={n.id}
-              onClick={() => !n.lu && markRead(n.id)}
+              onClick={() => {
+                if (!n.lu) markRead(n.id);
+                if (n.lien) navigate({ to: n.lien });
+              }}
               className={`p-3 border-b cursor-pointer hover:bg-muted ${!n.lu ? "bg-accent/5" : ""}`}
             >
               <div className="font-medium text-sm">{n.titre}</div>
@@ -61,6 +67,9 @@ export function NotificationsBell() {
             </div>
           ))
         )}
+        <div className="p-2 border-t text-center">
+          <Link to="/dashboard/messages" className="text-xs text-muted-foreground hover:text-primary">Voir tout l'historique</Link>
+        </div>
       </PopoverContent>
     </Popover>
   );
