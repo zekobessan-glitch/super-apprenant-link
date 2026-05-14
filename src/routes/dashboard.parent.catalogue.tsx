@@ -151,6 +151,21 @@ function ParentCatalogue() {
                 <div className="flex items-start gap-1"><MapPin className="h-3.5 w-3.5 mt-0.5" /> {ZONES[enc.zone_residence as keyof typeof ZONES]?.split("(")[0]}</div>
                 <div className="flex items-start gap-1"><GraduationCap className="h-3.5 w-3.5 mt-0.5" /> {enc.dernier_diplome}</div>
               </div>
+              {(() => {
+                const niveau = apprenant?.niveau;
+                const matieres: string[] = niveau === "college"
+                  ? (enc.matieres_college ?? [])
+                  : niveau === "lycee"
+                  ? (enc.matieres_lycee ?? [])
+                  : Array.from(new Set([...(enc.matieres_college ?? []), ...(enc.matieres_lycee ?? [])]));
+                if (!matieres.length) return null;
+                return (
+                  <div className="text-sm text-muted-foreground flex items-start gap-1">
+                    <BookOpen className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                    <span>{matieres.join(", ")}</span>
+                  </div>
+                );
+              })()}
               <div className="flex flex-wrap gap-1">
                 {enc.niveaux?.map((n: string) => <Badge key={n} variant="outline" className="text-xs capitalize">{n}</Badge>)}
               </div>
