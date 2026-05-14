@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2, BookOpen } from "lucide-react";
+import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2, BookOpen, Brain } from "lucide-react";
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
@@ -169,6 +169,12 @@ function ParentCatalogue() {
               <div className="flex flex-wrap gap-1">
                 {enc.niveaux?.map((n: string) => <Badge key={n} variant="outline" className="text-xs capitalize">{n}</Badge>)}
               </div>
+              {enc.profil_pedagogique && (
+                <div className="text-sm text-muted-foreground flex items-start gap-1">
+                  <Brain className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                  <span className="capitalize">Profil pédagogique : {enc.profil_pedagogique}</span>
+                </div>
+              )}
               {isDebloque ? (
                 <div className="bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
