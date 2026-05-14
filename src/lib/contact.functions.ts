@@ -89,7 +89,11 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
     if (updateCreditsError) throw new Error(updateCreditsError.message);
 
     const [{ data: encProfile }, { data: parentProfile }] = await Promise.all([
-      supabaseAdmin.from("profiles").select("nom, prenoms").eq("id", data.encadreurId).maybeSingle(),
+      supabaseAdmin
+        .from("profiles")
+        .select("nom, prenoms")
+        .eq("id", data.encadreurId)
+        .maybeSingle(),
       supabaseAdmin.from("profiles").select("nom, prenoms").eq("id", userId).maybeSingle(),
     ]);
 
