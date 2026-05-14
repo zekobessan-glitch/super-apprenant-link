@@ -9,6 +9,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 
 export function NotificationsBell() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [notifs, setNotifs] = useState<any[]>([]);
 
   const load = async () => {
