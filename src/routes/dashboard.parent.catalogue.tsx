@@ -169,6 +169,12 @@ function ParentCatalogue() {
               <div className="flex flex-wrap gap-1">
                 {enc.niveaux?.map((n: string) => <Badge key={n} variant="outline" className="text-xs capitalize">{n}</Badge>)}
               </div>
+              {enc.profil_pedagogique && (
+                <div className="text-sm text-muted-foreground flex items-start gap-1">
+                  <Brain className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                  <span className="capitalize">Profil pédagogique : {enc.profil_pedagogique}</span>
+                </div>
+              )}
               {isDebloque ? (
                 <div className="bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
