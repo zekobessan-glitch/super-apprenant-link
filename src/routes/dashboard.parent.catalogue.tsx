@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2, BookOpen, Brain } from "lucide-react";
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
+import { unlockEncadreurContact } from "@/lib/contact.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard/parent/catalogue")({
@@ -22,6 +24,7 @@ function ParentCatalogue() {
   const [credits, setCredits] = useState(0);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
+  const unlockContact = useServerFn(unlockEncadreurContact);
 
   const reload = async () => {
     if (!user) return;
@@ -86,42 +89,21 @@ function ParentCatalogue() {
   }, [apprenant, encadreurs]);
 
   const unlock = async (enc: any) => {
-    if (!user) return;
+    if (!user || !apprenant) return;
     if (credits < 1) {
       toast.error("Aucun crédit disponible. Achetez un pack pour débloquer ce contact.");
       return;
     }
     setUnlocking(enc.profile_id);
-    const { error } = await supabase.from("correspondances").upsert({
-      parent_id: user.id,
-      encadreur_id: enc.profile_id,
-      apprenant_id: apprenant.id,
-      statut: "debloquee",
-      initiateur: "parent",
-      contact_debloque: true,
-    }, { onConflict: "encadreur_id,parent_id,apprenant_id" });
-
-    if (error) { setUnlocking(null); return toast.error(error.message); }
-
-    await supabase.from("contacts_credits").update({ credits_restants: credits - 1 }).eq("parent_id", user.id);
-    const encNom = `${enc.profiles?.prenoms ?? ""} ${enc.profiles?.nom ?? ""}`.trim();
-    await supabase.from("notifications").insert([
-      {
-        user_id: enc.profile_id,
-        titre: "Nouveau parent intéressé",
-        message: `Un parent a payé pour débloquer votre contact et souhaite être contacté pour ${apprenant.prenoms} ${apprenant.nom} (${apprenant.classe}).`,
-        lien: "/dashboard/encadreur/correspondances",
-      },
-      {
-        user_id: user.id,
-        titre: "Demande envoyée",
-        message: `Votre demande a bien été transmise${encNom ? ` à ${encNom}` : ""}. L'encadreur vous contactera prochainement.`,
-        lien: "/dashboard/parent/correspondances",
-      },
-    ]);
-    toast.success("Contact débloqué ! L'encadreur a été notifié.");
-    setUnlocking(null);
-    reload();
+    try {
+      await unlockContact({ data: { encadreurId: enc.profile_id, apprenantId: apprenant.id } });
+      toast.success("Demande de contact envoyée avec succès.");
+      reload();
+    } catch (error: any) {
+      toast.error(error?.message ?? "Impossible d'envoyer la demande de contact.");
+    } finally {
+      setUnlocking(null);
+    }
   };
 
   if (loading) return <div className="p-6 flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Chargement...</div>;
