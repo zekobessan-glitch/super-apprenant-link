@@ -6,7 +6,17 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2, BookOpen, Brain } from "lucide-react";
+import {
+  Crown,
+  Lock,
+  MapPin,
+  GraduationCap,
+  Loader2,
+  MessageCircle,
+  CheckCircle2,
+  BookOpen,
+  Brain,
+} from "lucide-react";
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { unlockEncadreurContact } from "@/lib/contact.functions";
@@ -28,34 +38,45 @@ function ParentCatalogue() {
 
   const reload = async () => {
     if (!user) return;
-    const [
-      { data: app },
-      { data: encs },
-      { data: cred },
-      { data: corr },
-    ] = await Promise.all([
+    const [{ data: app }, { data: encs }, { data: cred }, { data: corr }] = await Promise.all([
       supabase.from("apprenants").select("*").eq("parent_id", user.id).maybeSingle(),
       supabase.from("public_encadreurs" as any).select("*"),
-      supabase.from("contacts_credits").select("credits_restants").eq("parent_id", user.id).maybeSingle(),
-      supabase.from("correspondances").select("encadreur_id, contact_debloque").eq("parent_id", user.id),
+      supabase
+        .from("contacts_credits")
+        .select("credits_restants")
+        .eq("parent_id", user.id)
+        .maybeSingle(),
+      supabase
+        .from("correspondances")
+        .select("encadreur_id, contact_debloque")
+        .eq("parent_id", user.id),
     ]);
     setApprenant(app);
     const profileIds = (encs ?? []).map((e: any) => e.profile_id);
     const { data: pubProfiles } = profileIds.length
-      ? await supabase.from("public_profiles" as any).select("id, nom, prenoms, photo_url").in("id", profileIds)
+      ? await supabase
+          .from("public_profiles" as any)
+          .select("id, nom, prenoms, photo_url")
+          .in("id", profileIds)
       : { data: [] as any[] };
-    const profMap: Record<string, any> = Object.fromEntries((pubProfiles ?? []).map((p: any) => [p.id, p]));
+    const profMap: Record<string, any> = Object.fromEntries(
+      (pubProfiles ?? []).map((p: any) => [p.id, p]),
+    );
     const unlockedIds = (corr ?? []).filter((c) => c.contact_debloque).map((c) => c.encadreur_id);
-    setEncadreurs((encs ?? []).map((e: any) => ({
-      ...e,
-      profiles: profMap[e.profile_id] ?? {},
-    })));
+    setEncadreurs(
+      (encs ?? []).map((e: any) => ({
+        ...e,
+        profiles: profMap[e.profile_id] ?? {},
+      })),
+    );
     setCredits(cred?.credits_restants ?? 0);
     setDebloques(new Set(unlockedIds));
     setLoading(false);
   };
 
-  useEffect(() => { reload(); }, [user]);
+  useEffect(() => {
+    reload();
+  }, [user]);
 
   const sorted = useMemo(() => {
     if (!apprenant) return [];
@@ -81,7 +102,7 @@ function ParentCatalogue() {
             matieres_college: e.matieres_college ?? [],
             matieres_lycee: e.matieres_lycee ?? [],
             profil_pedagogique: e.profil_pedagogique,
-          }
+          },
         ),
       }))
       .filter((x) => x.score >= 30)
@@ -106,8 +127,18 @@ function ParentCatalogue() {
     }
   };
 
-  if (loading) return <div className="p-6 flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Chargement...</div>;
-  if (!apprenant) return <div className="p-6"><Card className="p-6">Aucun apprenant enregistré.</Card></div>;
+  if (loading)
+    return (
+      <div className="p-6 flex items-center gap-2">
+        <Loader2 className="h-4 w-4 animate-spin" /> Chargement...
+      </div>
+    );
+  if (!apprenant)
+    return (
+      <div className="p-6">
+        <Card className="p-6">Aucun apprenant enregistré.</Card>
+      </div>
+    );
 
   return (
     <div className="p-6 space-y-4">
@@ -131,25 +162,39 @@ function ParentCatalogue() {
             <Card key={enc.id} className="p-5 shadow-soft space-y-3">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-bold">{enc.profiles?.nom} {enc.profiles?.prenoms}</h3>
+                  <h3 className="font-bold">
+                    {enc.profiles?.nom} {enc.profiles?.prenoms}
+                  </h3>
                   <p className="text-xs text-muted-foreground capitalize">{enc.genre}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <Badge className="bg-brand text-white">{score}% match</Badge>
-                  {enc.premium && <Badge className="bg-accent text-accent-foreground gap-1"><Crown className="h-3 w-3" /> Premium</Badge>}
+                  {enc.premium && (
+                    <Badge className="bg-accent text-accent-foreground gap-1">
+                      <Crown className="h-3 w-3" /> Premium
+                    </Badge>
+                  )}
                 </div>
               </div>
               <div className="text-sm text-muted-foreground space-y-1">
-                <div className="flex items-start gap-1"><MapPin className="h-3.5 w-3.5 mt-0.5" /> {ZONES[enc.zone_residence as keyof typeof ZONES]?.split("(")[0]}</div>
-                <div className="flex items-start gap-1"><GraduationCap className="h-3.5 w-3.5 mt-0.5" /> {enc.dernier_diplome}</div>
+                <div className="flex items-start gap-1">
+                  <MapPin className="h-3.5 w-3.5 mt-0.5" />{" "}
+                  {ZONES[enc.zone_residence as keyof typeof ZONES]?.split("(")[0]}
+                </div>
+                <div className="flex items-start gap-1">
+                  <GraduationCap className="h-3.5 w-3.5 mt-0.5" /> {enc.dernier_diplome}
+                </div>
               </div>
               {(() => {
                 const niveau = apprenant?.niveau;
-                const matieres: string[] = niveau === "college"
-                  ? (enc.matieres_college ?? [])
-                  : niveau === "lycee"
-                  ? (enc.matieres_lycee ?? [])
-                  : Array.from(new Set([...(enc.matieres_college ?? []), ...(enc.matieres_lycee ?? [])]));
+                const matieres: string[] =
+                  niveau === "college"
+                    ? (enc.matieres_college ?? [])
+                    : niveau === "lycee"
+                      ? (enc.matieres_lycee ?? [])
+                      : Array.from(
+                          new Set([...(enc.matieres_college ?? []), ...(enc.matieres_lycee ?? [])]),
+                        );
                 if (!matieres.length) return null;
                 return (
                   <div className="text-sm text-muted-foreground flex items-start gap-1">
@@ -159,7 +204,11 @@ function ParentCatalogue() {
                 );
               })()}
               <div className="flex flex-wrap gap-1">
-                {enc.niveaux?.map((n: string) => <Badge key={n} variant="outline" className="text-xs capitalize">{n}</Badge>)}
+                {enc.niveaux?.map((n: string) => (
+                  <Badge key={n} variant="outline" className="text-xs capitalize">
+                    {n}
+                  </Badge>
+                ))}
               </div>
               {enc.profil_pedagogique && (
                 <div className="text-sm text-muted-foreground flex items-start gap-1">
@@ -181,16 +230,24 @@ function ParentCatalogue() {
                   {unlocking === enc.profile_id ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : credits < 1 ? (
-                    <><Lock className="h-4 w-4 mr-2" /> Achetez un pack pour contacter</>
+                    <>
+                      <Lock className="h-4 w-4 mr-2" /> Achetez un pack pour contacter
+                    </>
                   ) : (
-                    <><MessageCircle className="h-4 w-4 mr-2" /> Contacter</>
+                    <>
+                      <MessageCircle className="h-4 w-4 mr-2" /> Contacter
+                    </>
                   )}
                 </Button>
               )}
             </Card>
           );
         })}
-        {sorted.length === 0 && <Card className="p-6 col-span-full text-center text-muted-foreground">Aucun encadreur compatible pour le moment.</Card>}
+        {sorted.length === 0 && (
+          <Card className="p-6 col-span-full text-center text-muted-foreground">
+            Aucun encadreur compatible pour le moment.
+          </Card>
+        )}
       </div>
     </div>
   );

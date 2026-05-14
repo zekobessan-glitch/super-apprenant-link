@@ -26,8 +26,9 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
     if (apprenantError) throw new Error(apprenantError.message);
     if (!apprenant) throw new Error("Apprenant introuvable pour ce parent.");
 
-    const { data: encadreur, error: encadreurError } = await (supabaseAdmin
-      .from("public_encadreurs" as any) as any)
+    const { data: encadreur, error: encadreurError } = await (
+      supabaseAdmin.from("public_encadreurs" as any) as any
+    )
       .select("profile_id")
       .eq("profile_id", data.encadreurId)
       .maybeSingle();
@@ -72,7 +73,10 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
     };
 
     const correspondenceResult = existing
-      ? await supabaseAdmin.from("correspondances").update(correspondencePayload).eq("id", existing.id)
+      ? await supabaseAdmin
+          .from("correspondances")
+          .update(correspondencePayload)
+          .eq("id", existing.id)
       : await supabaseAdmin.from("correspondances").insert(correspondencePayload);
 
     if (correspondenceResult.error) throw new Error(correspondenceResult.error.message);
