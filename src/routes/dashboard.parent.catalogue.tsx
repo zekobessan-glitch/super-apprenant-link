@@ -104,12 +104,22 @@ function ParentCatalogue() {
     if (error) { setUnlocking(null); return toast.error(error.message); }
 
     await supabase.from("contacts_credits").update({ credits_restants: credits - 1 }).eq("parent_id", user.id);
-    await supabase.from("notifications").insert({
-      user_id: enc.profile_id,
-      titre: "Nouveau parent intéressé",
-      message: `Un parent a débloqué votre contact.`,
-    });
-    toast.success("Contact débloqué !");
+    const encNom = `${enc.profiles?.prenoms ?? ""} ${enc.profiles?.nom ?? ""}`.trim();
+    await supabase.from("notifications").insert([
+      {
+        user_id: enc.profile_id,
+        titre: "Nouveau parent intéressé",
+        message: `Un parent a payé pour débloquer votre contact et souhaite être contacté pour ${apprenant.prenoms} ${apprenant.nom} (${apprenant.classe}).`,
+        lien: "/dashboard/encadreur/correspondances",
+      },
+      {
+        user_id: user.id,
+        titre: "Demande envoyée",
+        message: `Votre demande a bien été transmise${encNom ? ` à ${encNom}` : ""}. L'encadreur vous contactera prochainement.`,
+        lien: "/dashboard/parent/correspondances",
+      },
+    ]);
+    toast.success("Contact débloqué ! L'encadreur a été notifié.");
     setUnlocking(null);
     reload();
   };
