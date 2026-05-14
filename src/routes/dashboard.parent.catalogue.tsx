@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2, BookOpen } from "lucide-react";
+import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle2, BookOpen, Brain } from "lucide-react";
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
