@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -17,6 +17,30 @@ export const Route = createFileRoute("/dashboard/encadreur/catalogue")({
 const MAX_CONTACTS = 5;
 const PRICE_CONTACT = 5000;
 
+declare global {
+  interface Window {
+    openKkiapayWidget?: (opts: any) => void;
+    addSuccessListener?: (cb: (resp: any) => void) => void;
+    addFailedListener?: (cb: (resp: any) => void) => void;
+  }
+}
+
+function loadKkiapayScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (typeof window === "undefined") return reject(new Error("SSR"));
+    if (window.openKkiapayWidget) return resolve();
+    const existing = document.querySelector('script[data-kkiapay]') as HTMLScriptElement | null;
+    if (existing) { existing.addEventListener("load", () => resolve()); return; }
+    const s = document.createElement("script");
+    s.src = "https://cdn.kkiapay.me/k.js";
+    s.async = true;
+    s.dataset.kkiapay = "1";
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error("Impossible de charger KKiaPay"));
+    document.head.appendChild(s);
+  });
+}
+
 function EncadreurCatalogue() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -24,6 +48,7 @@ function EncadreurCatalogue() {
   const [apprenants, setApprenants] = useState<any[]>([]);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
+  const currentPaiementId = useRef<string | null>(null);
 
   const reload = async () => {
     if (!user) return;
@@ -54,6 +79,35 @@ function EncadreurCatalogue() {
   };
 
   useEffect(() => { reload(); }, [user]);
+
+  useEffect(() => {
+    let mounted = true;
+    loadKkiapayScript().then(() => {
+      if (!mounted) return;
+      window.addSuccessListener?.(async (resp: any) => {
+        const transactionId = resp?.transactionId ?? resp?.id;
+        const paiement_id = currentPaiementId.current;
+        if (!transactionId || !paiement_id) return;
+        toast.loading("Vérification du paiement…", { id: "kkiapay-verify" });
+        const { data, error } = await supabase.functions.invoke("kkiapay-verify", {
+          body: { paiement_id, transactionId },
+        });
+        toast.dismiss("kkiapay-verify");
+        if (error || !data?.ok) {
+          toast.error("Paiement non confirmé.");
+        } else {
+          toast.success("Contact débloqué !");
+        }
+        currentPaiementId.current = null;
+        reload();
+      });
+      window.addFailedListener?.((resp: any) => {
+        console.warn("KKiaPay failed", resp);
+        toast.error("Paiement échoué ou annulé.");
+      });
+    }).catch((e) => console.error(e));
+    return () => { mounted = false; };
+  }, [user]);
 
   const sorted = useMemo(() => {
     if (!encadreur) return [];
@@ -86,9 +140,9 @@ function EncadreurCatalogue() {
       return;
     }
     if (!encadreur.premium) {
-      // Initiate FedaPay payment
+      // Initiate KKiaPay payment
       setUnlocking(a.id);
-      const { data, error } = await supabase.functions.invoke("fedapay-create-payment", {
+      const { data, error } = await supabase.functions.invoke("kkiapay-init", {
         body: {
           montant: PRICE_CONTACT,
           type: "contact_unique_encadreur",
@@ -96,11 +150,26 @@ function EncadreurCatalogue() {
         },
       });
       setUnlocking(null);
-      if (error || !data?.payment_url) {
-        toast.error("Impossible d'initier le paiement. Vérifiez la configuration FedaPay.");
+      if (error || !data?.public_key || !data?.paiement_id) {
+        toast.error("Impossible d'initier le paiement. Vérifiez la configuration KKiaPay.");
         return;
       }
-      window.location.href = data.payment_url;
+      currentPaiementId.current = data.paiement_id;
+      if (!window.openKkiapayWidget) {
+        toast.error("Widget KKiaPay non chargé. Rechargez la page.");
+        return;
+      }
+      window.openKkiapayWidget({
+        amount: data.amount,
+        key: data.public_key,
+        sandbox: data.sandbox,
+        position: "center",
+        theme: "#1e40af",
+        name: data.customer.fullname,
+        email: data.customer.email,
+        phone: data.customer.phone,
+        data: data.paiement_id,
+      });
       return;
     }
 
@@ -146,7 +215,7 @@ function EncadreurCatalogue() {
           <AlertTriangle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-medium">Compte standard — paiement par contact</p>
-            <p className="text-muted-foreground">Chaque déblocage de contact coûte {PRICE_CONTACT.toLocaleString()} FCFA. Devenez Premium en suivant la formation Super Apprenant.</p>
+            <p className="text-muted-foreground">Chaque déblocage de contact coûte {PRICE_CONTACT.toLocaleString()} FCFA via KKiaPay. Devenez Premium en suivant la formation Super Apprenant.</p>
           </div>
         </Card>
       )}
