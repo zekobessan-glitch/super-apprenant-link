@@ -76,10 +76,14 @@ function AdminUsers() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Supprimer cet utilisateur ?")) return;
-    const { error } = await supabase.from("profiles").delete().eq("id", id);
-    if (error) toast.error(error.message);
-    else { toast.success("Supprimé"); load(); }
+    if (!confirm("Supprimer définitivement cet utilisateur et toutes ses données ?")) return;
+    const { data, error } = await supabase.functions.invoke("admin-delete-user", { body: { user_id: id } });
+    if (error || (data as any)?.error) {
+      toast.error((data as any)?.error ?? error?.message ?? "Erreur");
+    } else {
+      toast.success("Utilisateur supprimé");
+      load();
+    }
   };
 
   const handleCreate = async () => {
