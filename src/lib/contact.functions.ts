@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { TablesInsert } from "@/integrations/supabase/types";
 
 export const unlockEncadreurContact = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -26,9 +27,8 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
     if (apprenantError) throw new Error(apprenantError.message);
     if (!apprenant) throw new Error("Apprenant introuvable pour ce parent.");
 
-    const { data: encadreur, error: encadreurError } = await (
-      supabaseAdmin.from("public_encadreurs" as any) as any
-    )
+    const { data: encadreur, error: encadreurError } = await supabaseAdmin
+      .from("public_encadreurs")
       .select("profile_id")
       .eq("profile_id", data.encadreurId)
       .maybeSingle();
@@ -63,7 +63,7 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
       throw new Error("Aucun crédit disponible. Achetez un pack pour débloquer ce contact.");
     }
 
-    const correspondencePayload = {
+    const correspondencePayload: TablesInsert<"correspondances"> = {
       parent_id: userId,
       encadreur_id: data.encadreurId,
       apprenant_id: data.apprenantId,
