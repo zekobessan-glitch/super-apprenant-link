@@ -184,20 +184,11 @@ function EncadreurCatalogue() {
       contact_debloque: true,
     }, { onConflict: "encadreur_id,parent_id,apprenant_id" });
     if (error) { setUnlocking(null); return toast.error(error.message); }
-    await supabase.from("notifications").insert([
-      {
-        user_id: a.parent_id,
-        titre: "Nouvel encadreur intéressé",
-        message: `Un encadreur a débloqué votre contact et souhaite échanger au sujet de ${a.prenoms} ${a.nom}.`,
-        lien: "/dashboard/parent/correspondances",
-      },
-      {
-        user_id: user.id,
-        titre: "Contact débloqué",
-        message: `Vous avez débloqué le contact du parent de ${a.prenoms} ${a.nom}. Retrouvez-le dans vos correspondances.`,
-        lien: "/dashboard/encadreur/correspondances",
-      },
-    ]);
+    await supabase.from("notifications").insert({
+      user_id: a.parent_id,
+      titre: "Nouvel encadreur intéressé",
+      message: `Un encadreur a manifesté son intérêt pour ${a.prenoms} ${a.nom}.`,
+    });
     toast.success("Contact débloqué !");
     setUnlocking(null);
     reload();
