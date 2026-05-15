@@ -9,7 +9,7 @@ export function Footer() {
           rel="noopener noreferrer"
           className="text-accent hover:underline font-medium"
         >
-          ZEKO SERVICE
+          ZEKO SERVICES
         </a>
       </div>
     </footer>
