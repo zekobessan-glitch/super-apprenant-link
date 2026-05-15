@@ -172,7 +172,13 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
           <h3 className="font-semibold text-primary">Identifiants</h3>
           <div><Label>Nom d'utilisateur *</Label><Input value={username} onChange={(e) => setUsername(e.target.value)} required /></div>
           <div><Label>Email *</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
-          <div><Label>Mot de passe *</Label><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} /></div>
+          <div className="relative">
+            <Label>Mot de passe *</Label>
+            <Input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="pr-10" />
+            <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-[28px] text-muted-foreground hover:text-foreground">
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           <Button className="w-full bg-brand text-white" onClick={() => setStep(2)} disabled={!email || !password || !username}>Suivant</Button>
         </div>
       )}
