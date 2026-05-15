@@ -61,6 +61,7 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // Step 2 — profil
   const [nom, setNom] = useState("");

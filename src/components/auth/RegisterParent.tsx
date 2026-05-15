@@ -63,6 +63,7 @@ export function RegisterParent({ onBack }: { onBack: () => void }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [nom, setNom] = useState("");
   const [prenoms, setPrenoms] = useState("");
