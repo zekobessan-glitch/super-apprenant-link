@@ -11,14 +11,19 @@ export const Route = createFileRoute("/dashboard/parent/")({
 
 function ParentHome() {
   const { user } = useAuth();
+  const [profileName, setProfileName] = useState("");
   const [credits, setCredits] = useState(0);
   const [matches, setMatches] = useState(0);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const { data: c } = await supabase.from("contacts_credits").select("credits_restants").eq("parent_id", user.id).maybeSingle();
+      const [{ data: c }, { data: profile }] = await Promise.all([
+        supabase.from("contacts_credits").select("credits_restants").eq("parent_id", user.id).maybeSingle(),
+        supabase.from("profiles").select("nom,prenoms").eq("id", user.id).maybeSingle(),
+      ]);
       setCredits(c?.credits_restants ?? 0);
+      if (profile) setProfileName(`${profile.prenoms} ${profile.nom}`);
       const { count } = await supabase.from("correspondances").select("*", { count: "exact", head: true }).eq("parent_id", user.id);
       setMatches(count ?? 0);
     })();
@@ -27,7 +32,7 @@ function ParentHome() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-primary">Tableau de bord parent</h1>
+        <h1 className="text-3xl font-bold text-primary">{profileName ? `Bonjour ${profileName}` : "Tableau de bord parent"}</h1>
         <p className="text-muted-foreground">Trouvez le meilleur encadreur pour votre enfant</p>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

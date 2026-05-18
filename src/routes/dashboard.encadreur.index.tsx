@@ -12,6 +12,7 @@ export const Route = createFileRoute("/dashboard/encadreur/")({
 
 function EncadreurHome() {
   const { user } = useAuth();
+  const [profileName, setProfileName] = useState("");
   const [premium, setPremium] = useState(false);
   const [matches, setMatches] = useState(0);
   const [debloques, setDebloques] = useState(0);
@@ -19,8 +20,12 @@ function EncadreurHome() {
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const { data: enc } = await supabase.from("encadreurs").select("premium").eq("profile_id", user.id).maybeSingle();
+      const [{ data: enc }, { data: profile }] = await Promise.all([
+        supabase.from("encadreurs").select("premium").eq("profile_id", user.id).maybeSingle(),
+        supabase.from("profiles").select("nom,prenoms").eq("id", user.id).maybeSingle(),
+      ]);
       setPremium(!!enc?.premium);
+      if (profile) setProfileName(`${profile.prenoms} ${profile.nom}`);
       const { count } = await supabase.from("correspondances").select("*", { count: "exact", head: true }).eq("encadreur_id", user.id);
       setMatches(count ?? 0);
       const { count: dc } = await supabase.from("correspondances").select("*", { count: "exact", head: true }).eq("encadreur_id", user.id).eq("contact_debloque", true);
@@ -32,7 +37,7 @@ function EncadreurHome() {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold text-primary">Tableau de bord encadreur</h1>
+          <h1 className="text-3xl font-bold text-primary">{profileName ? `Bonjour ${profileName}` : "Tableau de bord encadreur"}</h1>
           <p className="text-muted-foreground">Bienvenue !</p>
         </div>
         {premium && (
