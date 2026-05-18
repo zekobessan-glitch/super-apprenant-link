@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Users, GraduationCap, CreditCard, UserCog } from "lucide-react";
 
@@ -9,7 +10,17 @@ export const Route = createFileRoute("/dashboard/admin/")({
 });
 
 function AdminHome() {
+  const { user } = useAuth();
+  const [profileName, setProfileName] = useState("");
   const [stats, setStats] = useState({ users: 0, encadreurs: 0, parents: 0, paiements: 0 });
+
+  useEffect(() => {
+    if (user) {
+      supabase.from("profiles").select("nom,prenoms").eq("id", user.id).maybeSingle().then(({ data }) => {
+        if (data) setProfileName(`${data.prenoms} ${data.nom}`);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     (async () => {
@@ -38,7 +49,7 @@ function AdminHome() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-primary">Tableau de bord administrateur</h1>
+        <h1 className="text-3xl font-bold text-primary">{profileName ? `Bonjour ${profileName}` : "Tableau de bord administrateur"}</h1>
         <p className="text-muted-foreground">Vue d'ensemble de la plateforme</p>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
