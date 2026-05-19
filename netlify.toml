@@ -1,0 +1,13 @@
+[build]
+  command = "bun run build"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback : toutes les routes non-fichiers renvoient vers index.html
+# pour laisser TanStack Router gérer le routage côté client.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
