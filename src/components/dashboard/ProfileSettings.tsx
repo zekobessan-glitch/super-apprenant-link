@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { formatZone } from "@/lib/constants";
 
 function ReadField({ label, value }: { label: string; value: any }) {
   if (value === null || value === undefined || value === "" || (Array.isArray(value) && value.length === 0)) return null;
@@ -96,7 +97,7 @@ export function ProfilePage() {
             <ReadField label="Email" value={profile.email} />
             <ReadField label="Téléphone" value={profile.telephone} />
             <ReadField label="Profession" value={profile.profession} />
-            <ReadField label="Zone de résidence" value={profile.zone_residence} />
+            <ReadField label="Zone de résidence" value={formatZone(profile.zone_residence)} />
             <ReadField label="Inscrit le" value={profile.created_at ? new Date(profile.created_at).toLocaleString() : null} />
           </div>
         )}
@@ -106,7 +107,7 @@ export function ProfilePage() {
         <Card className="p-6">
           <h2 className="text-lg font-semibold mb-3">Profil encadreur</h2>
           <ReadField label="Genre" value={encadreur.genre} />
-          <ReadField label="Zone de résidence" value={encadreur.zone_residence} />
+          <ReadField label="Zone de résidence" value={formatZone(encadreur.zone_residence)} />
           <ReadField label="Dernier diplôme" value={encadreur.dernier_diplome} />
           <ReadField label="Expérience pro" value={encadreur.experience_pro} />
           <ReadField label="Détail expérience" value={encadreur.experience_detail} />
@@ -138,7 +139,7 @@ export function ProfilePage() {
               <ReadField label="Série" value={a.serie} />
               <ReadField label="Matières" value={a.matieres} />
               <ReadField label="Profil d'apprentissage" value={a.profil_apprentissage} />
-              <ReadField label="Zone de résidence" value={a.zone_residence} />
+              <ReadField label="Zone de résidence" value={formatZone(a.zone_residence)} />
             </div>
           ))}
         </Card>
