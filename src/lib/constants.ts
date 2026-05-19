@@ -6,6 +6,11 @@ export const ZONES = {
 
 export type ZoneKey = keyof typeof ZONES;
 
+export function formatZone(zone: string | null | undefined): string {
+  if (!zone) return "";
+  return ZONES[zone as ZoneKey] ?? zone;
+}
+
 export const CLASSES_PRIMAIRE = ["CP1", "CP2", "CE1", "CE2", "CM1", "CM2"];
 export const CLASSES_COLLEGE = ["6e", "5e", "4e", "3e"];
 export const CLASSES_LYCEE = ["Seconde", "Première", "Terminale"];
