@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LifeBuoy } from "lucide-react";
+import { LifeBuoy, Send } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard/admin/support")({
@@ -17,6 +18,12 @@ function AdminSupportPage() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [users, setUsers] = useState<any[]>([]);
+  const [newUserId, setNewUserId] = useState<string>("");
+  const [newSearch, setNewSearch] = useState("");
+  const [newSujet, setNewSujet] = useState("");
+  const [newMessage, setNewMessage] = useState("");
+  const [sendingNew, setSendingNew] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -36,7 +43,57 @@ function AdminSupportPage() {
 
   useEffect(() => {
     load();
+    supabase
+      .from("profiles")
+      .select("id, nom, prenoms, email")
+      .order("nom", { ascending: true })
+      .then(({ data }) => setUsers(data ?? []));
   }, []);
+
+  const filteredUsers = useMemo(() => {
+    const q = newSearch.trim().toLowerCase();
+    if (!q) return users.slice(0, 50);
+    return users
+      .filter((u) =>
+        `${u.prenoms ?? ""} ${u.nom ?? ""} ${u.email ?? ""}`.toLowerCase().includes(q),
+      )
+      .slice(0, 50);
+  }, [users, newSearch]);
+
+  const sendNewMessage = async () => {
+    if (!newUserId || !newSujet.trim() || !newMessage.trim()) {
+      toast.error("Sélectionnez un utilisateur et remplissez le message");
+      return;
+    }
+    setSendingNew(true);
+    const adminId = (await supabase.auth.getUser()).data.user?.id;
+    const { error } = await supabase.from("support_messages").insert({
+      user_id: newUserId,
+      sujet: newSujet.trim(),
+      message: newMessage.trim(),
+      reponse_admin: newMessage.trim(),
+      statut: "resolu",
+      admin_id: adminId,
+    });
+    if (error) {
+      setSendingNew(false);
+      toast.error("Erreur : " + error.message);
+      return;
+    }
+    await supabase.from("notifications").insert({
+      user_id: newUserId,
+      titre: newSujet.trim(),
+      message: newMessage.trim().slice(0, 200),
+      lien: "/dashboard/support",
+    });
+    setSendingNew(false);
+    toast.success("Message envoyé");
+    setNewUserId("");
+    setNewSearch("");
+    setNewSujet("");
+    setNewMessage("");
+    load();
+  };
 
   const respond = async (id: string, user_id: string) => {
     const reponse = drafts[id]?.trim();
