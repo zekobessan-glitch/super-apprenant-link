@@ -233,7 +233,7 @@ function EncadreurCatalogue() {
                 <Badge className="bg-brand text-white">{score}%</Badge>
               </div>
               <div className="text-sm text-muted-foreground space-y-1">
-                <div className="flex items-start gap-1"><MapPin className="h-3.5 w-3.5 mt-0.5" /> {ZONES[app.zone_residence as keyof typeof ZONES]?.split("(")[0]}</div>
+                <div className="flex items-start gap-1"><MapPin className="h-3.5 w-3.5 mt-0.5" /> {ZONES[app.zone_residence as keyof typeof ZONES] ?? app.zone_residence}</div>
                 {app.matieres?.length > 0 && (
                   <div className="flex items-start gap-1"><BookOpen className="h-3.5 w-3.5 mt-0.5" /> {app.matieres.join(", ")}</div>
                 )}

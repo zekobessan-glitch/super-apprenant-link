@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Eye } from "lucide-react";
+import { formatZone } from "@/lib/constants";
 
 export const Route = createFileRoute("/dashboard/admin/validations")({
   component: Validations,
@@ -138,13 +139,13 @@ function Validations() {
                 <Field label="Email" value={selected.profiles?.email} />
                 <Field label="Téléphone" value={selected.profiles?.telephone} />
                 <Field label="Profession" value={selected.profiles?.profession} />
-                <Field label="Zone de résidence" value={selected.profiles?.zone_residence} />
+                <Field label="Zone de résidence" value={formatZone(selected.profiles?.zone_residence)} />
                 <Field label="Inscrit le" value={selected.profiles?.created_at ? new Date(selected.profiles.created_at).toLocaleString() : null} />
               </section>
               <section>
                 <h3 className="font-semibold text-primary mb-2">Profil encadreur</h3>
                 <Field label="Genre" value={selected.genre} />
-                <Field label="Zone de résidence" value={selected.zone_residence} />
+                <Field label="Zone de résidence" value={formatZone(selected.zone_residence)} />
                 <Field label="Dernier diplôme" value={selected.dernier_diplome} />
                 <Field label="Expérience pro" value={selected.experience_pro} />
                 <Field label="Détail expérience" value={selected.experience_detail} />
