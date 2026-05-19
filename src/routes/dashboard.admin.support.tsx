@@ -134,6 +134,60 @@ function AdminSupportPage() {
         <p className="text-muted-foreground">Demandes des utilisateurs</p>
       </div>
 
+      <Card className="p-4 space-y-3">
+        <div className="flex items-center gap-2 font-semibold">
+          <Send className="h-4 w-4" /> Nouveau message à un utilisateur
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Rechercher un utilisateur</label>
+            <Input
+              placeholder="Nom, prénoms ou email…"
+              value={newSearch}
+              onChange={(e) => setNewSearch(e.target.value)}
+            />
+            <Select value={newUserId} onValueChange={setNewUserId}>
+              <SelectTrigger><SelectValue placeholder="Sélectionner un destinataire" /></SelectTrigger>
+              <SelectContent>
+                {filteredUsers.map((u) => (
+                  <SelectItem key={u.id} value={u.id}>
+                    {u.prenoms} {u.nom} — {u.email}
+                  </SelectItem>
+                ))}
+                {filteredUsers.length === 0 && (
+                  <div className="px-2 py-1 text-xs text-muted-foreground">Aucun résultat</div>
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Sujet</label>
+            <Input
+              placeholder="Objet du message"
+              value={newSujet}
+              onChange={(e) => setNewSujet(e.target.value)}
+              maxLength={150}
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Message</label>
+          <Textarea
+            rows={4}
+            placeholder="Écrire le message…"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            maxLength={2000}
+          />
+        </div>
+        <div>
+          <Button onClick={sendNewMessage} disabled={sendingNew || !newUserId || !newSujet.trim() || !newMessage.trim()}>
+            <Send className="h-4 w-4 mr-2" /> {sendingNew ? "Envoi…" : "Envoyer"}
+          </Button>
+        </div>
+      </Card>
+
+
       {loading ? (
         <div className="text-muted-foreground">Chargement…</div>
       ) : items.length === 0 ? (
