@@ -18,6 +18,12 @@ function AdminSupportPage() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [users, setUsers] = useState<any[]>([]);
+  const [newUserId, setNewUserId] = useState<string>("");
+  const [newSearch, setNewSearch] = useState("");
+  const [newSujet, setNewSujet] = useState("");
+  const [newMessage, setNewMessage] = useState("");
+  const [sendingNew, setSendingNew] = useState(false);
 
   const load = async () => {
     setLoading(true);
