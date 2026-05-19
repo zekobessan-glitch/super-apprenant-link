@@ -158,7 +158,7 @@ function ParentCatalogue() {
                 </div>
               </div>
               <div className="text-sm text-muted-foreground space-y-1">
-                <div className="flex items-start gap-1"><MapPin className="h-3.5 w-3.5 mt-0.5" /> {ZONES[enc.zone_residence as keyof typeof ZONES]?.split("(")[0]}</div>
+                <div className="flex items-start gap-1"><MapPin className="h-3.5 w-3.5 mt-0.5" /> {ZONES[enc.zone_residence as keyof typeof ZONES] ?? enc.zone_residence}</div>
                 <div className="flex items-start gap-1"><GraduationCap className="h-3.5 w-3.5 mt-0.5" /> {enc.dernier_diplome}</div>
               </div>
               {(() => {

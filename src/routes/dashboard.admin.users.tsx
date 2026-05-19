@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Eye, UserPlus } from "lucide-react";
 import { toast } from "sonner";
+import { formatZone } from "@/lib/constants";
 
 export const Route = createFileRoute("/dashboard/admin/users")({
   component: AdminUsers,
@@ -166,7 +167,7 @@ function AdminUsers() {
                 <Field label="Email" value={details.profile?.email} />
                 <Field label="Téléphone" value={details.profile?.telephone} />
                 <Field label="Profession" value={details.profile?.profession} />
-                <Field label="Zone de résidence" value={details.profile?.zone_residence} />
+                <Field label="Zone de résidence" value={formatZone(details.profile?.zone_residence)} />
                 <Field label="Photo" value={details.profile?.photo_url} />
                 <Field label="Inscrit le" value={details.profile?.created_at ? new Date(details.profile.created_at).toLocaleString() : null} />
               </section>
@@ -175,7 +176,7 @@ function AdminUsers() {
                 <section>
                   <h3 className="font-semibold text-primary mb-2">Informations encadreur</h3>
                   <Field label="Genre" value={details.encadreur.genre} />
-                  <Field label="Zone de résidence" value={details.encadreur.zone_residence} />
+                  <Field label="Zone de résidence" value={formatZone(details.encadreur.zone_residence)} />
                   <Field label="Dernier diplôme" value={details.encadreur.dernier_diplome} />
                   <Field label="Expérience pro" value={details.encadreur.experience_pro} />
                   <Field label="Détail expérience" value={details.encadreur.experience_detail} />
@@ -206,7 +207,7 @@ function AdminUsers() {
                       <Field label="Série" value={a.serie} />
                       <Field label="Matières" value={a.matieres} />
                       <Field label="Profil d'apprentissage" value={a.profil_apprentissage} />
-                      <Field label="Zone de résidence" value={a.zone_residence} />
+                      <Field label="Zone de résidence" value={formatZone(a.zone_residence)} />
                     </div>
                   ))}
                 </section>
