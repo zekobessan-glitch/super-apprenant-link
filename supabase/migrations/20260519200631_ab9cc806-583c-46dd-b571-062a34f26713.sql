@@ -1,0 +1,1 @@
+CREATE POLICY "support_admin_insert" ON public.support_messages FOR INSERT TO authenticated WITH CHECK (has_role(auth.uid(), 'admin'::app_role));
