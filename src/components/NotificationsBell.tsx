@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
+import { playNotificationSound, primeNotificationSound } from "@/lib/notification-sound";
 
 export function NotificationsBell() {
   const { user } = useAuth();
   const [notifs, setNotifs] = useState<any[]>([]);
+  const mountedRef = useRef(false);
 
   const load = async () => {
     if (!user) return;
@@ -17,15 +19,23 @@ export function NotificationsBell() {
   };
 
   useEffect(() => {
+    primeNotificationSound();
+  }, []);
+
+  useEffect(() => {
     load();
     if (!user) return;
+    mountedRef.current = true;
     const ch = supabase.channel(`notifs:${user.id}:${Math.random().toString(36).slice(2)}`);
     ch.on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
-      () => load()
+      () => {
+        if (mountedRef.current) playNotificationSound();
+        load();
+      }
     ).subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => { mountedRef.current = false; supabase.removeChannel(ch); };
   }, [user]);
 
   const unread = notifs.filter((n) => !n.lu).length;
