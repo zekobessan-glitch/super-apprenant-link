@@ -24,6 +24,8 @@ function ParentCatalogue() {
   const [credits, setCredits] = useState(0);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
+  const unlockFn = useServerFn(unlockEncadreurContact);
+
 
   const reload = async () => {
     if (!user) return;
