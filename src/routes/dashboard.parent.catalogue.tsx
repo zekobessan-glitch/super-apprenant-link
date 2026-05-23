@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useMemo } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
+import { unlockEncadreurContact } from "@/lib/unlock-contact.functions";
 
 export const Route = createFileRoute("/dashboard/parent/catalogue")({
   component: ParentCatalogue,
