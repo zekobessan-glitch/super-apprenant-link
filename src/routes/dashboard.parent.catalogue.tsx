@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useMemo } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Crown, Lock, MapPin, GraduationCap, Loader2, MessageCircle, CheckCircle
 import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
+import { unlockEncadreurContact } from "@/lib/unlock-contact.functions";
 
 export const Route = createFileRoute("/dashboard/parent/catalogue")({
   component: ParentCatalogue,
@@ -22,6 +24,8 @@ function ParentCatalogue() {
   const [credits, setCredits] = useState(0);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
+  const unlockFn = useServerFn(unlockEncadreurContact);
+
 
   const reload = async () => {
     if (!user) return;
@@ -92,37 +96,17 @@ function ParentCatalogue() {
       return;
     }
     setUnlocking(enc.profile_id);
-    const { error } = await supabase.from("correspondances").upsert({
-      parent_id: user.id,
-      encadreur_id: enc.profile_id,
-      apprenant_id: apprenant.id,
-      statut: "debloquee",
-      initiateur: "parent",
-      contact_debloque: true,
-    }, { onConflict: "encadreur_id,parent_id,apprenant_id" });
-
-    if (error) { setUnlocking(null); return toast.error(error.message); }
-
-    await supabase.from("contacts_credits").update({ credits_restants: credits - 1 }).eq("parent_id", user.id);
-    const encNom = `${enc.profiles?.prenoms ?? ""} ${enc.profiles?.nom ?? ""}`.trim();
-    await supabase.from("notifications").insert([
-      {
-        user_id: enc.profile_id,
-        titre: "Nouveau parent intéressé",
-        message: `Un parent a payé pour débloquer votre contact et souhaite être contacté pour ${apprenant.prenoms} ${apprenant.nom} (${apprenant.classe}).`,
-        lien: "/dashboard/encadreur/correspondances",
-      },
-      {
-        user_id: user.id,
-        titre: "Demande envoyée",
-        message: `Votre demande a bien été transmise${encNom ? ` à ${encNom}` : ""}. L'encadreur vous contactera prochainement.`,
-        lien: "/dashboard/parent/correspondances",
-      },
-    ]);
-    toast.success("Contact débloqué ! L'encadreur a été notifié.");
-    setUnlocking(null);
-    reload();
+    try {
+      await unlockFn({ data: { encadreur_id: enc.profile_id, apprenant_id: apprenant.id } });
+      toast.success("Contact débloqué ! L'encadreur a été notifié.");
+      reload();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Erreur lors du déblocage");
+    } finally {
+      setUnlocking(null);
+    }
   };
+
 
   if (loading) return <div className="p-6 flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Chargement...</div>;
   if (!apprenant) return <div className="p-6"><Card className="p-6">Aucun apprenant enregistré.</Card></div>;
