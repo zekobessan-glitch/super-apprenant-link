@@ -22,7 +22,7 @@ export function RegisterChooser() {
       </p>
       <Card
         onClick={() => setChoice("parent")}
-        className="p-4 cursor-pointer hover:border-primary hover:shadow-soft transition-all flex items-center gap-4"
+        className="p-4 cursor-pointer hover:border-primary hover:shadow-soft transition-all flex items-center gap-4 animate-float-slow hover:[animation-play-state:paused]"
       >
         <div className="bg-brand text-white p-3 rounded-lg">
           <Users className="h-6 w-6" />
