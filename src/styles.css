@@ -136,4 +136,18 @@
   .shadow-elegant { box-shadow: var(--shadow-elegant); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
+
+  @keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .animate-float-slow {
+    animation: float-y 4s ease-in-out infinite;
+    will-change: transform;
+  }
+  .animate-float-slower {
+    animation: float-y 5s ease-in-out infinite;
+    animation-delay: 0.8s;
+    will-change: transform;
+  }
 }
