@@ -36,7 +36,7 @@ export function RegisterChooser() {
       </Card>
       <Card
         onClick={() => setChoice("encadreur")}
-        className="p-4 cursor-pointer hover:border-primary hover:shadow-soft transition-all flex items-center gap-4"
+        className="p-4 cursor-pointer hover:border-primary hover:shadow-soft transition-all flex items-center gap-4 animate-float-slower hover:[animation-play-state:paused]"
       >
         <div className="bg-accent-gradient text-foreground p-3 rounded-lg">
           <GraduationCap className="h-6 w-6" />
