@@ -55,7 +55,7 @@ function HomePage() {
 
             {/* Auth card */}
             <div className="w-full max-w-md mx-auto lg:ml-auto">
-              <Card className="p-6 shadow-elegant">
+            <Card className="p-6 shadow-elegant animate-float-slow hover:[animation-play-state:paused] transition-all">
                 <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
                   <TabsList className="grid w-full grid-cols-2 mb-6">
                     <TabsTrigger value="login">Connexion</TabsTrigger>
