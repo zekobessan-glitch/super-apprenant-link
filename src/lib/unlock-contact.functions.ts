@@ -11,6 +11,7 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => InputSchema.parse(data))
   .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const parentId = context.userId;
 
     // Verify apprenant belongs to parent
