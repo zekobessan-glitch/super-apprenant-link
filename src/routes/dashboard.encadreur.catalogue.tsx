@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -174,7 +174,7 @@ function EncadreurCatalogue() {
           <AlertTriangle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-medium">Compte standard — paiement par contact</p>
-            <p className="text-muted-foreground">Chaque déblocage de contact coûte {PRICE_CONTACT.toLocaleString()} FCFA via KKiaPay. Devenez Premium en suivant la formation Super Apprenant.</p>
+            <p className="text-muted-foreground">Chaque déblocage de contact coûte {PRICE_CONTACT.toLocaleString()} FCFA via GeniusPay. Devenez Premium en suivant la formation Super Apprenant.</p>
           </div>
         </Card>
       )}
