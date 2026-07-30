@@ -669,6 +669,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      unlock_encadreur_contact: {
+        Args: { _apprenant_id: string; _encadreur_id: string }
+        Returns: number
+      }
     }
     Enums: {
       app_role: "admin" | "encadreur" | "parent"
