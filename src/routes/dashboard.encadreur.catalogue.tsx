@@ -108,38 +108,29 @@ function EncadreurCatalogue() {
       return;
     }
     if (!encadreur.premium) {
-      // Initiate KKiaPay payment
+      // Paiement GeniusPay (checkout hébergé)
       setUnlocking(a.id);
-      const { data, error } = await supabase.functions.invoke("kkiapay-init", {
+      const returnUrl = `${window.location.origin}${window.location.pathname}`;
+      const { data, error } = await supabase.functions.invoke("geniuspay-init", {
         body: {
           montant: PRICE_CONTACT,
           type: "contact_unique_encadreur",
+          description: "Déblocage d'un contact parent",
           metadata: { apprenant_id: a.id, parent_id: a.parent_id },
+          success_url: returnUrl,
+          error_url: returnUrl,
         },
       });
       setUnlocking(null);
-      if (error || !data?.public_key || !data?.paiement_id) {
-        toast.error("Impossible d'initier le paiement. Vérifiez la configuration KKiaPay.");
+      if (error || !data?.checkout_url) {
+        toast.error("Impossible d'initier le paiement. Vérifiez la configuration GeniusPay.");
         return;
       }
-      currentPaiementId.current = data.paiement_id;
-      if (!window.openKkiapayWidget) {
-        toast.error("Widget KKiaPay non chargé. Rechargez la page.");
-        return;
-      }
-      window.openKkiapayWidget({
-        amount: data.amount,
-        key: data.public_key,
-        sandbox: data.sandbox,
-        position: "center",
-        theme: "#1e40af",
-        name: data.customer.fullname,
-        email: data.customer.email,
-        phone: data.customer.phone,
-        data: data.paiement_id,
-      });
+      sessionStorage.setItem("gp_ref_enc", data.reference);
+      window.location.href = data.checkout_url;
       return;
     }
+
 
     // Premium : déblocage direct
     setUnlocking(a.id);
