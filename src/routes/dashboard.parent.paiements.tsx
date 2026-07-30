@@ -28,12 +28,13 @@ function ParentPaiements() {
 
   useEffect(() => { refresh(); }, [user]);
 
-  // Retour depuis le checkout GeniusPay : ?gp_ref=MTX-xxxx
+  // Retour depuis le checkout GeniusPay
   useEffect(() => {
     if (typeof window === "undefined" || !user) return;
     const params = new URLSearchParams(window.location.search);
-    const reference = params.get("gp_ref");
+    const reference = params.get("gp_ref") || sessionStorage.getItem("gp_ref");
     if (!reference) return;
+    sessionStorage.removeItem("gp_ref");
     (async () => {
       toast.loading("Vérification du paiement…", { id: "gp-verify" });
       const { data, error } = await supabase.functions.invoke("geniuspay-verify", { body: { reference } });
@@ -57,8 +58,8 @@ function ParentPaiements() {
         type: "pack_contacts_parent",
         metadata: { credits: PACK_CREDITS },
         description: `Pack ${PACK_CREDITS} contacts`,
-        success_url: `${returnUrl}?gp_ref=`,
-        error_url: `${returnUrl}?gp_ref=`,
+        success_url: returnUrl,
+        error_url: returnUrl,
       },
     });
     setLoading(false);
@@ -66,11 +67,10 @@ function ParentPaiements() {
       toast.error("Impossible d'initier le paiement. Vérifiez la configuration GeniusPay.");
       return;
     }
-    // On mémorise la référence pour la vérification au retour
-    const url = new URL(data.checkout_url);
     sessionStorage.setItem("gp_ref", data.reference);
-    window.location.href = url.toString();
+    window.location.href = data.checkout_url;
   };
+
 
   return (
     <div className="p-6 space-y-6">
