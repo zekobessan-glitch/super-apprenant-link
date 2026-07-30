@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -15,35 +15,10 @@ export const Route = createFileRoute("/dashboard/parent/paiements")({
 const PACK_PRICE = 5000;
 const PACK_CREDITS = 3;
 
-declare global {
-  interface Window {
-    openKkiapayWidget?: (opts: any) => void;
-    addSuccessListener?: (cb: (resp: any) => void) => void;
-    addFailedListener?: (cb: (resp: any) => void) => void;
-  }
-}
-
-function loadKkiapayScript(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (typeof window === "undefined") return reject(new Error("SSR"));
-    if (window.openKkiapayWidget) return resolve();
-    const existing = document.querySelector('script[data-kkiapay]') as HTMLScriptElement | null;
-    if (existing) { existing.addEventListener("load", () => resolve()); return; }
-    const s = document.createElement("script");
-    s.src = "https://cdn.kkiapay.me/k.js";
-    s.async = true;
-    s.dataset.kkiapay = "1";
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error("Impossible de charger KKiaPay"));
-    document.head.appendChild(s);
-  });
-}
-
 function ParentPaiements() {
   const { user } = useAuth();
   const [rows, setRows] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const currentPaiementId = useRef<string | null>(null);
 
   const refresh = () => {
     if (!user) return;
@@ -53,62 +28,48 @@ function ParentPaiements() {
 
   useEffect(() => { refresh(); }, [user]);
 
+  // Retour depuis le checkout GeniusPay : ?gp_ref=MTX-xxxx
   useEffect(() => {
-    let mounted = true;
-    loadKkiapayScript().then(() => {
-      if (!mounted) return;
-      window.addSuccessListener?.(async (resp: any) => {
-        const transactionId = resp?.transactionId ?? resp?.id;
-        const paiement_id = currentPaiementId.current;
-        if (!transactionId || !paiement_id) return;
-        toast.loading("Vérification du paiement…", { id: "kkiapay-verify" });
-        const { data, error } = await supabase.functions.invoke("kkiapay-verify", {
-          body: { paiement_id, transactionId },
-        });
-        toast.dismiss("kkiapay-verify");
-        if (error || !data?.ok) {
-          toast.error("Paiement non confirmé.");
-        } else {
-          toast.success(`Paiement réussi ! ${PACK_CREDITS} crédits ajoutés.`);
-        }
-        refresh();
-      });
-      window.addFailedListener?.((resp: any) => {
-        console.warn("KKiaPay failed", resp);
-        toast.error("Paiement échoué ou annulé.");
-        refresh();
-      });
-    }).catch((e) => console.error(e));
-    return () => { mounted = false; };
+    if (typeof window === "undefined" || !user) return;
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get("gp_ref");
+    if (!reference) return;
+    (async () => {
+      toast.loading("Vérification du paiement…", { id: "gp-verify" });
+      const { data, error } = await supabase.functions.invoke("geniuspay-verify", { body: { reference } });
+      toast.dismiss("gp-verify");
+      if (error) toast.error("Vérification impossible pour le moment.");
+      else if (data?.status === "reussi") toast.success(`Paiement réussi ! ${PACK_CREDITS} crédits ajoutés.`);
+      else if (data?.status === "en_attente") toast.info("Paiement en attente de confirmation.");
+      else toast.error("Paiement échoué ou annulé.");
+      window.history.replaceState({}, "", window.location.pathname);
+      refresh();
+    })();
   }, [user]);
 
   const buy = async () => {
     if (!user) return;
     setLoading(true);
-    const { data, error } = await supabase.functions.invoke("kkiapay-init", {
-      body: { montant: PACK_PRICE, type: "pack_contacts_parent", metadata: { credits: PACK_CREDITS } },
+    const returnUrl = `${window.location.origin}${window.location.pathname}`;
+    const { data, error } = await supabase.functions.invoke("geniuspay-init", {
+      body: {
+        montant: PACK_PRICE,
+        type: "pack_contacts_parent",
+        metadata: { credits: PACK_CREDITS },
+        description: `Pack ${PACK_CREDITS} contacts`,
+        success_url: `${returnUrl}?gp_ref=`,
+        error_url: `${returnUrl}?gp_ref=`,
+      },
     });
     setLoading(false);
-    if (error || !data?.public_key || !data?.paiement_id) {
-      toast.error("Impossible d'initier le paiement.");
+    if (error || !data?.checkout_url) {
+      toast.error("Impossible d'initier le paiement. Vérifiez la configuration GeniusPay.");
       return;
     }
-    currentPaiementId.current = data.paiement_id;
-    if (!window.openKkiapayWidget) {
-      toast.error("Widget KKiaPay non chargé. Rechargez la page.");
-      return;
-    }
-    window.openKkiapayWidget({
-      amount: data.amount,
-      key: data.public_key,
-      sandbox: data.sandbox,
-      position: "center",
-      theme: "#1e40af",
-      name: data.customer.fullname,
-      email: data.customer.email,
-      phone: data.customer.phone,
-      data: data.paiement_id,
-    });
+    // On mémorise la référence pour la vérification au retour
+    const url = new URL(data.checkout_url);
+    sessionStorage.setItem("gp_ref", data.reference);
+    window.location.href = url.toString();
   };
 
   return (
@@ -120,7 +81,7 @@ function ParentPaiements() {
         <p className="text-white/85 text-sm mb-4">Débloquez {PACK_CREDITS} encadreurs pour {PACK_PRICE.toLocaleString()} FCFA.</p>
         <Button onClick={buy} disabled={loading} className="bg-accent text-accent-foreground hover:opacity-90">
           {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CreditCard className="h-4 w-4 mr-2" />}
-          Payer via KKiaPay
+          Payer via GeniusPay
         </Button>
       </Card>
 
