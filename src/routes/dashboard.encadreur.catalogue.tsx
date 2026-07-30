@@ -17,30 +17,6 @@ export const Route = createFileRoute("/dashboard/encadreur/catalogue")({
 const MAX_CONTACTS = 5;
 const PRICE_CONTACT = 5000;
 
-declare global {
-  interface Window {
-    openKkiapayWidget?: (opts: any) => void;
-    addSuccessListener?: (cb: (resp: any) => void) => void;
-    addFailedListener?: (cb: (resp: any) => void) => void;
-  }
-}
-
-function loadKkiapayScript(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (typeof window === "undefined") return reject(new Error("SSR"));
-    if (window.openKkiapayWidget) return resolve();
-    const existing = document.querySelector('script[data-kkiapay]') as HTMLScriptElement | null;
-    if (existing) { existing.addEventListener("load", () => resolve()); return; }
-    const s = document.createElement("script");
-    s.src = "https://cdn.kkiapay.me/k.js";
-    s.async = true;
-    s.dataset.kkiapay = "1";
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error("Impossible de charger KKiaPay"));
-    document.head.appendChild(s);
-  });
-}
-
 function EncadreurCatalogue() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -48,7 +24,7 @@ function EncadreurCatalogue() {
   const [apprenants, setApprenants] = useState<any[]>([]);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
-  const currentPaiementId = useRef<string | null>(null);
+
 
   const reload = async () => {
     if (!user) return;
