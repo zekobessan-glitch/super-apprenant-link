@@ -56,34 +56,26 @@ function EncadreurCatalogue() {
 
   useEffect(() => { reload(); }, [user]);
 
+  // Retour depuis le checkout GeniusPay
   useEffect(() => {
-    let mounted = true;
-    loadKkiapayScript().then(() => {
-      if (!mounted) return;
-      window.addSuccessListener?.(async (resp: any) => {
-        const transactionId = resp?.transactionId ?? resp?.id;
-        const paiement_id = currentPaiementId.current;
-        if (!transactionId || !paiement_id) return;
-        toast.loading("Vérification du paiement…", { id: "kkiapay-verify" });
-        const { data, error } = await supabase.functions.invoke("kkiapay-verify", {
-          body: { paiement_id, transactionId },
-        });
-        toast.dismiss("kkiapay-verify");
-        if (error || !data?.ok) {
-          toast.error("Paiement non confirmé.");
-        } else {
-          toast.success("Contact débloqué !");
-        }
-        currentPaiementId.current = null;
-        reload();
-      });
-      window.addFailedListener?.((resp: any) => {
-        console.warn("KKiaPay failed", resp);
-        toast.error("Paiement échoué ou annulé.");
-      });
-    }).catch((e) => console.error(e));
-    return () => { mounted = false; };
+    if (typeof window === "undefined" || !user) return;
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get("gp_ref") || sessionStorage.getItem("gp_ref_enc");
+    if (!reference) return;
+    sessionStorage.removeItem("gp_ref_enc");
+    (async () => {
+      toast.loading("Vérification du paiement…", { id: "gp-verify" });
+      const { data, error } = await supabase.functions.invoke("geniuspay-verify", { body: { reference } });
+      toast.dismiss("gp-verify");
+      if (error) toast.error("Vérification impossible pour le moment.");
+      else if (data?.status === "reussi") toast.success("Contact débloqué !");
+      else if (data?.status === "en_attente") toast.info("Paiement en attente de confirmation.");
+      else toast.error("Paiement échoué ou annulé.");
+      window.history.replaceState({}, "", window.location.pathname);
+      reload();
+    })();
   }, [user]);
+
 
   const sorted = useMemo(() => {
     if (!encadreur) return [];
