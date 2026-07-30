@@ -20,3 +20,12 @@ verify_jwt = true
 
 [functions.admin-delete-user]
 verify_jwt = true
+
+[functions.geniuspay-init]
+verify_jwt = true
+
+[functions.geniuspay-verify]
+verify_jwt = true
+
+[functions.geniuspay-webhook]
+verify_jwt = false
