@@ -33,15 +33,55 @@ async function applyEffects(admin: any, paiement: any) {
   }
 }
 
+function timingSafeEqual(a: string, b: string) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+async function hmacHex(secret: string, body: string) {
+  const key = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(body));
+  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const apiKey = Deno.env.get("GENIUSPAY_PUBLIC_KEY")!;
     const apiSecret = Deno.env.get("GENIUSPAY_SECRET_KEY")!;
+    const webhookSecret = Deno.env.get("GENIUSPAY_WEBHOOK_SECRET") ?? Deno.env.get("STRIPE_WEBHOOK_SECRET");
 
-    const payload = await req.json().catch(() => null);
+    const rawBody = await req.text();
+
+    // Vérification de la signature du webhook (si un secret est configuré)
+    if (webhookSecret) {
+      const provided = (
+        req.headers.get("x-geniuspay-signature") ??
+        req.headers.get("x-webhook-signature") ??
+        req.headers.get("x-signature") ??
+        ""
+      ).replace(/^sha256=/i, "").trim().toLowerCase();
+
+      const expected = await hmacHex(webhookSecret, rawBody);
+      const okHmac = provided.length > 0 && timingSafeEqual(provided, expected);
+      // Certains dashboards envoient le "secret hash" tel quel plutôt qu'un HMAC
+      const okPlain = provided.length > 0 && timingSafeEqual(provided, webhookSecret.toLowerCase());
+
+      if (!okHmac && !okPlain) {
+        console.warn("GeniusPay webhook: signature invalide");
+        return new Response(JSON.stringify({ error: "signature invalide" }), { status: 401, headers: corsHeaders });
+      }
+    }
+
+    const payload = JSON.parse(rawBody || "null");
     console.log("GeniusPay webhook payload", JSON.stringify(payload));
+
 
     const data = payload?.data ?? payload;
     const reference = data?.reference ?? data?.transaction?.reference;
