@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -17,30 +17,6 @@ export const Route = createFileRoute("/dashboard/encadreur/catalogue")({
 const MAX_CONTACTS = 5;
 const PRICE_CONTACT = 5000;
 
-declare global {
-  interface Window {
-    openKkiapayWidget?: (opts: any) => void;
-    addSuccessListener?: (cb: (resp: any) => void) => void;
-    addFailedListener?: (cb: (resp: any) => void) => void;
-  }
-}
-
-function loadKkiapayScript(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (typeof window === "undefined") return reject(new Error("SSR"));
-    if (window.openKkiapayWidget) return resolve();
-    const existing = document.querySelector('script[data-kkiapay]') as HTMLScriptElement | null;
-    if (existing) { existing.addEventListener("load", () => resolve()); return; }
-    const s = document.createElement("script");
-    s.src = "https://cdn.kkiapay.me/k.js";
-    s.async = true;
-    s.dataset.kkiapay = "1";
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error("Impossible de charger KKiaPay"));
-    document.head.appendChild(s);
-  });
-}
-
 function EncadreurCatalogue() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -48,7 +24,7 @@ function EncadreurCatalogue() {
   const [apprenants, setApprenants] = useState<any[]>([]);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
-  const currentPaiementId = useRef<string | null>(null);
+
 
   const reload = async () => {
     if (!user) return;
@@ -80,34 +56,26 @@ function EncadreurCatalogue() {
 
   useEffect(() => { reload(); }, [user]);
 
+  // Retour depuis le checkout GeniusPay
   useEffect(() => {
-    let mounted = true;
-    loadKkiapayScript().then(() => {
-      if (!mounted) return;
-      window.addSuccessListener?.(async (resp: any) => {
-        const transactionId = resp?.transactionId ?? resp?.id;
-        const paiement_id = currentPaiementId.current;
-        if (!transactionId || !paiement_id) return;
-        toast.loading("Vérification du paiement…", { id: "kkiapay-verify" });
-        const { data, error } = await supabase.functions.invoke("kkiapay-verify", {
-          body: { paiement_id, transactionId },
-        });
-        toast.dismiss("kkiapay-verify");
-        if (error || !data?.ok) {
-          toast.error("Paiement non confirmé.");
-        } else {
-          toast.success("Contact débloqué !");
-        }
-        currentPaiementId.current = null;
-        reload();
-      });
-      window.addFailedListener?.((resp: any) => {
-        console.warn("KKiaPay failed", resp);
-        toast.error("Paiement échoué ou annulé.");
-      });
-    }).catch((e) => console.error(e));
-    return () => { mounted = false; };
+    if (typeof window === "undefined" || !user) return;
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get("gp_ref") || sessionStorage.getItem("gp_ref_enc");
+    if (!reference) return;
+    sessionStorage.removeItem("gp_ref_enc");
+    (async () => {
+      toast.loading("Vérification du paiement…", { id: "gp-verify" });
+      const { data, error } = await supabase.functions.invoke("geniuspay-verify", { body: { reference } });
+      toast.dismiss("gp-verify");
+      if (error) toast.error("Vérification impossible pour le moment.");
+      else if (data?.status === "reussi") toast.success("Contact débloqué !");
+      else if (data?.status === "en_attente") toast.info("Paiement en attente de confirmation.");
+      else toast.error("Paiement échoué ou annulé.");
+      window.history.replaceState({}, "", window.location.pathname);
+      reload();
+    })();
   }, [user]);
+
 
   const sorted = useMemo(() => {
     if (!encadreur) return [];
@@ -140,38 +108,29 @@ function EncadreurCatalogue() {
       return;
     }
     if (!encadreur.premium) {
-      // Initiate KKiaPay payment
+      // Paiement GeniusPay (checkout hébergé)
       setUnlocking(a.id);
-      const { data, error } = await supabase.functions.invoke("kkiapay-init", {
+      const returnUrl = `${window.location.origin}${window.location.pathname}`;
+      const { data, error } = await supabase.functions.invoke("geniuspay-init", {
         body: {
           montant: PRICE_CONTACT,
           type: "contact_unique_encadreur",
+          description: "Déblocage d'un contact parent",
           metadata: { apprenant_id: a.id, parent_id: a.parent_id },
+          success_url: returnUrl,
+          error_url: returnUrl,
         },
       });
       setUnlocking(null);
-      if (error || !data?.public_key || !data?.paiement_id) {
-        toast.error("Impossible d'initier le paiement. Vérifiez la configuration KKiaPay.");
+      if (error || !data?.checkout_url) {
+        toast.error("Impossible d'initier le paiement. Vérifiez la configuration GeniusPay.");
         return;
       }
-      currentPaiementId.current = data.paiement_id;
-      if (!window.openKkiapayWidget) {
-        toast.error("Widget KKiaPay non chargé. Rechargez la page.");
-        return;
-      }
-      window.openKkiapayWidget({
-        amount: data.amount,
-        key: data.public_key,
-        sandbox: data.sandbox,
-        position: "center",
-        theme: "#1e40af",
-        name: data.customer.fullname,
-        email: data.customer.email,
-        phone: data.customer.phone,
-        data: data.paiement_id,
-      });
+      sessionStorage.setItem("gp_ref_enc", data.reference);
+      window.location.href = data.checkout_url;
       return;
     }
+
 
     // Premium : déblocage direct
     setUnlocking(a.id);
@@ -215,7 +174,7 @@ function EncadreurCatalogue() {
           <AlertTriangle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-medium">Compte standard — paiement par contact</p>
-            <p className="text-muted-foreground">Chaque déblocage de contact coûte {PRICE_CONTACT.toLocaleString()} FCFA via KKiaPay. Devenez Premium en suivant la formation Super Apprenant.</p>
+            <p className="text-muted-foreground">Chaque déblocage de contact coûte {PRICE_CONTACT.toLocaleString()} FCFA via GeniusPay. Devenez Premium en suivant la formation Super Apprenant.</p>
           </div>
         </Card>
       )}
