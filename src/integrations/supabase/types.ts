@@ -686,7 +686,18 @@ export type Database = {
         | "pack_contacts_parent"
       serie_type: "A" | "C" | "D"
       support_statut: "ouvert" | "en_cours" | "resolu"
-      zone_residence: "zone1" | "zone2" | "zone3"
+      zone_residence:
+        | "zone1"
+        | "zone2"
+        | "zone3"
+        | "zone4"
+        | "zone5"
+        | "zone6"
+        | "zone7"
+        | "zone8"
+        | "zone9"
+        | "zone10"
+        | "zone11"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -826,7 +837,19 @@ export const Constants = {
       ],
       serie_type: ["A", "C", "D"],
       support_statut: ["ouvert", "en_cours", "resolu"],
-      zone_residence: ["zone1", "zone2", "zone3"],
+      zone_residence: [
+        "zone1",
+        "zone2",
+        "zone3",
+        "zone4",
+        "zone5",
+        "zone6",
+        "zone7",
+        "zone8",
+        "zone9",
+        "zone10",
+        "zone11",
+      ],
     },
   },
 } as const
