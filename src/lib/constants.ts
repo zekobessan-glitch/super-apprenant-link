@@ -2,6 +2,14 @@ export const ZONES = {
   zone1: "Zone 1 (Anyama, Abobo, Adjamé, Attécoubé, Plateau, Cocody, Bingerville)",
   zone2: "Zone 2 (Yopougon, Songon)",
   zone3: "Zone 3 (Treichville, Marcory, Koumassi, Port-Bouët)",
+  zone4: "Zone 4 (Bouaké)",
+  zone5: "Zone 5 (Yamoussoukro)",
+  zone6: "Zone 6 (Korhogo)",
+  zone7: "Zone 7 (Daloa)",
+  zone8: "Zone 8 (Man)",
+  zone9: "Zone 9 (Odienné)",
+  zone10: "Zone 10 (Bondoukou)",
+  zone11: "Zone 11 (San Pédro)",
 } as const;
 
 export type ZoneKey = keyof typeof ZONES;
