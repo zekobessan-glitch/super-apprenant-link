@@ -45,7 +45,9 @@ export function computeMatchScore(
 ): number {
   let score = 0;
 
-  if (app.zone === enc.zone) score += 25;
+  // La zone de résidence est éliminatoire : pas de proposition hors zone.
+  if (app.zone !== enc.zone) return 0;
+  score += 25;
 
   if (enc.niveaux.includes(app.niveau)) score += 20;
   else return Math.round(score); // niveau incompatible : on s'arrête tôt
