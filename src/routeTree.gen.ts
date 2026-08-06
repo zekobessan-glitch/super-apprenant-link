@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VitrineRouteImport } from './routes/vitrine'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
@@ -42,6 +43,11 @@ const VitrineRoute = VitrineRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -168,6 +174,7 @@ const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/vitrine': typeof VitrineRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/vitrine': typeof VitrineRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
@@ -221,6 +229,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/vitrine': typeof VitrineRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
@@ -249,6 +258,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/connexion'
     | '/dashboard'
     | '/vitrine'
     | '/dashboard/messages'
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/connexion'
     | '/dashboard'
     | '/vitrine'
     | '/dashboard/messages'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/connexion'
     | '/dashboard'
     | '/vitrine'
     | '/dashboard/messages'
@@ -328,6 +340,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConnexionRoute: typeof ConnexionRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   VitrineRoute: typeof VitrineRoute
 }
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -560,6 +580,7 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConnexionRoute: ConnexionRoute,
   DashboardRoute: DashboardRouteWithChildren,
   VitrineRoute: VitrineRoute,
 }
