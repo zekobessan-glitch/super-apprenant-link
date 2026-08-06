@@ -8,7 +8,21 @@ import { RegisterChooser } from "@/components/auth/RegisterChooser";
 import { useAuth } from "@/hooks/use-auth";
 import logo from "@/assets/logo.jpg";
 
+const TITLE = "Connexion & inscription — SUPER@PPRENANT-I";
+const DESC =
+  "Connectez-vous ou créez votre compte parent, élève ou encadreur sur SUPER@PPRENANT-I.";
+
 export const Route = createFileRoute("/connexion")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: HomePage,
 });
 

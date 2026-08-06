@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VitrineRouteImport } from './routes/vitrine'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as IndexRouteImport } from './routes/index'
@@ -35,11 +34,6 @@ import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.adm
 import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
 
-const VitrineRoute = VitrineRouteImport.update({
-  id: '/vitrine',
-  path: '/vitrine',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -176,7 +170,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/vitrine': typeof VitrineRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
@@ -203,7 +196,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/vitrine': typeof VitrineRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
@@ -231,7 +223,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/vitrine': typeof VitrineRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
@@ -260,7 +251,6 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/dashboard'
-    | '/vitrine'
     | '/dashboard/messages'
     | '/dashboard/support'
     | '/dashboard/admin/paiements'
@@ -287,7 +277,6 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/dashboard'
-    | '/vitrine'
     | '/dashboard/messages'
     | '/dashboard/support'
     | '/dashboard/admin/paiements'
@@ -314,7 +303,6 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/dashboard'
-    | '/vitrine'
     | '/dashboard/messages'
     | '/dashboard/support'
     | '/dashboard/admin/paiements'
@@ -342,18 +330,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConnexionRoute: typeof ConnexionRoute
   DashboardRoute: typeof DashboardRouteWithChildren
-  VitrineRoute: typeof VitrineRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vitrine': {
-      id: '/vitrine'
-      path: '/vitrine'
-      fullPath: '/vitrine'
-      preLoaderRoute: typeof VitrineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -582,7 +562,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConnexionRoute: ConnexionRoute,
   DashboardRoute: DashboardRouteWithChildren,
-  VitrineRoute: VitrineRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
