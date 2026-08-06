@@ -32,25 +32,23 @@ export interface MatchInputEncadreur {
 
 /**
  * Score de matching 0-100.
- * - Zone : 25 pts (résidence identique)
- * - Niveau : 20 pts (encadreur enseigne ce niveau)
- * - Classe : 15 pts (classe précise prise en charge)
- * - Série (lycée) : 10 pts
- * - Matières : 20 pts (au moins 1 commune, +5 par matière)
- * - Profil pédagogique : 10 pts (compatibilité visuel/auditif/kinesthésique)
+ * Critères éliminatoires (score 0 si non respectés) :
+ * - Zone de résidence identique
+ * - Niveau + classe de l'apprenant pris en charge par l'encadreur
+ * - Matières de l'apprenant incluses dans celles de l'encadreur (collège/lycée)
+ * Bonus : série lycée (10 pts), profil pédagogique (10 pts).
  */
 export function computeMatchScore(
   app: MatchInputApprenant,
   enc: MatchInputEncadreur
 ): number {
-  let score = 0;
-
-  // La zone de résidence est éliminatoire : pas de proposition hors zone.
+  // 1) Zone de résidence : éliminatoire
   if (app.zone !== enc.zone) return 0;
-  score += 25;
+  let score = 30;
 
-  if (enc.niveaux.includes(app.niveau)) score += 20;
-  else return Math.round(score); // niveau incompatible : on s'arrête tôt
+  // 2) Niveau + classe : éliminatoires
+  if (!enc.niveaux.includes(app.niveau)) return 0;
+  score += 15;
 
   const classes =
     app.niveau === "primaire"
@@ -58,23 +56,30 @@ export function computeMatchScore(
       : app.niveau === "college"
       ? enc.classes_college
       : enc.classes_lycee;
-  if (classes.includes(app.classe)) score += 15;
+  if (!classes.includes(app.classe)) return 0;
+  score += 20;
 
+  // 3) Matières : éliminatoires (toutes celles de l'apprenant doivent être couvertes)
+  if (app.niveau !== "primaire") {
+    const encMat = app.niveau === "college" ? enc.matieres_college : enc.matieres_lycee;
+    const demandees = app.matieres ?? [];
+    if (demandees.length > 0) {
+      const toutesCouvertes = demandees.every((m) => encMat.includes(m));
+      if (!toutesCouvertes) return 0;
+    }
+    score += 25;
+  } else {
+    score += 25; // primaire : pas de matière spécifique
+  }
+
+  // Bonus
   if (app.niveau === "lycee" && app.serie && enc.series_lycee.includes(app.serie)) {
     score += 10;
   }
-
-  if (app.niveau !== "primaire") {
-    const encMat = app.niveau === "college" ? enc.matieres_college : enc.matieres_lycee;
-    const common = app.matieres.filter((m) => encMat.includes(m));
-    if (common.length > 0) score += Math.min(20, 10 + common.length * 5);
-  } else {
-    score += 20; // primaire : pas de matière spécifique
-  }
-
   if (app.profil_apprentissage && enc.profil_pedagogique && app.profil_apprentissage === enc.profil_pedagogique) {
     score += 10;
   }
 
   return Math.min(100, Math.round(score));
 }
+
