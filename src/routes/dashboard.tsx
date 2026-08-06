@@ -26,7 +26,7 @@ function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/" });
+    if (!loading && !user) navigate({ to: "/connexion" });
   }, [loading, user, navigate]);
 
   if (loading || !user) {
@@ -102,7 +102,7 @@ function DashboardLayout() {
         <Button
           variant="ghost"
           className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-          onClick={async () => { setMobileOpen(false); await signOut(); navigate({ to: "/" }); }}
+          onClick={async () => { setMobileOpen(false); await signOut(); navigate({ to: "/connexion" }); }}
         >
           <LogOut className="h-4 w-4" /> Déconnexion
         </Button>

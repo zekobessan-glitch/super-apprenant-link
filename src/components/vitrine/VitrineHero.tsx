@@ -30,7 +30,7 @@ export function VitrineHero() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link to="/">
+              <Link to="/connexion">
                 Commencer maintenant <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

@@ -40,7 +40,7 @@ export function VitrineNav() {
 
         <div className="hidden lg:block">
           <Button asChild>
-            <Link to="/">Se connecter</Link>
+            <Link to="/connexion">Se connecter</Link>
           </Button>
         </div>
 
@@ -70,7 +70,7 @@ export function VitrineNav() {
             ))}
             <li className="py-3">
               <Button asChild className="w-full">
-                <Link to="/">Se connecter</Link>
+                <Link to="/connexion">Se connecter</Link>
               </Button>
             </li>
           </ul>
