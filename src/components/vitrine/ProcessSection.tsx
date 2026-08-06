@@ -21,7 +21,7 @@ export function ProcessSection() {
             description="Un parcours simple et transparent, du premier clic jusqu'au suivi de l'encadrement."
           />
           <Button asChild>
-            <Link to="/">Créer mon compte</Link>
+            <Link to="/connexion">Créer mon compte</Link>
           </Button>
         </div>
 

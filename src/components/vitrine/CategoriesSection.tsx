@@ -57,7 +57,7 @@ export function CategoriesSection() {
             description="Parent, encadreur ou élève : la plateforme filtre automatiquement les résultats selon la zone de résidence, la classe et les matières."
           />
           <Link
-            to="/"
+            to="/connexion"
             className="inline-flex items-center text-sm font-semibold text-primary hover:underline"
           >
             Accéder à la plateforme <ArrowRight className="ml-1 h-4 w-4" />

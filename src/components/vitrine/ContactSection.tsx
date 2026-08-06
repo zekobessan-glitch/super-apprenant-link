@@ -30,12 +30,12 @@ export function ContactSection() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/">
+                <Link to="/connexion">
                   Créer un compte <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/">Se connecter</Link>
+                <Link to="/connexion">Se connecter</Link>
               </Button>
             </div>
             <Card className="grid gap-3 p-5 shadow-soft">
