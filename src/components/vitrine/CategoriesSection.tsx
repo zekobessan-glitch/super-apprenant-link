@@ -5,7 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { SectionHeading } from "./SectionHeading";
 import parentImg from "@/assets/vitrine-parent.jpg";
 import encadreurImg from "@/assets/vitrine-encadreur.jpg";
-import eleveImg from "@/assets/vitrine-eleve.jpg";
+import eleveAsset from "@/assets/vitrine-eleve-new.jpg.asset.json";
+
+const eleveImg = eleveAsset.url;
 
 const CATEGORIES = [
   {
