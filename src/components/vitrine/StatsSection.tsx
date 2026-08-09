@@ -40,7 +40,7 @@ function Counter({
 }) {
   const value = useCountUp(target, start);
   return (
-    <p className="text-2xl font-bold text-foreground md:text-3xl">
+    <p className="text-2xl font-bold text-white md:text-3xl">
       {value}
       {suffix}
     </p>
