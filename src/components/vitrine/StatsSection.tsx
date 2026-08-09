@@ -68,7 +68,7 @@ export function StatsSection() {
   }, []);
 
   return (
-    <section className="bg-secondary py-12">
+    <section className="bg-[#fba100] py-12">
       <div
         ref={ref}
         className="container mx-auto grid grid-cols-2 gap-6 px-4 lg:grid-cols-4 lg:divide-x lg:divide-border"
