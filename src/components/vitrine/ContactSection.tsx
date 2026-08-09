@@ -43,10 +43,10 @@ export function ContactSection() {
                 <MapPin className="h-4 w-4 shrink-0 text-primary" /> Abidjan, Côte d'Ivoire
               </p>
               <p className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Mail className="h-4 w-4 shrink-0 text-primary" /> ekbessan@gmail.com
+                <Mail className="h-4 w-4 shrink-0 text-primary" /> contact@superapprenant-i.com
               </p>
               <p className="flex items-center gap-3 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4 shrink-0 text-primary" /> Support disponible depuis votre tableau de bord
+                <Phone className="h-4 w-4 shrink-0 text-primary" /> +225 07 47 26 25 77
               </p>
             </Card>
           </div>
