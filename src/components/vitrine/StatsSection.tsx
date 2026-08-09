@@ -81,7 +81,7 @@ export function StatsSection() {
             <Icon className="h-8 w-8 shrink-0 text-primary" />
             <div className="min-w-0">
               <Counter target={value} suffix={suffix} start={start} />
-              <p className="truncate text-xs text-muted-foreground md:text-sm">
+              <p className="truncate text-xs text-white md:text-sm">
                 {label}
               </p>
             </div>
