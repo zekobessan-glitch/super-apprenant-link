@@ -35,31 +35,46 @@ function VitrinePage() {
       <VitrineNav />
       <main className="flex-1">
         <VitrineHero />
-        <ActivitiesSection />
-        <StatsSection />
+        <Reveal>
+          <ActivitiesSection />
+        </Reveal>
+        <Reveal>
+          <StatsSection />
+        </Reveal>
 
-        <section id="a-propos" className="bg-background py-16 md:py-20">
-          <div className="container mx-auto grid gap-8 px-4 lg:grid-cols-2 lg:items-center">
-            <SectionHeading
-              eyebrow="Qui sommes-nous"
-              title="Une plateforme ivoirienne dédiée à la réussite scolaire"
-              description="SUPER@PPRENANT-I connecte les familles à des encadreurs vérifiés dans 11 zones du pays. Notre algorithme de compatibilité croise la zone de résidence, la classe, la série et les matières pour ne proposer que des profils réellement pertinents."
-            />
-            <blockquote className="rounded-xl border-l-4 border-accent bg-secondary/60 p-6 text-sm italic leading-relaxed text-muted-foreground md:text-base">
-              « Instruis l'enfant selon la voie qu'il doit suivre, et quand il sera vieux, il ne
-              s'en détournera pas. »
-              <footer className="mt-3 text-xs font-semibold not-italic uppercase tracking-wider text-primary">
-                Proverbes 22 : 6
-              </footer>
-            </blockquote>
-          </div>
-        </section>
+        <Reveal>
+          <section id="a-propos" className="bg-background py-16 md:py-20">
+            <div className="container mx-auto grid gap-8 px-4 lg:grid-cols-2 lg:items-center">
+              <SectionHeading
+                eyebrow="Qui sommes-nous"
+                title="Une plateforme ivoirienne dédiée à la réussite scolaire"
+                description="SUPER@PPRENANT-I connecte les familles à des encadreurs vérifiés dans 11 zones du pays. Notre algorithme de compatibilité croise la zone de résidence, la classe, la série et les matières pour ne proposer que des profils réellement pertinents."
+              />
+              <blockquote className="rounded-xl border-l-4 border-accent bg-secondary/60 p-6 text-sm italic leading-relaxed text-muted-foreground md:text-base">
+                « Instruis l'enfant selon la voie qu'il doit suivre, et quand il sera vieux, il ne
+                s'en détournera pas. »
+                <footer className="mt-3 text-xs font-semibold not-italic uppercase tracking-wider text-primary">
+                  Proverbes 22 : 6
+                </footer>
+              </blockquote>
+            </div>
+          </section>
+        </Reveal>
 
-        <CategoriesSection />
-        <ProcessSection />
-        <TestimonialsSection />
-        <ContactSection />
+        <Reveal>
+          <CategoriesSection />
+        </Reveal>
+        <Reveal>
+          <ProcessSection />
+        </Reveal>
+        <Reveal>
+          <TestimonialsSection />
+        </Reveal>
+        <Reveal>
+          <ContactSection />
+        </Reveal>
       </main>
+
       <Footer />
     </div>
   );
