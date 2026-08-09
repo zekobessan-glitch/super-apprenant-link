@@ -88,13 +88,13 @@ export function CategoriesSection() {
                 </Badge>
               </div>
               <div className="space-y-4 p-6">
-                <h3 className="flex items-center gap-2 text-lg font-bold text-foreground">
-                  <Search className="h-4 w-4 shrink-0 text-primary" />
+                <h3 className="flex items-center gap-2 text-lg font-bold text-[#fba100]">
+                  <Search className="h-4 w-4 shrink-0 text-[#fba100]" />
                   {cat.title}
                 </h3>
                 <ol className="space-y-3">
                   {cat.steps.map((step, i) => (
-                    <li key={step} className="flex gap-3 text-sm text-muted-foreground">
+                    <li key={step} className="flex gap-3 text-sm text-black">
                       <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                         {i + 1}
                       </span>
