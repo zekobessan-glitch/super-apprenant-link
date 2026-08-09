@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, Users, Sparkles, ShieldCheck, ArrowRight } from "lucide-react";
+import { BookOpen, GraduationCap, Users, Sparkles, ShieldCheck } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "./SectionHeading";
 
@@ -49,10 +49,6 @@ export function ActivitiesSection() {
               <Icon className="h-9 w-9 shrink-0 text-primary transition-transform group-hover:scale-110" />
               <h3 className="text-base font-bold text-foreground">{title}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>
-              <span className="mt-auto inline-flex items-center pt-2 text-sm font-semibold text-primary">
-                En savoir plus
-                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
             </Card>
           ))}
         </div>
