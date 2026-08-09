@@ -2,9 +2,13 @@ import { useEffect, useState, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@/assets/vitrine-hero.jpg";
-import parentImage from "@/assets/vitrine-parent.jpg";
-import eleveImage from "@/assets/vitrine-eleve.jpg";
+import heroAsset from "@/assets/hero-classe.jpg.asset.json";
+import parentAsset from "@/assets/hero-encadreur.jpg.asset.json";
+import eleveAsset from "@/assets/hero-eleve.jpg.asset.json";
+
+const heroImage = heroAsset.url;
+const parentImage = parentAsset.url;
+const eleveImage = eleveAsset.url;
 
 const SLIDES = [
   {
