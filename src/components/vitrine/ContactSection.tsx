@@ -2,7 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import ctaImage from "@/assets/vitrine-hero.jpg";
+import ctaAsset from "@/assets/vitrine-cta.jpg.asset.json";
+
+const ctaImage = ctaAsset.url;
 
 export function ContactSection() {
   return (
