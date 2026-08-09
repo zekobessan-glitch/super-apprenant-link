@@ -29,7 +29,7 @@ export function ProcessSection() {
           <span className="absolute left-4 top-0 hidden h-full w-px bg-border sm:block lg:left-0 lg:top-5 lg:h-px lg:w-full" />
           {STEPS.map((s, i) => (
             <li key={s.title} className="relative flex gap-4 lg:block lg:text-center">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-soft lg:mx-auto">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#fba100] text-sm font-bold text-white shadow-soft lg:mx-auto">
                 {i + 1}
               </span>
               <div className="min-w-0 lg:mt-4">
