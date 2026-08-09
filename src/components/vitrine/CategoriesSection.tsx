@@ -4,7 +4,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeading } from "./SectionHeading";
 import parentImg from "@/assets/vitrine-parent.jpg";
-import encadreurImg from "@/assets/vitrine-encadreur.jpg";
+import encadreurAsset from "@/assets/vitrine-encadreur-new.jpg.asset.json";
+
+const encadreurImg = encadreurAsset.url;
 import eleveAsset from "@/assets/vitrine-eleve-new.jpg.asset.json";
 
 const eleveImg = eleveAsset.url;
