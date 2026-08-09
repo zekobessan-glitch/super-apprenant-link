@@ -9,6 +9,7 @@ import { ProcessSection } from "@/components/vitrine/ProcessSection";
 import { TestimonialsSection } from "@/components/vitrine/TestimonialsSection";
 import { ContactSection } from "@/components/vitrine/ContactSection";
 import { SectionHeading } from "@/components/vitrine/SectionHeading";
+import { Reveal } from "@/components/vitrine/Reveal";
 
 const TITLE = "SUPER@PPRENANT-I — Encadrement scolaire en Côte d'Ivoire";
 const DESC =
