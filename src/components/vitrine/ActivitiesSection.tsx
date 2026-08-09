@@ -46,7 +46,7 @@ export function ActivitiesSection() {
               key={title}
               className="group flex flex-col gap-3 p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elegant"
             >
-              <Icon className="h-9 w-9 shrink-0 text-primary transition-transform group-hover:scale-110" />
+              <Icon className="h-9 w-9 shrink-0 text-[#fba100] transition-transform group-hover:scale-110" />
               <h3 className="text-base font-bold text-foreground">{title}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>
             </Card>
