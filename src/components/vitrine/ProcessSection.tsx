@@ -34,7 +34,7 @@ export function ProcessSection() {
               </span>
               <div className="min-w-0 lg:mt-4">
                 <h3 className="text-sm font-bold text-foreground">{s.title}</h3>
-                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.text}</p>
+                <p className="mt-1 text-xs leading-relaxed text-black">{s.text}</p>
               </div>
             </li>
           ))}
