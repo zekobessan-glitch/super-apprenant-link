@@ -18,14 +18,42 @@ export function buildEmailHtml(titre: string, message: string, lien?: string | n
   </div></body></html>`;
 }
 
+export async function logEmail(entry: {
+  user_id?: string | null;
+  destinataire: string;
+  sujet: string;
+  type: string;
+  statut: "envoye" | "echoue";
+  provider_id?: string | null;
+  erreur?: string | null;
+}) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await supabaseAdmin.from("email_logs").insert({
+      user_id: entry.user_id ?? null,
+      destinataire: entry.destinataire,
+      sujet: entry.sujet,
+      type: entry.type,
+      statut: entry.statut,
+      provider_id: entry.provider_id ?? null,
+      erreur: entry.erreur ?? null,
+    });
+  } catch (e) {
+    console.error("[email_logs] échec journalisation:", e);
+  }
+}
+
 export async function sendResendEmail(opts: {
   to: string;
   subject: string;
   html: string;
+  type?: string;
+  user_id?: string | null;
 }) {
   const apiKey = process.env['RESEND_API_KEY'];
   if (!apiKey) throw new Error("RESEND_API_KEY non configurée");
   const from = process.env['RESEND_FROM'] ?? "SUPER@PPRENANT-I <onboarding@resend.dev>";
+  const type = opts.type ?? "notification";
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -36,7 +64,24 @@ export async function sendResendEmail(opts: {
   const body = await res.text();
   if (!res.ok) {
     console.error(`Resend error [${res.status}]: ${body}`);
+    await logEmail({
+      user_id: opts.user_id ?? null,
+      destinataire: opts.to,
+      sujet: opts.subject,
+      type,
+      statut: "echoue",
+      erreur: `[${res.status}] ${body.slice(0, 500)}`,
+    });
     throw new Error(`Envoi e-mail échoué [${res.status}]`);
   }
-  return JSON.parse(body) as { id: string };
+  const parsed = JSON.parse(body) as { id: string };
+  await logEmail({
+    user_id: opts.user_id ?? null,
+    destinataire: opts.to,
+    sujet: opts.subject,
+    type,
+    statut: "envoye",
+    provider_id: parsed.id,
+  });
+  return parsed;
 }
