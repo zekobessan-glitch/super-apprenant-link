@@ -92,12 +92,12 @@ export function ContactSection() {
                     {href ? (
                       <a
                         href={href}
-                        className="mt-1 block text-sm text-muted-foreground transition-colors hover:text-primary"
+                        className="mt-1 block text-sm text-muted-foreground transition-colors hover:text-primary break-words"
                       >
                         {value}
                       </a>
                     ) : (
-                      <p className="mt-1 text-sm text-muted-foreground">{value}</p>
+                      <p className="mt-1 text-sm text-muted-foreground break-words">{value}</p>
                     )}
                   </Card>
                 ))}
