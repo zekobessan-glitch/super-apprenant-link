@@ -55,6 +55,8 @@ export const sendEmail = createServerFn({ method: "POST" })
       to: recipient,
       subject: data.titre,
       html: buildEmailHtml(data.titre, data.message, lien),
+      type: "notification",
+      user_id: data.user_id ?? context.userId,
     });
 
     return { success: true, id: result.id };
