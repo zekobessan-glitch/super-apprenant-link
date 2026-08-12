@@ -30,16 +30,16 @@ export function ProcessSection() {
             {STEPS.map((s, i) => (
               <li key={s.title} className="relative flex items-start gap-4 md:block md:text-center">
                 {/* Cercle numéroté */}
-                <span className="relative z-10 grid h-20 w-20 shrink-0 place-items-center rounded-full bg-accent text-lg font-bold text-accent-foreground shadow-soft md:mx-auto">
+                <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-base font-bold text-accent-foreground shadow-soft md:mx-auto">
                   {i + 1}
                 </span>
 
                 {/* Ligne verticale mobile */}
                 {i < STEPS.length - 1 && (
-                  <span className="absolute left-10 top-20 h-[calc(100%-2rem)] w-px bg-border md:hidden" />
+                  <span className="absolute left-7 top-14 h-[calc(100%-2rem)] w-px bg-border md:hidden" />
                 )}
 
-                <div className="min-w-0 pt-2 md:mt-5 md:pt-0">
+                <div className="min-w-0 pt-2 md:mt-4 md:pt-0">
                   <h3 className="text-base font-bold text-foreground">{s.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-black">{s.text}</p>
                 </div>
