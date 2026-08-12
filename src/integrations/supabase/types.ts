@@ -192,6 +192,57 @@ export type Database = {
           },
         ]
       }
+      email_logs: {
+        Row: {
+          created_at: string
+          destinataire: string
+          erreur: string | null
+          id: string
+          provider_id: string | null
+          statut: string
+          sujet: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          destinataire: string
+          erreur?: string | null
+          id?: string
+          provider_id?: string | null
+          statut?: string
+          sujet: string
+          type?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          destinataire?: string
+          erreur?: string | null
+          id?: string
+          provider_id?: string | null
+          statut?: string
+          sujet?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       encadreur_refus: {
         Row: {
           admin_id: string
