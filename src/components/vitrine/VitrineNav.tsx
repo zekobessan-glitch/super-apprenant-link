@@ -24,7 +24,7 @@ export function VitrineNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+    <header className="sticky top-0 z-50 bg-[#004d00] lg:bg-card/95 lg:backdrop-blur lg:supports-[backdrop-filter]:bg-card/85">
       {/* Bandeau d'informations */}
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 py-3 lg:grid-cols-[auto_repeat(3,minmax(0,1fr))] lg:gap-8">
@@ -32,9 +32,9 @@ export function VitrineNav() {
             <img
               src={logo}
               alt="Logo SUPER@PPRENANT-I"
-              className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-primary/20"
+              className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-white/30 lg:ring-primary/20"
             />
-            <span className="truncate text-sm font-extrabold text-primary sm:text-base lg:hidden xl:inline">
+            <span className="truncate text-sm font-extrabold text-white sm:text-base lg:hidden lg:text-primary xl:inline">
               SUPER@PPRENANT-I
             </span>
           </a>
@@ -56,7 +56,7 @@ export function VitrineNav() {
             type="button"
             aria-label="Ouvrir le menu"
             onClick={() => setOpen((v) => !v)}
-            className="justify-self-end rounded-md border p-2 text-primary lg:hidden"
+            className="justify-self-end flex h-11 w-11 items-center justify-center rounded-full bg-[#004d00] text-white ring-2 ring-white/30 lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
