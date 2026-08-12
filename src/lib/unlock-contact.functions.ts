@@ -37,6 +37,8 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
         await sendResendEmail({
           to: enc.email,
           subject: "Nouveau parent intéressé",
+          type: "correspondance_encadreur",
+          user_id: data.encadreur_id,
           html: buildEmailHtml(
             "Nouveau parent intéressé",
             "Un parent a payé pour débloquer votre contact et souhaite être contacté. Connectez-vous à votre espace pour consulter la correspondance.",
@@ -48,6 +50,8 @@ export const unlockEncadreurContact = createServerFn({ method: "POST" })
         await sendResendEmail({
           to: parent.email,
           subject: "Demande envoyée",
+          type: "correspondance_parent",
+          user_id: context.userId,
           html: buildEmailHtml(
             "Demande envoyée",
             `Votre demande a bien été transmise${enc ? ` à ${enc.prenoms ?? ""} ${enc.nom ?? ""}`.trimEnd() : ""}. L'encadreur vous contactera prochainement.`,
