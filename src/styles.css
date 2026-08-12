@@ -90,9 +90,11 @@
   --gradient-hero: linear-gradient(135deg, oklch(0.42 0.18 260) 0%, oklch(0.55 0.20 260) 60%, oklch(0.78 0.17 70) 100%);
   --gradient-brand: linear-gradient(135deg, oklch(0.42 0.18 260), oklch(0.55 0.20 260));
   --gradient-accent: linear-gradient(135deg, oklch(0.78 0.17 70), oklch(0.85 0.16 80));
+  --gradient-stats: linear-gradient(135deg, #fba100 0%, #ff8c1a 100%);
   --shadow-elegant: 0 20px 50px -20px oklch(0.42 0.18 260 / 0.35);
   --shadow-soft: 0 10px 30px -15px oklch(0.18 0.04 250 / 0.15);
   --shadow-glow: 0 0 60px oklch(0.78 0.17 70 / 0.35);
+
 }
 
 .dark {
