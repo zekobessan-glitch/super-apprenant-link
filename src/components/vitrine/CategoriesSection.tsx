@@ -68,31 +68,34 @@ export function CategoriesSection() {
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {CATEGORIES.map((cat) => (
             <Card
               key={cat.role}
-              className="group overflow-hidden p-0 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elegant"
+              className="group relative overflow-hidden rounded-[2rem] p-0 shadow-soft transition-all hover:-translate-y-2 hover:shadow-elegant"
             >
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-52 overflow-hidden rounded-t-[2rem]">
                 <img
                   src={cat.image}
                   alt={cat.alt}
                   loading="lazy"
                   width={1200}
                   height={900}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <Badge className="absolute left-4 top-4 bg-accent text-accent-foreground">
+                <Badge className="absolute left-5 top-5 bg-accent text-accent-foreground">
                   {cat.role}
                 </Badge>
               </div>
-              <div className="space-y-4 p-6">
-                <h3 className="flex items-center gap-2 text-lg font-bold text-[#fba100]">
-                  <Search className="h-4 w-4 shrink-0 text-[#fba100]" />
-                  {cat.title}
-                </h3>
-                <ol className="space-y-3">
+
+              {/* Icône centrée chevauchant l'image et le contenu */}
+              <div className="absolute left-1/2 top-52 z-20 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-background bg-[#fba100] shadow-soft">
+                <Search className="h-7 w-7 text-white" />
+              </div>
+
+              <div className="space-y-4 px-6 pb-8 pt-14 text-center">
+                <h3 className="text-lg font-bold text-[#fba100]">{cat.title}</h3>
+                <ol className="space-y-3 text-left">
                   {cat.steps.map((step, i) => (
                     <li key={step} className="flex gap-3 text-sm text-black">
                       <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
@@ -103,6 +106,9 @@ export function CategoriesSection() {
                   ))}
                 </ol>
               </div>
+
+              {/* Ligne accent en bas */}
+              <div className="h-1.5 w-full bg-[#fba100]" />
             </Card>
           ))}
         </div>
