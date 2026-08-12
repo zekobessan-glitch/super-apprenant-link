@@ -33,6 +33,7 @@ import { Route as DashboardAdminSupportRouteImport } from './routes/dashboard.ad
 import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.admin.profil'
 import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
+import { Route as DashboardAdminEmailsRouteImport } from './routes/dashboard.admin.emails'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -165,6 +166,11 @@ const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
   path: '/admin/paiements',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAdminEmailsRoute = DashboardAdminEmailsRouteImport.update({
+  id: '/admin/emails',
+  path: '/admin/emails',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
+  '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
+  '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
+  '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
@@ -253,6 +262,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/messages'
     | '/dashboard/support'
+    | '/dashboard/admin/emails'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/messages'
     | '/dashboard/support'
+    | '/dashboard/admin/emails'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
@@ -305,6 +316,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/messages'
     | '/dashboard/support'
+    | '/dashboard/admin/emails'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
@@ -502,12 +514,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminPaiementsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/admin/emails': {
+      id: '/dashboard/admin/emails'
+      path: '/admin/emails'
+      fullPath: '/dashboard/admin/emails'
+      preLoaderRoute: typeof DashboardAdminEmailsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardSupportRoute: typeof DashboardSupportRoute
+  DashboardAdminEmailsRoute: typeof DashboardAdminEmailsRoute
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
   DashboardAdminParametresRoute: typeof DashboardAdminParametresRoute
   DashboardAdminProfilRoute: typeof DashboardAdminProfilRoute
@@ -532,6 +552,7 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardSupportRoute: DashboardSupportRoute,
+  DashboardAdminEmailsRoute: DashboardAdminEmailsRoute,
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
   DashboardAdminParametresRoute: DashboardAdminParametresRoute,
   DashboardAdminProfilRoute: DashboardAdminProfilRoute,

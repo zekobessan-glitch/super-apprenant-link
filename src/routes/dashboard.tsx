@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import logo from "@/assets/logo.jpg";
-import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck, MessageSquare, Menu, LifeBuoy } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck, MessageSquare, Menu, LifeBuoy, Mail } from "lucide-react";
 import { NotificationsBell } from "@/components/NotificationsBell";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -42,6 +42,7 @@ function DashboardLayout() {
           { to: `${base}/validations`, icon: ShieldCheck, label: "Validations" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
           { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
+          { to: `${base}/emails`, icon: Mail, label: "E-mails envoyés" },
           { to: `${base}/support`, icon: LifeBuoy, label: "Support" },
         ]
       : role === "encadreur"
