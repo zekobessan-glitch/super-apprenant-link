@@ -68,6 +68,32 @@ function AdminEmailsPage() {
   const [statut, setStatut] = useState("all");
   const [type, setType] = useState("all");
   const [date, setDate] = useState("");
+  const [resendRow, setResendRow] = useState<LogRow | null>(null);
+  const [resendMsg, setResendMsg] = useState("");
+  const [sending, setSending] = useState(false);
+  const doResend = useServerFn(resendEmailLog);
+
+  const openResend = (r: LogRow) => {
+    setResendRow(r);
+    setResendMsg(r.sujet);
+  };
+
+  const submitResend = async () => {
+    if (!resendRow || !resendMsg.trim()) return;
+    setSending(true);
+    try {
+      await doResend({ data: { log_id: resendRow.id, message: resendMsg.trim() } });
+      toast.success("E-mail renvoyé");
+      setResendRow(null);
+      await load();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Échec du renvoi");
+    } finally {
+      setSending(false);
+    }
+  };
+
+
 
   const load = async () => {
     setLoading(true);
