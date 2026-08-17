@@ -192,19 +192,20 @@ function AdminEmailsPage() {
               <th className="p-3">Type</th>
               <th className="p-3">Sujet</th>
               <th className="p-3">Statut</th>
+              <th className="p-3">Action</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
               <tr>
-                <td className="p-4 text-muted-foreground" colSpan={6}>
+                <td className="p-4 text-muted-foreground" colSpan={7}>
                   Chargement…
                 </td>
               </tr>
             )}
             {!loading && filtered.length === 0 && (
               <tr>
-                <td className="p-4 text-muted-foreground" colSpan={6}>
+                <td className="p-4 text-muted-foreground" colSpan={7}>
                   Aucun e-mail enregistré.
                 </td>
               </tr>
@@ -234,11 +235,47 @@ function AdminEmailsPage() {
                     {r.statut === "envoye" ? "Envoyé" : "Échoué"}
                   </Badge>
                 </td>
+                <td className="p-3">
+                  <Button
+                    variant={r.statut === "echoue" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => openResend(r)}
+                  >
+                    <Send className="h-4 w-4 mr-2" />
+                    Renvoyer
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </Card>
+
+      <Dialog open={!!resendRow} onOpenChange={(o) => !o && setResendRow(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Renvoyer l'e-mail</DialogTitle>
+            <DialogDescription>
+              Destinataire : {resendRow?.destinataire} — Sujet : {resendRow?.sujet}
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            rows={6}
+            value={resendMsg}
+            onChange={(e) => setResendMsg(e.target.value)}
+            placeholder="Contenu du message"
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setResendRow(null)} disabled={sending}>
+              Annuler
+            </Button>
+            <Button onClick={submitResend} disabled={sending || !resendMsg.trim()}>
+              {sending ? "Envoi…" : "Renvoyer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+
