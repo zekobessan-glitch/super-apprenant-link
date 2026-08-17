@@ -77,6 +77,7 @@ function VitrinePage() {
       </main>
 
       <Footer />
+      <VitrineAuthPopup />
     </div>
   );
 }
