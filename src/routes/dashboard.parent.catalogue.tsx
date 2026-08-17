@@ -176,8 +176,8 @@ function ParentCatalogue() {
                 </div>
               ) : (
                 <Button
-                  onClick={() => unlock(enc)}
-                  disabled={unlocking === enc.profile_id || credits < 1}
+                  onClick={() => (credits < 1 ? navigate({ to: "/dashboard/parent/paiements" }) : unlock(enc))}
+                  disabled={unlocking === enc.profile_id}
                   className="w-full bg-brand text-white"
                 >
                   {unlocking === enc.profile_id ? (
@@ -188,6 +188,7 @@ function ParentCatalogue() {
                     <><MessageCircle className="h-4 w-4 mr-2" /> Contacter</>
                   )}
                 </Button>
+
               )}
             </Card>
           );
