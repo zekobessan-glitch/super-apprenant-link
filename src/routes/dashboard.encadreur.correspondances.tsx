@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Mail } from "lucide-react";
+import { Phone, Mail, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard/encadreur/correspondances")({
   component: EncCorrespondances,
@@ -33,12 +33,19 @@ function EncCorrespondances() {
                 <h3 className="font-bold">{r.parent?.nom} {r.parent?.prenoms}</h3>
                 {r.apprenant && <p className="text-sm text-muted-foreground">Apprenant : {r.apprenant.prenoms} {r.apprenant.nom} — {r.apprenant.classe}</p>}
               </div>
-              <Badge variant={r.contact_debloque ? "default" : "outline"}>{r.statut}</Badge>
+              <Badge variant={r.contact_debloque ? "default" : "secondary"} className="shrink-0 h-fit">
+                {r.contact_debloque ? "Contact débloqué" : "Contact en attente de paiement"}
+              </Badge>
             </div>
-            {r.contact_debloque && (
+            {r.contact_debloque ? (
               <div className="text-sm space-y-1 pt-2 border-t">
                 <div className="flex items-center gap-2"><Phone className="h-3.5 w-3.5 text-primary" /> {r.parent?.telephone}</div>
                 <div className="flex items-center gap-2"><Mail className="h-3.5 w-3.5 text-primary" /> {r.parent?.email}</div>
+              </div>
+            ) : (
+              <div className="text-sm flex items-start gap-2 pt-2 border-t text-muted-foreground">
+                <Clock className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                <span>Ce parent s'intéresse à votre profil. Ses coordonnées seront visibles dès la validation de son paiement.</span>
               </div>
             )}
           </Card>
