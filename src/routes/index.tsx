@@ -10,6 +10,7 @@ import { TestimonialsSection } from "@/components/vitrine/TestimonialsSection";
 import { ContactSection } from "@/components/vitrine/ContactSection";
 import { SectionHeading } from "@/components/vitrine/SectionHeading";
 import { Reveal } from "@/components/vitrine/Reveal";
+import { VitrineAuthPopup } from "@/components/vitrine/VitrineAuthPopup";
 
 const TITLE = "SUPER@PPRENANT-I — Encadrement scolaire en Côte d'Ivoire";
 const DESC =
@@ -76,6 +77,7 @@ function VitrinePage() {
       </main>
 
       <Footer />
+      <VitrineAuthPopup />
     </div>
   );
 }
