@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as IndexRouteImport } from './routes/index'
@@ -35,6 +36,11 @@ import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
 import { Route as DashboardAdminEmailsRouteImport } from './routes/dashboard.admin.emails'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
@@ -203,6 +210,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/dashboard'
+    | '/reset-password'
     | '/dashboard/messages'
     | '/dashboard/support'
     | '/dashboard/admin/emails'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/dashboard'
+    | '/reset-password'
     | '/dashboard/messages'
     | '/dashboard/support'
     | '/dashboard/admin/emails'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/dashboard'
+    | '/reset-password'
     | '/dashboard/messages'
     | '/dashboard/support'
     | '/dashboard/admin/emails'
@@ -342,10 +354,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConnexionRoute: typeof ConnexionRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -583,6 +603,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConnexionRoute: ConnexionRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
