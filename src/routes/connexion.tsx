@@ -70,11 +70,21 @@ function HomePage() {
             {/* Auth card */}
             <div className="w-full max-w-md mx-auto lg:ml-auto">
             <Card className="p-6 shadow-elegant animate-float-slow hover:[animation-play-state:paused] transition-all">
-                <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
-                  <TabsList className="grid w-full grid-cols-2 mb-6">
-                    <TabsTrigger value="login">Connexion</TabsTrigger>
-                    <TabsTrigger value="register">Inscription</TabsTrigger>
-                  </TabsList>
+              <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
+                <TabsList className="grid w-full grid-cols-2 mb-6 h-12 p-1.5 bg-muted rounded-full">
+                  <TabsTrigger
+                    value="login"
+                    className="rounded-full text-sm font-bold transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground"
+                  >
+                    Connexion
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="register"
+                    className="rounded-full text-sm font-bold transition-all data-[state=active]:bg-accent data-[state=active]:text-accent-foreground data-[state=active]:shadow-md data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground"
+                  >
+                    Inscription
+                  </TabsTrigger>
+                </TabsList>
                   <TabsContent value="login">
                     <LoginForm />
                   </TabsContent>
