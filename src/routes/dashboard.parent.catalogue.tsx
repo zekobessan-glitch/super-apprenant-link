@@ -11,6 +11,7 @@ import { computeMatchScore, classeToNiveau } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
 import { unlockEncadreurContact } from "@/lib/unlock-contact.functions";
+import { notifyInterestBeforePayment } from "@/lib/notify-interest.functions";
 
 export const Route = createFileRoute("/dashboard/parent/catalogue")({
   component: ParentCatalogue,
@@ -27,6 +28,7 @@ function ParentCatalogue() {
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
   const unlockFn = useServerFn(unlockEncadreurContact);
+  const notifyInterestFn = useServerFn(notifyInterestBeforePayment);
 
 
   const reload = async () => {
@@ -90,6 +92,20 @@ function ParentCatalogue() {
       .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score);
   }, [apprenant, encadreurs]);
+
+  const showInterest = async (enc: any) => {
+    if (!user || !apprenant) return;
+    setUnlocking(enc.profile_id);
+    try {
+      await notifyInterestFn({ data: { encadreur_id: enc.profile_id, apprenant_id: apprenant.id } });
+      toast.success("L'encadreur a été averti de votre intérêt. Achetez un pack pour obtenir ses coordonnées.");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Erreur lors de l'envoi de l'alerte");
+    } finally {
+      setUnlocking(null);
+      navigate({ to: "/dashboard/parent/paiements" });
+    }
+  };
 
   const unlock = async (enc: any) => {
     if (!user) return;
@@ -178,7 +194,7 @@ function ParentCatalogue() {
                 </div>
               ) : (
                 <Button
-                  onClick={() => (credits < 1 ? navigate({ to: "/dashboard/parent/paiements" }) : unlock(enc))}
+                  onClick={() => (credits < 1 ? showInterest(enc) : unlock(enc))}
                   disabled={unlocking === enc.profile_id}
                   className="w-full bg-brand text-white"
                 >
