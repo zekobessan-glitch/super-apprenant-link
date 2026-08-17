@@ -40,6 +40,7 @@ function DashboardLayout() {
           { to: base, icon: LayoutDashboard, label: "Vue d'ensemble" },
           { to: `${base}/users`, icon: Users, label: "Utilisateurs" },
           { to: `${base}/validations`, icon: ShieldCheck, label: "Validations" },
+          { to: `${base}/correspondances`, icon: Bell, label: "Correspondances" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
           { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
           { to: `${base}/emails`, icon: Mail, label: "E-mails envoyés" },
