@@ -35,6 +35,7 @@ import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.adm
 import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
 import { Route as DashboardAdminEmailsRouteImport } from './routes/dashboard.admin.emails'
+import { Route as DashboardAdminCorrespondancesRouteImport } from './routes/dashboard.admin.correspondances'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -177,6 +178,12 @@ const DashboardAdminEmailsRoute = DashboardAdminEmailsRouteImport.update({
   path: '/admin/emails',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAdminCorrespondancesRoute =
+  DashboardAdminCorrespondancesRouteImport.update({
+    id: '/admin/correspondances',
+    path: '/admin/correspondances',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
+  '/dashboard/admin/correspondances': typeof DashboardAdminCorrespondancesRoute
   '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
@@ -213,6 +221,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
+  '/dashboard/admin/correspondances': typeof DashboardAdminCorrespondancesRoute
   '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
@@ -242,6 +251,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/support': typeof DashboardSupportRoute
+  '/dashboard/admin/correspondances': typeof DashboardAdminCorrespondancesRoute
   '/dashboard/admin/emails': typeof DashboardAdminEmailsRoute
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/dashboard/messages'
     | '/dashboard/support'
+    | '/dashboard/admin/correspondances'
     | '/dashboard/admin/emails'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
@@ -300,6 +311,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/dashboard/messages'
     | '/dashboard/support'
+    | '/dashboard/admin/correspondances'
     | '/dashboard/admin/emails'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
@@ -328,6 +340,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/dashboard/messages'
     | '/dashboard/support'
+    | '/dashboard/admin/correspondances'
     | '/dashboard/admin/emails'
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
@@ -541,12 +554,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminEmailsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/admin/correspondances': {
+      id: '/dashboard/admin/correspondances'
+      path: '/admin/correspondances'
+      fullPath: '/dashboard/admin/correspondances'
+      preLoaderRoute: typeof DashboardAdminCorrespondancesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardSupportRoute: typeof DashboardSupportRoute
+  DashboardAdminCorrespondancesRoute: typeof DashboardAdminCorrespondancesRoute
   DashboardAdminEmailsRoute: typeof DashboardAdminEmailsRoute
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
   DashboardAdminParametresRoute: typeof DashboardAdminParametresRoute
@@ -572,6 +593,7 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardMessagesRoute: DashboardMessagesRoute,
   DashboardSupportRoute: DashboardSupportRoute,
+  DashboardAdminCorrespondancesRoute: DashboardAdminCorrespondancesRoute,
   DashboardAdminEmailsRoute: DashboardAdminEmailsRoute,
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
   DashboardAdminParametresRoute: DashboardAdminParametresRoute,
