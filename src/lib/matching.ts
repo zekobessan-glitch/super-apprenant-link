@@ -2,6 +2,16 @@ import { CLASSES_PRIMAIRE, CLASSES_COLLEGE, CLASSES_LYCEE } from "./constants";
 
 export type Niveau = "primaire" | "college" | "lycee";
 
+/** Normalise une zone ("Zone 6", "zone_6", "zone6") -> "zone6" parmi les 11 zones. */
+export function normalizeZone(zone: string | null | undefined): string | null {
+  if (!zone) return null;
+  const m = String(zone).toLowerCase().replace(/[\s_-]/g, "").match(/^zone(\d{1,2})$/);
+  if (!m) return null;
+  const n = Number(m[1]);
+  if (!Number.isInteger(n) || n < 1 || n > 11) return null;
+  return `zone${n}`;
+}
+
 export function classeToNiveau(classe: string): Niveau | null {
   if (CLASSES_PRIMAIRE.includes(classe)) return "primaire";
   if (CLASSES_COLLEGE.includes(classe)) return "college";
@@ -42,8 +52,10 @@ export function computeMatchScore(
   app: MatchInputApprenant,
   enc: MatchInputEncadreur
 ): number {
-  // 1) Zone de résidence : éliminatoire
-  if (app.zone !== enc.zone) return 0;
+  // 1) Zone de résidence : critère n°1, strictement éliminatoire
+  const zoneApp = normalizeZone(app.zone);
+  const zoneEnc = normalizeZone(enc.zone);
+  if (!zoneApp || !zoneEnc || zoneApp !== zoneEnc) return 0;
   let score = 30;
 
   // 2) Niveau + classe : éliminatoires
