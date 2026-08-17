@@ -85,7 +85,7 @@ function ParentCatalogue() {
           }
         ),
       }))
-      .filter((x) => x.score >= 30)
+      .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score);
   }, [apprenant, encadreurs]);
 
