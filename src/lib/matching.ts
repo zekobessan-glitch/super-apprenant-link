@@ -45,7 +45,7 @@ export interface MatchInputEncadreur {
  * Critères éliminatoires (score 0 si non respectés) :
  * - Zone de résidence identique
  * - Niveau + classe de l'apprenant pris en charge par l'encadreur
- * - Matières de l'apprenant incluses dans celles de l'encadreur (collège/lycée)
+ * - Au moins une matière de l'apprenant correspond à celles de l'encadreur (collège/lycée)
  * Bonus : série lycée (10 pts), profil pédagogique (10 pts).
  */
 export function computeMatchScore(
@@ -71,13 +71,13 @@ export function computeMatchScore(
   if (!classes.includes(app.classe)) return 0;
   score += 20;
 
-  // 3) Matières : éliminatoires (toutes celles de l'apprenant doivent être couvertes)
+  // 3) Matières : au moins une matière demandée doit correspondre (collège/lycée)
   if (app.niveau !== "primaire") {
     const encMat = app.niveau === "college" ? enc.matieres_college : enc.matieres_lycee;
     const demandees = app.matieres ?? [];
     if (demandees.length > 0) {
-      const toutesCouvertes = demandees.every((m) => encMat.includes(m));
-      if (!toutesCouvertes) return 0;
+      const auMoinsUne = demandees.some((m) => encMat.includes(m));
+      if (!auMoinsUne) return 0;
     }
     score += 25;
   } else {
