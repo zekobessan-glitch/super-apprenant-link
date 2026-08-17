@@ -18,6 +18,8 @@ export const Route = createFileRoute("/dashboard/parent/catalogue")({
 
 function ParentCatalogue() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [apprenant, setApprenant] = useState<any>(null);
   const [encadreurs, setEncadreurs] = useState<any[]>([]);
