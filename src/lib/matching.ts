@@ -72,14 +72,17 @@ export function computeMatchScore(
   score += 20;
 
   // 3) Matières : au moins une matière demandée doit correspondre (collège/lycée)
+  // Score proportionnel au nombre de matières couvertes, 100 % seulement si tout correspond.
   if (app.niveau !== "primaire") {
     const encMat = app.niveau === "college" ? enc.matieres_college : enc.matieres_lycee;
     const demandees = app.matieres ?? [];
     if (demandees.length > 0) {
-      const auMoinsUne = demandees.some((m) => encMat.includes(m));
-      if (!auMoinsUne) return 0;
+      const couvertes = demandees.filter((m) => encMat.includes(m)).length;
+      if (couvertes === 0) return 0;
+      score += Math.round((25 * couvertes) / demandees.length);
+    } else {
+      score += 25; // aucune matière renseignée
     }
-    score += 25;
   } else {
     score += 25; // primaire : pas de matière spécifique
   }
