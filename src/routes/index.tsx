@@ -32,7 +32,7 @@ export const Route = createFileRoute("/")({
 
 function VitrinePage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="vitrine-typo flex min-h-screen flex-col">
       <VitrineNav />
       <main className="flex-1">
         <VitrineHero />
