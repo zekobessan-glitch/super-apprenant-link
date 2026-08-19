@@ -132,6 +132,29 @@
 }
 
 @layer utilities {
+  /* Police de la page vitrine uniquement */
+  .vitrine-typo,
+  .vitrine-typo button,
+  .vitrine-typo input,
+  .vitrine-typo textarea,
+  .vitrine-typo select {
+    font-family: 'Space Grotesk', 'Outfit', system-ui, sans-serif;
+  }
+  .vitrine-typo h1,
+  .vitrine-typo h2,
+  .vitrine-typo h3,
+  .vitrine-typo h4 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .vitrine-typo .font-mono,
+  .vitrine-typo [data-eyebrow] {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .bg-hero { background: var(--gradient-hero); }
   .bg-brand { background: var(--gradient-brand); }
   .bg-accent-gradient { background: var(--gradient-accent); }
