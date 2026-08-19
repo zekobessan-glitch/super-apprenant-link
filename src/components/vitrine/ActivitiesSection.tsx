@@ -33,12 +33,13 @@ const ACTIVITIES = [
 
 export function ActivitiesSection() {
   return (
-    <section id="activites" className="bg-background py-16 md:py-20">
+    <section id="activites" className="bg-[#0d2233] py-16 md:py-20">
       <div className="container mx-auto px-4">
         <SectionHeading
           eyebrow="Nos activités"
           title="Un accompagnement scolaire complet"
           description="De l'identification du profil de l'enfant jusqu'à la mise en relation avec le bon encadreur, chaque étape est pensée pour la réussite."
+          className="[&_h2]:text-[#22c55e] [&_p:not([data-eyebrow])]:text-white"
         />
 
         <div className="mt-20 grid gap-x-5 gap-y-20 sm:grid-cols-2 lg:grid-cols-5">
@@ -50,9 +51,9 @@ export function ActivitiesSection() {
               <div className="absolute left-1/2 top-3 z-20 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[#ff8c00] via-[#fba100] to-[#ffbd2e] shadow-soft transition-transform group-hover:scale-110">
                 <Icon className="h-8 w-8 text-white" />
               </div>
-              <Card className="relative z-10 flex h-full flex-col items-center gap-3 overflow-hidden rounded-3xl bg-white px-5 pb-7 pt-12 text-center shadow-soft transition-all group-hover:-translate-y-1 group-hover:shadow-elegant">
+              <Card className="relative z-10 flex h-full flex-col items-center gap-3 overflow-hidden rounded-2xl border-0 bg-[#0b0f14] px-5 pb-7 pt-12 text-center shadow-soft transition-all group-hover:-translate-y-1 group-hover:shadow-elegant">
                 <h3 className="relative z-10 text-base font-extrabold text-[#fba100]">{title}</h3>
-                <p className="relative z-10 text-sm leading-relaxed text-black">{text}</p>
+                <p className="relative z-10 text-sm leading-relaxed text-white">{text}</p>
               </Card>
             </div>
           ))}
