@@ -18,7 +18,7 @@ export function SectionHeading({
       className={`${align === "center" ? "text-center mx-auto max-w-2xl" : "max-w-2xl"} ${className}`}
     >
       <div className={`flex items-center gap-3 ${align === "center" ? "justify-center" : ""}`}>
-        <p className="text-sm font-semibold italic text-[#fba100]">
+        <p data-eyebrow className="text-xs font-bold not-italic text-[#fba100]">
           {eyebrow}
         </p>
         <span className="inline-block h-px w-12 bg-[#fba100]" />
