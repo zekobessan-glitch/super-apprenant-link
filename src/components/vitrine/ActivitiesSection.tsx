@@ -42,18 +42,15 @@ export function ActivitiesSection() {
         />
 
         <div className="mt-20 grid gap-x-5 gap-y-20 sm:grid-cols-2 lg:grid-cols-5">
-          {ACTIVITIES.map(({ icon: Icon, title, text, iconGradient, cardGradient }) => (
+          {ACTIVITIES.map(({ icon: Icon, title, text }) => (
             <div key={title} className="group relative pt-12">
-              {/* arche verte */}
-              <div className="absolute left-1/2 top-0 z-0 h-24 w-24 -translate-x-1/2 rounded-full bg-primary" />
-              {/* pastille avec dégradé */}
-              <div
-                className={`absolute left-1/2 top-3 z-20 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full ${iconGradient} shadow-soft transition-transform group-hover:scale-110`}
-              >
+              {/* arche bleue */}
+              <div className="absolute left-1/2 top-0 z-0 h-24 w-24 -translate-x-1/2 rounded-full bg-gradient-to-b from-[#0056b3] via-[#0077e6] to-[#004494]" />
+              {/* pastille orange */}
+              <div className="absolute left-1/2 top-3 z-20 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[#ff8c00] via-[#fba100] to-[#ffbd2e] shadow-soft transition-transform group-hover:scale-110">
                 <Icon className="h-8 w-8 text-white" />
               </div>
-              <Card className="relative z-10 flex h-full flex-col items-center gap-3 overflow-hidden rounded-3xl bg-gradient-to-b px-5 pb-7 pt-12 text-center shadow-soft transition-all group-hover:-translate-y-1 group-hover:shadow-elegant">
-                <div className={`absolute inset-0 bg-gradient-to-b ${cardGradient} opacity-60 pointer-events-none`} />
+              <Card className="relative z-10 flex h-full flex-col items-center gap-3 overflow-hidden rounded-3xl bg-white px-5 pb-7 pt-12 text-center shadow-soft transition-all group-hover:-translate-y-1 group-hover:shadow-elegant">
                 <h3 className="relative z-10 text-base font-extrabold text-[#fba100]">{title}</h3>
                 <p className="relative z-10 text-sm leading-relaxed text-black">{text}</p>
               </Card>
