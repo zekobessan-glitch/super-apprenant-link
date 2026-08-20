@@ -11,6 +11,7 @@ import { ContactSection } from "@/components/vitrine/ContactSection";
 import { SectionHeading } from "@/components/vitrine/SectionHeading";
 import { Reveal } from "@/components/vitrine/Reveal";
 import { VitrineAuthPopup } from "@/components/vitrine/VitrineAuthPopup";
+import { WhatsAppButton } from "@/components/vitrine/WhatsAppButton";
 
 const TITLE = "SUPER@PPRENANT-I — Encadrement scolaire en Côte d'Ivoire";
 const DESC =
@@ -78,6 +79,7 @@ function VitrinePage() {
 
       <Footer />
       <VitrineAuthPopup />
+      <WhatsAppButton phone="+225 07 47 26 25 77" />
     </div>
   );
 }
