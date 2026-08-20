@@ -50,8 +50,8 @@ export function VitrineAuthPopup() {
       setOpen(isOpen);
       if (!isOpen) sessionStorage.setItem(STORAGE_KEY, "1");
     }}>
-      <DialogContent hideClose className="max-w-md p-0 overflow-hidden sm:rounded-2xl">
-        <div className="p-6">
+      <DialogContent hideClose className="max-w-md p-0 overflow-hidden sm:rounded-2xl border-2 border-accent shadow-glow">
+        <div className="p-6 animate-popup-bounce">
           <DialogHeader className="mb-4">
             <DialogTitle className="text-center text-2xl font-bold text-primary">
               Rejoignez SUPER@PPRENANT-I
@@ -83,6 +83,17 @@ export function VitrineAuthPopup() {
               <RegisterChooser />
             </TabsContent>
           </Tabs>
+
+          <DialogClose asChild>
+            <Button
+              variant="outline"
+              className="w-full mt-4 border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+              onClick={handleClose}
+            >
+              <X className="mr-2 h-4 w-4" />
+              Fermer
+            </Button>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
