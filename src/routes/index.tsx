@@ -79,6 +79,7 @@ function VitrinePage() {
 
       <Footer />
       <VitrineAuthPopup />
+      <WhatsAppButton phone="+225 07 47 26 25 77" />
     </div>
   );
 }
