@@ -190,6 +190,15 @@
     will-change: transform;
   }
 
+  @keyframes whatsapp-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .animate-whatsapp-bounce {
+    animation: whatsapp-bounce 2.2s ease-in-out infinite;
+    will-change: transform;
+  }
+
   /* Apparition des sections au défilement */
   .reveal {
     opacity: 0;
