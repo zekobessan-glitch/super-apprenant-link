@@ -24,17 +24,17 @@ export function VitrineNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-primary lg:bg-card/95 lg:backdrop-blur lg:supports-[backdrop-filter]:bg-card/85">
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
       {/* Bandeau d'informations */}
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 py-3 lg:grid-cols-[auto_repeat(3,minmax(0,1fr))] lg:gap-8">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 py-3 lg:grid-cols-[auto_repeat(3,minmax(0,1fr))] lg:gap-0">
           <a href="#accueil" className="flex min-w-0 items-center gap-2">
             <img
               src={logo}
               alt="Logo SUPER@PPRENANT-I"
-              className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-white/30 lg:ring-primary/20"
+              className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-primary/20"
             />
-            <span className="truncate text-sm font-extrabold text-white sm:text-base lg:hidden lg:text-primary xl:inline">
+            <span className="truncate text-sm font-extrabold text-primary sm:text-base xl:text-lg">
               SUPER@PPRENANT-I
             </span>
           </a>
@@ -42,7 +42,7 @@ export function VitrineNav() {
           {INFOS.map((info, i) => (
             <div
               key={info.label}
-              className={`hidden min-w-0 items-start gap-2 lg:flex ${i > 0 ? "lg:border-l lg:border-border lg:pl-8" : ""}`}
+              className={`hidden min-w-0 items-start gap-2 lg:flex ${i > 0 ? "lg:border-l lg:border-border lg:pl-6" : "lg:justify-self-end lg:pr-2"}`}
             >
               <info.icon className="mt-1 h-4 w-4 shrink-0 text-accent" />
               <div className="min-w-0">
@@ -56,23 +56,23 @@ export function VitrineNav() {
             type="button"
             aria-label="Ouvrir le menu"
             onClick={() => setOpen((v) => !v)}
-            className="justify-self-end flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white ring-2 ring-white/30 lg:hidden"
+            className="justify-self-end flex h-11 w-11 items-center justify-center rounded-full bg-black text-accent ring-2 ring-accent/30 lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Barre de navigation en pilule */}
+      {/* Barre de navigation en pilule noire */}
       <div className="container mx-auto hidden px-4 pb-4 lg:block">
         <div className="flex items-center gap-3">
-          <nav className="flex flex-1 items-center rounded-full bg-primary px-8 py-3.5 shadow-lg">
+          <nav className="flex flex-1 items-center rounded-full bg-black px-8 py-3.5 shadow-lg">
             <ul className="flex flex-wrap items-center gap-7">
               {LINKS.map((l) => (
                 <li key={l.href}>
                   <a
                     href={l.href}
-                    className="text-sm font-bold uppercase tracking-wide text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+                    className="text-sm font-bold uppercase tracking-wide text-accent transition-colors hover:text-white"
                   >
                     {l.label}
                   </a>
@@ -92,7 +92,7 @@ export function VitrineNav() {
             <Search className="h-5 w-5" />
           </button>
 
-          <Button asChild size="lg" className="h-12 shrink-0 rounded-full px-7 font-bold shadow-lg">
+          <Button asChild size="lg" className="h-12 shrink-0 rounded-full px-7 font-bold shadow-lg bg-primary hover:bg-primary/90">
             <Link to="/connexion">Se connecter</Link>
           </Button>
         </div>
