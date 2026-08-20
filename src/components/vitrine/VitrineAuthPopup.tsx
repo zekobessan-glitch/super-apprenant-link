@@ -48,20 +48,9 @@ export function VitrineAuthPopup() {
       setOpen(isOpen);
       if (!isOpen) sessionStorage.setItem(STORAGE_KEY, "1");
     }}>
-      <DialogContent className="max-w-md p-0 overflow-hidden sm:rounded-2xl">
+      <DialogContent hideClose className="max-w-md p-0 overflow-hidden sm:rounded-2xl">
         <div className="p-6">
-          <DialogHeader className="mb-4 relative">
-            <div className="absolute -right-2 -top-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleClose}
-                className="rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
-                aria-label="Fermer"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
+          <DialogHeader className="mb-4">
             <DialogTitle className="text-center text-2xl font-bold text-primary">
               Rejoignez SUPER@PPRENANT-I
             </DialogTitle>
@@ -92,18 +81,6 @@ export function VitrineAuthPopup() {
               <RegisterChooser />
             </TabsContent>
           </Tabs>
-
-          <div className="mt-6 flex justify-center">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClose}
-              className="rounded-full px-6 text-sm font-semibold"
-            >
-              <X className="h-4 w-4 mr-2" />
-              Fermer
-            </Button>
-          </div>
         </div>
       </DialogContent>
     </Dialog>
