@@ -67,7 +67,7 @@ export function VitrineHero() {
             height={1000}
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-primary/95 via-primary/80 to-primary/30" />
+          <div className="absolute inset-0 bg-linear-to-r from-black/95 via-black/75 to-black/40" />
         </div>
       ))}
 
