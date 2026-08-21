@@ -50,7 +50,7 @@ export function VitrineAuthPopup() {
       setOpen(isOpen);
       if (!isOpen) sessionStorage.setItem(STORAGE_KEY, "1");
     }}>
-      <DialogContent hideClose className="max-w-md p-0 overflow-hidden sm:rounded-2xl border-2 border-accent shadow-glow">
+      <DialogContent hideClose className="max-w-md p-0 overflow-hidden rounded-2xl border-2 border-accent shadow-glow">
         <div className="p-6 animate-popup-bounce">
           <DialogHeader className="mb-4">
             <DialogTitle className="text-center text-2xl font-bold text-primary">
