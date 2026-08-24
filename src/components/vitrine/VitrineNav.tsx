@@ -56,7 +56,7 @@ export function VitrineNav() {
             type="button"
             aria-label="Ouvrir le menu"
             onClick={() => setOpen((v) => !v)}
-            className="justify-self-end flex h-11 w-11 items-center justify-center rounded-full bg-black text-accent ring-2 ring-accent/30 lg:hidden"
+            className="justify-self-end flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white ring-2 ring-primary/30 lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
