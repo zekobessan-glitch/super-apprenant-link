@@ -1,35 +1,42 @@
 import { useCallback, useEffect, useState } from "react";
-import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Zap } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "./SectionHeading";
+
 
 const TESTIMONIALS = [
   {
     text: "En deux jours, nous avons trouvé un encadreur de notre zone pour la classe de 3e. Les notes de mon fils ont nettement progressé.",
     name: "Aïcha Koné",
     role: "Parent, Abobo",
+    highlight: "Encadreur trouvé en 2 jours",
   },
   {
     text: "Le profil pédagogique m'a permis d'être mis en relation avec des élèves qui correspondent vraiment à ma méthode d'enseignement.",
     name: "Yao Konan",
     role: "Encadreur, Bouaké",
+    highlight: "Mise en relation ciblée",
   },
   {
     text: "Simple, sérieux et transparent. Le suivi par notifications et le support répondent rapidement à nos questions.",
     name: "Fatou Diarra",
     role: "Parent, Yamoussoukro",
+    highlight: "Support réactif",
   },
   {
     text: "J'ai pu suivre le parcours de ma fille directement depuis le tableau de bord. L'encadreur est compétent et très à l'écoute.",
     name: "Marie-Thérèse Amani",
     role: "Parent, Cocody",
+    highlight: "Suivi en temps réel",
   },
   {
     text: "La validation du dossier et la mise en relation sont rapides. Super Apprenant m'aide à trouver des apprenants sans difficulté.",
     name: "Kouamé Brou",
     role: "Encadreur, Korhogo",
+    highlight: "Dossier validé rapidement",
   },
 ];
+
 
 export function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
