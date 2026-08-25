@@ -100,7 +100,7 @@ export function PricingSection() {
                   </span>
                   <span className="text-sm font-medium text-white/50">{plan.period}</span>
                 </div>
-                <p className="mt-1 text-sm text-white/40 line-through">{plan.oldPrice}</p>
+                {plan.oldPrice ? <p className="mt-1 text-sm text-white/40 line-through">{plan.oldPrice}</p> : null}
 
                 {/* CTA */}
                 <Button
