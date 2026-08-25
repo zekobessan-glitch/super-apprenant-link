@@ -13,6 +13,7 @@ import { SectionHeading } from "@/components/vitrine/SectionHeading";
 import { Reveal } from "@/components/vitrine/Reveal";
 import { VitrineAuthPopup } from "@/components/vitrine/VitrineAuthPopup";
 import { WhatsAppButton } from "@/components/vitrine/WhatsAppButton";
+import { CtaSection } from "@/components/vitrine/CtaSection";
 
 
 const TITLE = "SUPER@PPRENANT-I — Encadrement scolaire en Côte d'Ivoire";
@@ -63,6 +64,10 @@ function VitrinePage() {
               </blockquote>
             </div>
           </section>
+        </Reveal>
+
+        <Reveal>
+          <CtaSection />
         </Reveal>
 
         <Reveal>
