@@ -7,11 +7,13 @@ import { StatsSection } from "@/components/vitrine/StatsSection";
 import { CategoriesSection } from "@/components/vitrine/CategoriesSection";
 import { ProcessSection } from "@/components/vitrine/ProcessSection";
 import { TestimonialsSection } from "@/components/vitrine/TestimonialsSection";
+import { PricingSection } from "@/components/vitrine/PricingSection";
 import { ContactSection } from "@/components/vitrine/ContactSection";
 import { SectionHeading } from "@/components/vitrine/SectionHeading";
 import { Reveal } from "@/components/vitrine/Reveal";
 import { VitrineAuthPopup } from "@/components/vitrine/VitrineAuthPopup";
 import { WhatsAppButton } from "@/components/vitrine/WhatsAppButton";
+
 
 const TITLE = "SUPER@PPRENANT-I — Encadrement scolaire en Côte d'Ivoire";
 const DESC =
@@ -73,8 +75,12 @@ function VitrinePage() {
           <TestimonialsSection />
         </Reveal>
         <Reveal>
+          <PricingSection />
+        </Reveal>
+        <Reveal>
           <ContactSection />
         </Reveal>
+
       </main>
 
       <Footer />
