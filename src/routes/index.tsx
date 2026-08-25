@@ -75,8 +75,12 @@ function VitrinePage() {
           <TestimonialsSection />
         </Reveal>
         <Reveal>
+          <PricingSection />
+        </Reveal>
+        <Reveal>
           <ContactSection />
         </Reveal>
+
       </main>
 
       <Footer />
