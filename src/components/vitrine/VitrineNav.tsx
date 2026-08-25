@@ -26,8 +26,36 @@ export function VitrineNav() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       {/* Bandeau d'informations */}
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 py-3 lg:grid-cols-[auto_repeat(3,minmax(0,1fr))] lg:gap-0">
+      {/* Mobile : pilule bleue + bouton rond */}
+      <div className="container mx-auto px-4 py-3 lg:hidden">
+        <div className="flex items-center gap-3">
+          <a
+            href="#accueil"
+            className="flex min-w-0 flex-1 items-center gap-3 rounded-full bg-primary py-2.5 pl-2.5 pr-5 shadow-lg"
+          >
+            <img
+              src={logo}
+              alt="Logo SUPER@PPRENANT-I"
+              className="h-11 w-11 shrink-0 rounded-full bg-white object-cover ring-2 ring-white/60"
+            />
+            <span className="truncate text-sm font-extrabold uppercase tracking-wide text-primary-foreground">
+              SUPER@PPRENANT-I
+            </span>
+          </a>
+          <button
+            type="button"
+            aria-label="Ouvrir le menu"
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Bandeau d'informations (desktop) */}
+      <div className="container mx-auto hidden px-4 lg:block">
+        <div className="grid items-center gap-4 py-3 lg:grid-cols-[auto_repeat(3,minmax(0,1fr))] lg:gap-0">
           <a href="#accueil" className="flex min-w-0 items-center gap-2">
             <img
               src={logo}
@@ -51,17 +79,9 @@ export function VitrineNav() {
               </div>
             </div>
           ))}
-
-          <button
-            type="button"
-            aria-label="Ouvrir le menu"
-            onClick={() => setOpen((v) => !v)}
-            className="justify-self-end flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white ring-2 ring-primary/30 lg:hidden"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
       </div>
+
 
       {/* Barre de navigation en pilule noire */}
       <div className="container mx-auto hidden px-4 pb-4 lg:block">
