@@ -7,50 +7,51 @@ const PLANS = [
   {
     id: "encadreur",
     name: "Encadreur",
-    badge: "Gratuit",
-    description: "Rejoignez la plateforme et trouvez des apprenants près de chez vous.",
-    price: "0 FCFA",
-    period: "à vie",
-    oldPrice: "5 000 FCFA",
+    badge: "Par contact",
+    description: "Débloquez le contact des parents/élèves qui correspondent à votre profil.",
+    price: "5 000 FCFA",
+    period: "par contact débloqué",
+    oldPrice: "",
     cta: "Créer mon profil",
     href: "/connexion",
     features: [
       "Inscription 100 % gratuite",
       "Profil pédagogique détaillé",
-      "Mise en relation qualifiée",
-      "Paiement sécurisé après validation",
-      "Support prioritaire",
+      "Matching par zone, classe et matières",
+      "Coordonnées de l'apprenant après déblocage",
+      "Paiement sécurisé via GeniusPay",
     ],
     bonus: {
       icon: Star,
-      title: "Commission réduite",
-      text: "Profitez d'une commission avantageuse sur les premières heures encadrées.",
+      title: "Premium : contacts gratuits",
+      text: "Suivez la formation Super Apprenant et débloquez vos contacts sans frais.",
     },
   },
   {
     id: "parent",
     name: "Parent / Élève",
-    badge: "-50 %",
+    badge: "Pack 3 contacts",
     description: "Débloquez le contact des encadreurs vérifiés et suivez le parcours.",
-    price: "2 500 FCFA",
-    period: "par contact",
-    oldPrice: "5 000 FCFA",
+    price: "5 000 FCFA",
+    period: "le pack de 3 contacts",
+    oldPrice: "",
     cta: "Débloquer un contact",
     href: "/connexion",
     features: [
+      "3 crédits de contact inclus",
       "Accès aux encadreurs vérifiés",
       "Matching par zone, classe et matières",
       "Contact sécurisé et direct",
       "Suivi du parcours sur le tableau de bord",
-      "Support client dédié",
     ],
     bonus: {
       icon: Gift,
-      title: "Satisfait ou remboursé 7 jours",
-      text: "Si l'encadreur ne convient pas, nous étudions votre demande sous 7 jours.",
+      title: "Crédits valables sans limite",
+      text: "Utilisez vos 3 crédits quand vous le souhaitez depuis votre tableau de bord.",
     },
   },
 ];
+
 
 export function PricingSection() {
   return (
@@ -99,7 +100,7 @@ export function PricingSection() {
                   </span>
                   <span className="text-sm font-medium text-white/50">{plan.period}</span>
                 </div>
-                <p className="mt-1 text-sm text-white/40 line-through">{plan.oldPrice}</p>
+                {plan.oldPrice ? <p className="mt-1 text-sm text-white/40 line-through">{plan.oldPrice}</p> : null}
 
                 {/* CTA */}
                 <Button
