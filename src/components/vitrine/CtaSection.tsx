@@ -32,7 +32,7 @@ export function CtaSection() {
             <div className="flex flex-col items-center justify-center gap-4 pt-2 sm:flex-row">
               <Link
                 to="/connexion"
-                className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+                className="inline-flex items-center gap-2 rounded-full bg-[#fba100] px-7 py-3.5 text-sm font-bold text-black shadow-lg transition-transform hover:scale-105"
               >
                 Commencer maintenant
                 <ArrowRight className="h-4 w-4" />
