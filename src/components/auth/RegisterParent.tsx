@@ -153,7 +153,24 @@ export function RegisterParent({ onBack }: { onBack: () => void }) {
 
   const progress = (step / 4) * 100;
 
+  if (done) {
+    return (
+      <div className="space-y-4 text-center py-6">
+        <div className="mx-auto h-12 w-12 rounded-full bg-brand/10 flex items-center justify-center">
+          <MailCheck className="h-6 w-6 text-brand" />
+        </div>
+        <h3 className="font-semibold text-primary">Inscription enregistrée</h3>
+        <p className="text-sm text-muted-foreground">
+          Un e-mail de confirmation a été envoyé à <strong>{email}</strong>. Veuillez vérifier votre
+          boîte mail (et vos spams) pour confirmer votre inscription, puis connectez-vous.
+        </p>
+        <Button className="w-full bg-brand text-white" onClick={onBack}>Retour à la connexion</Button>
+      </div>
+    );
+  }
+
   return (
+
     <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
       <div className="flex items-center gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onBack}>
