@@ -59,6 +59,8 @@ function computeProfilApprentissage(answers: number[]): string {
 export function RegisterParent({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
