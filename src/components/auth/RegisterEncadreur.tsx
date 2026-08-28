@@ -56,6 +56,8 @@ function computeProfilPedagogique(answers: number[]): string {
 export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+
 
   // Step 1 — auth
   const [email, setEmail] = useState("");
