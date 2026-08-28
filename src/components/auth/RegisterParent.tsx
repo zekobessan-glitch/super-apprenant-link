@@ -102,59 +102,52 @@ export function RegisterParent({ onBack }: { onBack: () => void }) {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
+    const profil = computeProfilApprentissage(answers as number[]);
+
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { role: "parent", username, nom, prenoms, telephone },
+        data: {
+          role: "parent",
+          username,
+          nom,
+          prenoms,
+          telephone,
+          profession,
+          zone_residence: zoneParent,
+          apprenant: {
+            nom: nomApp,
+            prenoms: prenomsApp,
+            age: age,
+            zone_residence: zoneApp,
+            niveau,
+            classe,
+            serie: niveau === "lycee" ? serie : null,
+            matieres: niveau === "primaire" ? [] : matieres,
+            profil_apprentissage: profil,
+          },
+          quiz: {
+            type: "profil_apprentissage",
+            reponses: answers,
+            profil_calcule: profil,
+          },
+        },
       },
-    });
-    if (error || !data.user) {
-      setLoading(false);
-      toast.error(error?.message ?? "Erreur d'inscription");
-      return;
-    }
-
-    await supabase.from("profiles").update({
-      profession,
-      zone_residence: zoneParent as ZoneKey,
-    }).eq("id", data.user.id);
-
-    const profil = computeProfilApprentissage(answers as number[]);
-
-    const { error: appErr } = await supabase.from("apprenants").insert({
-      parent_id: data.user.id,
-      nom: nomApp,
-      prenoms: prenomsApp,
-      age: parseInt(age),
-      zone_residence: zoneApp as ZoneKey,
-      niveau: niveau!,
-      classe,
-      serie: niveau === "lycee" ? (serie as any) : null,
-      matieres: niveau === "primaire" ? [] : matieres,
-      profil_apprentissage: profil,
-    });
-    if (appErr) {
-      setLoading(false);
-      toast.error(appErr.message);
-      return;
-    }
-
-    await supabase.from("quiz_responses").insert({
-      profile_id: data.user.id,
-      type: "profil_apprentissage",
-      reponses: answers as any,
-      profil_calcule: profil,
-    });
-    await supabase.from("contacts_credits").insert({
-      parent_id: data.user.id,
-      credits_restants: 0,
     });
 
     setLoading(false);
-    toast.success(`Inscription réussie ! Profil d'apprentissage : ${profil}`);
+
+    if (error) {
+      toast.error(error.message ?? "Erreur d'inscription");
+      return;
+    }
+
+    setDone(true);
+    toast.success("Inscription enregistrée ! Vérifiez votre boîte mail pour confirmer votre adresse.");
   };
+
 
   const progress = (step / 4) * 100;
 
