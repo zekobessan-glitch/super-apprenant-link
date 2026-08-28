@@ -13,7 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Loader2, Eye, EyeOff, MailCheck } from "lucide-react";
 import {
   ZONES,
   CLASSES_PRIMAIRE,
@@ -59,6 +59,8 @@ function computeProfilApprentissage(answers: number[]): string {
 export function RegisterParent({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -102,63 +104,73 @@ export function RegisterParent({ onBack }: { onBack: () => void }) {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
+    const profil = computeProfilApprentissage(answers as number[]);
+
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { role: "parent", username, nom, prenoms, telephone },
+        data: {
+          role: "parent",
+          username,
+          nom,
+          prenoms,
+          telephone,
+          profession,
+          zone_residence: zoneParent,
+          apprenant: {
+            nom: nomApp,
+            prenoms: prenomsApp,
+            age: age,
+            zone_residence: zoneApp,
+            niveau,
+            classe,
+            serie: niveau === "lycee" ? serie : null,
+            matieres: niveau === "primaire" ? [] : matieres,
+            profil_apprentissage: profil,
+          },
+          quiz: {
+            type: "profil_apprentissage",
+            reponses: answers,
+            profil_calcule: profil,
+          },
+        },
       },
-    });
-    if (error || !data.user) {
-      setLoading(false);
-      toast.error(error?.message ?? "Erreur d'inscription");
-      return;
-    }
-
-    await supabase.from("profiles").update({
-      profession,
-      zone_residence: zoneParent as ZoneKey,
-    }).eq("id", data.user.id);
-
-    const profil = computeProfilApprentissage(answers as number[]);
-
-    const { error: appErr } = await supabase.from("apprenants").insert({
-      parent_id: data.user.id,
-      nom: nomApp,
-      prenoms: prenomsApp,
-      age: parseInt(age),
-      zone_residence: zoneApp as ZoneKey,
-      niveau: niveau!,
-      classe,
-      serie: niveau === "lycee" ? (serie as any) : null,
-      matieres: niveau === "primaire" ? [] : matieres,
-      profil_apprentissage: profil,
-    });
-    if (appErr) {
-      setLoading(false);
-      toast.error(appErr.message);
-      return;
-    }
-
-    await supabase.from("quiz_responses").insert({
-      profile_id: data.user.id,
-      type: "profil_apprentissage",
-      reponses: answers as any,
-      profil_calcule: profil,
-    });
-    await supabase.from("contacts_credits").insert({
-      parent_id: data.user.id,
-      credits_restants: 0,
     });
 
     setLoading(false);
-    toast.success(`Inscription réussie ! Profil d'apprentissage : ${profil}`);
+
+    if (error) {
+      toast.error(error.message ?? "Erreur d'inscription");
+      return;
+    }
+
+    setDone(true);
+    toast.success("Inscription enregistrée ! Vérifiez votre boîte mail pour confirmer votre adresse.");
   };
+
 
   const progress = (step / 4) * 100;
 
+  if (done) {
+    return (
+      <div className="space-y-4 text-center py-6">
+        <div className="mx-auto h-12 w-12 rounded-full bg-brand/10 flex items-center justify-center">
+          <MailCheck className="h-6 w-6 text-brand" />
+        </div>
+        <h3 className="font-semibold text-primary">Inscription enregistrée</h3>
+        <p className="text-sm text-muted-foreground">
+          Un e-mail de confirmation a été envoyé à <strong>{email}</strong>. Veuillez vérifier votre
+          boîte mail (et vos spams) pour confirmer votre inscription, puis connectez-vous.
+        </p>
+        <Button className="w-full bg-brand text-white" onClick={onBack}>Retour à la connexion</Button>
+      </div>
+    );
+  }
+
   return (
+
     <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
       <div className="flex items-center gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onBack}>

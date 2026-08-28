@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Loader2, Eye, EyeOff, MailCheck } from "lucide-react";
 import {
   ZONES,
   CLASSES_PRIMAIRE,
@@ -56,6 +56,8 @@ function computeProfilPedagogique(answers: number[]): string {
 export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+
 
   // Step 1 — auth
   const [email, setEmail] = useState("");
@@ -100,62 +102,77 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
+    const profilPedagogique = computeProfilPedagogique(answers as number[]);
+
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { role: "encadreur", username, nom, prenoms, telephone },
+        data: {
+          role: "encadreur",
+          username,
+          nom,
+          prenoms,
+          telephone,
+          encadreur: {
+            genre,
+            zone_residence: zone,
+            dernier_diplome: diplome,
+            experience_pro: experience,
+            experience_detail: experienceDetail || null,
+            niveaux,
+            classes_primaire: classesPrim,
+            classes_college: classesColl,
+            classes_lycee: classesLyc,
+            series_lycee: seriesLyc,
+            matieres_college: matieresColl,
+            matieres_lycee: matieresLyc,
+            motivation,
+            profil_pedagogique: profilPedagogique,
+            formation_super_apprenant: formationSA,
+          },
+          quiz: {
+            type: "profil_encadrant",
+            reponses: answers,
+            profil_calcule: profilPedagogique,
+          },
+        },
       },
     });
 
-    if (error || !data.user) {
-      setLoading(false);
-      toast.error(error?.message ?? "Erreur d'inscription");
-      return;
-    }
-
-    const profilPedagogique = computeProfilPedagogique(answers as number[]);
-
-    const { error: encErr } = await supabase.from("encadreurs").insert({
-      profile_id: data.user.id,
-      genre,
-      zone_residence: zone as ZoneKey,
-      dernier_diplome: diplome,
-      experience_pro: experience,
-      experience_detail: experienceDetail || null,
-      niveaux,
-      classes_primaire: classesPrim,
-      classes_college: classesColl,
-      classes_lycee: classesLyc,
-      series_lycee: seriesLyc as any,
-      matieres_college: matieresColl,
-      matieres_lycee: matieresLyc,
-      motivation,
-      profil_pedagogique: profilPedagogique,
-      formation_super_apprenant: formationSA,
-    });
-
-    if (encErr) {
-      setLoading(false);
-      toast.error(`Profil créé mais erreur encadreur : ${encErr.message}`);
-      return;
-    }
-
-    await supabase.from("quiz_responses").insert({
-      profile_id: data.user.id,
-      type: "profil_encadrant",
-      reponses: answers as any,
-      profil_calcule: profilPedagogique,
-    });
-
     setLoading(false);
-    toast.success(`Inscription réussie ! Profil pédagogique : ${profilPedagogique}`);
+
+    if (error) {
+      toast.error(error.message ?? "Erreur d'inscription");
+      return;
+    }
+
+    setDone(true);
+    toast.success("Inscription enregistrée ! Vérifiez votre boîte mail pour confirmer votre adresse.");
   };
+
 
   const progress = (step / 4) * 100;
 
+  if (done) {
+    return (
+      <div className="space-y-4 text-center py-6">
+        <div className="mx-auto h-12 w-12 rounded-full bg-brand/10 flex items-center justify-center">
+          <MailCheck className="h-6 w-6 text-brand" />
+        </div>
+        <h3 className="font-semibold text-primary">Inscription enregistrée</h3>
+        <p className="text-sm text-muted-foreground">
+          Un e-mail de confirmation a été envoyé à <strong>{email}</strong>. Veuillez vérifier votre
+          boîte mail (et vos spams) pour confirmer votre inscription, puis connectez-vous.
+        </p>
+        <Button className="w-full bg-brand text-white" onClick={onBack}>Retour à la connexion</Button>
+      </div>
+    );
+  }
+
   return (
+
     <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
       <div className="flex items-center gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onBack}>
