@@ -52,7 +52,13 @@ export async function sendResendEmail(opts: {
 }) {
   const apiKey = process.env['RESEND_API_KEY'];
   if (!apiKey) throw new Error("RESEND_API_KEY non configurée");
-  const from = process.env['RESEND_FROM'] ?? "SUPER@PPRENANT-I <onboarding@resend.dev>";
+  // Le nom affiché ne doit pas contenir de caractères interdits (@, <, >) sinon
+  // Resend rejette l'en-tête From.
+  const rawFrom = process.env['RESEND_FROM'] ?? "SUPER APPRENANT-I <notifications@superapprenant-i.com>";
+  const m = /^(.*)<([^>]+)>\s*$/.exec(rawFrom);
+  const from = m
+    ? `${m[1].replace(/[@<>"]/g, " ").trim() || "SUPER APPRENANT-I"} <${m[2].trim()}>`
+    : rawFrom.trim();
   const type = opts.type ?? "notification";
 
   const res = await fetch("https://api.resend.com/emails", {
