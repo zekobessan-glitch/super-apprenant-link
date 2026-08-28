@@ -100,58 +100,56 @@ export function RegisterEncadreur({ onBack }: { onBack: () => void }) {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
+    const profilPedagogique = computeProfilPedagogique(answers as number[]);
+
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { role: "encadreur", username, nom, prenoms, telephone },
+        data: {
+          role: "encadreur",
+          username,
+          nom,
+          prenoms,
+          telephone,
+          encadreur: {
+            genre,
+            zone_residence: zone,
+            dernier_diplome: diplome,
+            experience_pro: experience,
+            experience_detail: experienceDetail || null,
+            niveaux,
+            classes_primaire: classesPrim,
+            classes_college: classesColl,
+            classes_lycee: classesLyc,
+            series_lycee: seriesLyc,
+            matieres_college: matieresColl,
+            matieres_lycee: matieresLyc,
+            motivation,
+            profil_pedagogique: profilPedagogique,
+            formation_super_apprenant: formationSA,
+          },
+          quiz: {
+            type: "profil_encadrant",
+            reponses: answers,
+            profil_calcule: profilPedagogique,
+          },
+        },
       },
     });
 
-    if (error || !data.user) {
-      setLoading(false);
-      toast.error(error?.message ?? "Erreur d'inscription");
-      return;
-    }
-
-    const profilPedagogique = computeProfilPedagogique(answers as number[]);
-
-    const { error: encErr } = await supabase.from("encadreurs").insert({
-      profile_id: data.user.id,
-      genre,
-      zone_residence: zone as ZoneKey,
-      dernier_diplome: diplome,
-      experience_pro: experience,
-      experience_detail: experienceDetail || null,
-      niveaux,
-      classes_primaire: classesPrim,
-      classes_college: classesColl,
-      classes_lycee: classesLyc,
-      series_lycee: seriesLyc as any,
-      matieres_college: matieresColl,
-      matieres_lycee: matieresLyc,
-      motivation,
-      profil_pedagogique: profilPedagogique,
-      formation_super_apprenant: formationSA,
-    });
-
-    if (encErr) {
-      setLoading(false);
-      toast.error(`Profil créé mais erreur encadreur : ${encErr.message}`);
-      return;
-    }
-
-    await supabase.from("quiz_responses").insert({
-      profile_id: data.user.id,
-      type: "profil_encadrant",
-      reponses: answers as any,
-      profil_calcule: profilPedagogique,
-    });
-
     setLoading(false);
-    toast.success(`Inscription réussie ! Profil pédagogique : ${profilPedagogique}`);
+
+    if (error) {
+      toast.error(error.message ?? "Erreur d'inscription");
+      return;
+    }
+
+    setDone(true);
+    toast.success("Inscription enregistrée ! Vérifiez votre boîte mail pour confirmer votre adresse.");
   };
+
 
   const progress = (step / 4) * 100;
 
