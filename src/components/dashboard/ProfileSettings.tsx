@@ -157,10 +157,30 @@ export function SettingsPage() {
     if (pwd.length < 6) return toast.error("Min 6 caractères");
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password: pwd, current_password: currentPwd });
+    if (error) {
+      setLoading(false);
+      toast.error(error.message === "Current password required when setting new password." ? "Mot de passe actuel requis" : error.message);
+      return;
+    }
+    try {
+      await sendEmail({
+        data: {
+          titre: "Confirmation de changement de mot de passe",
+          message:
+            "Votre mot de passe SUPER@PPRENANT-I vient d'être modifié avec succès. Si vous n'êtes pas à l'origine de cette action, réinitialisez immédiatement votre mot de passe et contactez le support.",
+          lien: "/connexion",
+        },
+      });
+      toast.success("Mot de passe modifié — un e-mail de confirmation vous a été envoyé");
+    } catch {
+      toast.success("Mot de passe modifié");
+      toast.error("L'e-mail de confirmation n'a pas pu être envoyé");
+    }
     setLoading(false);
-    if (error) toast.error(error.message === "Current password required when setting new password." ? "Mot de passe actuel requis" : error.message);
-    else { toast.success("Mot de passe modifié"); setPwd(""); setCurrentPwd(""); }
+    setPwd("");
+    setCurrentPwd("");
   };
+
   return (
     <div className="p-6 max-w-2xl space-y-4">
       <h1 className="text-3xl font-bold text-primary">Paramètres</h1>
