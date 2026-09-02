@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { formatZone } from "@/lib/constants";
+import { sendEmail } from "@/lib/send-email.functions";
+
 
 function ReadField({ label, value }: { label: string; value: any }) {
   if (value === null || value === undefined || value === "" || (Array.isArray(value) && value.length === 0)) return null;
