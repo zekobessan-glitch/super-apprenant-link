@@ -171,7 +171,7 @@ export function SettingsPage() {
 
   // Étape 2 : le changement n'est pris en compte qu'après saisie du code reçu par e-mail
   const confirmChange = async () => {
-    if (code.trim().length < 6) return toast.error("Saisissez le code à 6 chiffres reçu par e-mail");
+    if (code.trim().length < 8) return toast.error("Saisissez le code à 8 chiffres reçu par e-mail");
     setLoading(true);
     const { error } = await supabase.auth.updateUser({
       password: pwd,
@@ -219,11 +219,11 @@ export function SettingsPage() {
         ) : (
           <>
             <div className="rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
-              Un code à 6 chiffres vient d'être envoyé à votre adresse e-mail. Le changement de mot de passe ne sera pris en compte qu'après saisie de ce code.
+              Un code à 8 chiffres vient d'être envoyé à votre adresse e-mail. Le changement de mot de passe ne sera pris en compte qu'après saisie de ce code.
             </div>
             <div>
               <Label>Code de confirmation (reçu par e-mail)</Label>
-              <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="123456" inputMode="numeric" maxLength={6} />
+              <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="12345678" inputMode="numeric" maxLength={8} />
             </div>
             <div className="flex gap-2">
               <Button onClick={confirmChange} disabled={loading} className="bg-brand text-white">
