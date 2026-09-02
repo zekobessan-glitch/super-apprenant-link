@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import logo from "@/assets/logo.jpg";
-import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck, MessageSquare, Menu, LifeBuoy, Mail } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Bell, CreditCard, Settings, UserCircle, ShieldCheck, MessageSquare, Menu, LifeBuoy, Mail, BarChart3 } from "lucide-react";
 import { NotificationsBell } from "@/components/NotificationsBell";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -41,6 +41,7 @@ function DashboardLayout() {
           { to: `${base}/users`, icon: Users, label: "Utilisateurs" },
           { to: `${base}/validations`, icon: ShieldCheck, label: "Validations" },
           { to: `${base}/correspondances`, icon: Bell, label: "Correspondances" },
+          { to: `${base}/suivi`, icon: BarChart3, label: "Suivi & statistiques" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
           { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
           { to: `${base}/emails`, icon: Mail, label: "E-mails envoyés" },
