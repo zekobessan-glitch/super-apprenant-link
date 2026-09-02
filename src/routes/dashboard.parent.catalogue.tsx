@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -29,6 +29,7 @@ function ParentCatalogue() {
   const [unlocking, setUnlocking] = useState<string | null>(null);
   const unlockFn = useServerFn(unlockEncadreurContact);
   const notifyInterestFn = useServerFn(notifyInterestBeforePayment);
+  const autoAlertedMatches = useRef(new Set<string>());
 
 
   const reload = async () => {
@@ -92,6 +93,26 @@ function ParentCatalogue() {
       .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score);
   }, [apprenant, encadreurs]);
+
+  useEffect(() => {
+    if (!apprenant || sorted.length === 0) return;
+
+    const newMatches = sorted.filter(({ enc }) => {
+      const key = `${apprenant.id}:${enc.profile_id}`;
+      if (autoAlertedMatches.current.has(key)) return false;
+      autoAlertedMatches.current.add(key);
+      return true;
+    });
+
+    if (newMatches.length === 0) return;
+    void Promise.allSettled(
+      newMatches.map(({ enc }) =>
+        notifyInterestFn({
+          data: { encadreur_id: enc.profile_id, apprenant_id: apprenant.id },
+        }),
+      ),
+    );
+  }, [apprenant, notifyInterestFn, sorted]);
 
   const showInterest = async (enc: any) => {
     if (!user || !apprenant) return;
