@@ -149,19 +149,23 @@ export function ProfilePage() {
 }
 
 export function SettingsPage() {
+  const [currentPwd, setCurrentPwd] = useState("");
   const [pwd, setPwd] = useState("");
   const [loading, setLoading] = useState(false);
   const change = async () => {
+    if (!currentPwd) return toast.error("Veuillez saisir votre mot de passe actuel");
     if (pwd.length < 6) return toast.error("Min 6 caractères");
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password: pwd });
+    const { error } = await supabase.auth.updateUser({ password: pwd, current_password: currentPwd });
     setLoading(false);
-    if (error) toast.error(error.message); else { toast.success("Mot de passe modifié"); setPwd(""); }
+    if (error) toast.error(error.message === "Current password required when setting new password." ? "Mot de passe actuel requis" : error.message);
+    else { toast.success("Mot de passe modifié"); setPwd(""); setCurrentPwd(""); }
   };
   return (
     <div className="p-6 max-w-2xl space-y-4">
       <h1 className="text-3xl font-bold text-primary">Paramètres</h1>
       <Card className="p-6 space-y-4">
+        <div><Label>Mot de passe actuel</Label><Input type="password" value={currentPwd} onChange={(e) => setCurrentPwd(e.target.value)} /></div>
         <div><Label>Nouveau mot de passe</Label><Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} /></div>
         <Button onClick={change} disabled={loading} className="bg-brand text-white">Changer le mot de passe</Button>
       </Card>
