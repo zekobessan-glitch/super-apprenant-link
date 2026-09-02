@@ -99,7 +99,7 @@ function ParentCatalogue() {
   useEffect(() => {
     if (!apprenant || sorted.length === 0 || autoAlertedMatches.current) return;
     autoAlertedMatches.current = true;
-    void notifyMatchesFn({ data: {} }).catch((e) =>
+    void notifyMatchesFn(undefined as never).catch((e) =>
       console.error("[notify-matches]", e),
     );
   }, [apprenant, notifyMatchesFn, sorted]);
