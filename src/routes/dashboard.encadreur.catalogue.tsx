@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -9,6 +9,8 @@ import { Crown, Lock, Phone, Mail, MapPin, BookOpen, Loader2, AlertTriangle } fr
 import { computeMatchScore } from "@/lib/matching";
 import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { notifyMatchAlerts } from "@/lib/notify-matches.functions";
 
 export const Route = createFileRoute("/dashboard/encadreur/catalogue")({
   component: EncadreurCatalogue,
@@ -24,6 +26,8 @@ function EncadreurCatalogue() {
   const [apprenants, setApprenants] = useState<any[]>([]);
   const [debloques, setDebloques] = useState<Set<string>>(new Set());
   const [unlocking, setUnlocking] = useState<string | null>(null);
+  const notifyMatchesFn = useServerFn(notifyMatchAlerts);
+  const alerted = useRef(false);
 
 
   const reload = async () => {
@@ -100,6 +104,12 @@ function EncadreurCatalogue() {
       .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score);
   }, [encadreur, apprenants]);
+
+  useEffect(() => {
+    if (!encadreur || sorted.length === 0 || alerted.current) return;
+    alerted.current = true;
+    void notifyMatchesFn(undefined as never).catch((e) => console.error("[notify-matches]", e));
+  }, [encadreur, sorted, notifyMatchesFn]);
 
   const unlock = async (a: any) => {
     if (!user || !encadreur) return;

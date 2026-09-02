@@ -12,6 +12,7 @@ import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
 import { unlockEncadreurContact } from "@/lib/unlock-contact.functions";
 import { notifyInterestBeforePayment } from "@/lib/notify-interest.functions";
+import { notifyMatchAlerts } from "@/lib/notify-matches.functions";
 
 export const Route = createFileRoute("/dashboard/parent/catalogue")({
   component: ParentCatalogue,
@@ -29,7 +30,8 @@ function ParentCatalogue() {
   const [unlocking, setUnlocking] = useState<string | null>(null);
   const unlockFn = useServerFn(unlockEncadreurContact);
   const notifyInterestFn = useServerFn(notifyInterestBeforePayment);
-  const autoAlertedMatches = useRef(new Set<string>());
+  const notifyMatchesFn = useServerFn(notifyMatchAlerts);
+  const autoAlertedMatches = useRef(false);
 
 
   const reload = async () => {
@@ -95,24 +97,12 @@ function ParentCatalogue() {
   }, [apprenant, encadreurs]);
 
   useEffect(() => {
-    if (!apprenant || sorted.length === 0) return;
-
-    const newMatches = sorted.filter(({ enc }) => {
-      const key = `${apprenant.id}:${enc.profile_id}`;
-      if (autoAlertedMatches.current.has(key)) return false;
-      autoAlertedMatches.current.add(key);
-      return true;
-    });
-
-    if (newMatches.length === 0) return;
-    void Promise.allSettled(
-      newMatches.map(({ enc }) =>
-        notifyInterestFn({
-          data: { encadreur_id: enc.profile_id, apprenant_id: apprenant.id },
-        }),
-      ),
+    if (!apprenant || sorted.length === 0 || autoAlertedMatches.current) return;
+    autoAlertedMatches.current = true;
+    void notifyMatchesFn(undefined as never).catch((e) =>
+      console.error("[notify-matches]", e),
     );
-  }, [apprenant, notifyInterestFn, sorted]);
+  }, [apprenant, notifyMatchesFn, sorted]);
 
   const showInterest = async (enc: any) => {
     if (!user || !apprenant) return;
