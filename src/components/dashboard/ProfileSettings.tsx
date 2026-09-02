@@ -153,15 +153,38 @@ export function ProfilePage() {
 export function SettingsPage() {
   const [currentPwd, setCurrentPwd] = useState("");
   const [pwd, setPwd] = useState("");
+  const [code, setCode] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const change = async () => {
+
+  // Étape 1 : envoi du code de confirmation par e-mail
+  const requestCode = async () => {
     if (!currentPwd) return toast.error("Veuillez saisir votre mot de passe actuel");
     if (pwd.length < 6) return toast.error("Min 6 caractères");
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password: pwd, current_password: currentPwd });
+    const { error } = await supabase.auth.reauthenticate();
+    setLoading(false);
+    if (error) return toast.error("Impossible d'envoyer le code de confirmation");
+    setCodeSent(true);
+    toast.success("Un code de confirmation a été envoyé à votre adresse e-mail");
+  };
+
+  // Étape 2 : le changement n'est pris en compte qu'après saisie du code reçu par e-mail
+  const confirmChange = async () => {
+    if (code.trim().length < 6) return toast.error("Saisissez le code à 6 chiffres reçu par e-mail");
+    setLoading(true);
+    const { error } = await supabase.auth.updateUser({
+      password: pwd,
+      current_password: currentPwd,
+      nonce: code.trim(),
+    });
     if (error) {
       setLoading(false);
-      toast.error(error.message === "Current password required when setting new password." ? "Mot de passe actuel requis" : error.message);
+      toast.error(
+        error.message.toLowerCase().includes("nonce")
+          ? "Code invalide ou expiré — demandez un nouveau code"
+          : error.message,
+      );
       return;
     }
     try {
@@ -173,23 +196,45 @@ export function SettingsPage() {
           lien: "/connexion",
         },
       });
-      toast.success("Mot de passe modifié — un e-mail de confirmation vous a été envoyé");
-    } catch {
-      toast.success("Mot de passe modifié");
-      toast.error("L'e-mail de confirmation n'a pas pu être envoyé");
-    }
+    } catch { /* l'e-mail de notification est secondaire */ }
     setLoading(false);
+    toast.success("Mot de passe modifié avec succès");
     setPwd("");
     setCurrentPwd("");
+    setCode("");
+    setCodeSent(false);
   };
 
   return (
     <div className="p-6 max-w-2xl space-y-4">
       <h1 className="text-3xl font-bold text-primary">Paramètres</h1>
       <Card className="p-6 space-y-4">
-        <div><Label>Mot de passe actuel</Label><Input type="password" value={currentPwd} onChange={(e) => setCurrentPwd(e.target.value)} /></div>
-        <div><Label>Nouveau mot de passe</Label><Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} /></div>
-        <Button onClick={change} disabled={loading} className="bg-brand text-white">Changer le mot de passe</Button>
+        <div><Label>Mot de passe actuel</Label><Input type="password" value={currentPwd} onChange={(e) => setCurrentPwd(e.target.value)} disabled={codeSent} /></div>
+        <div><Label>Nouveau mot de passe</Label><Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} disabled={codeSent} /></div>
+
+        {!codeSent ? (
+          <Button onClick={requestCode} disabled={loading} className="bg-brand text-white">
+            {loading ? "Envoi..." : "Recevoir le code de confirmation par e-mail"}
+          </Button>
+        ) : (
+          <>
+            <div className="rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+              Un code à 6 chiffres vient d'être envoyé à votre adresse e-mail. Le changement de mot de passe ne sera pris en compte qu'après saisie de ce code.
+            </div>
+            <div>
+              <Label>Code de confirmation (reçu par e-mail)</Label>
+              <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="123456" inputMode="numeric" maxLength={6} />
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={confirmChange} disabled={loading} className="bg-brand text-white">
+                {loading ? "Validation..." : "Valider le changement de mot de passe"}
+              </Button>
+              <Button variant="ghost" onClick={() => { setCodeSent(false); setCode(""); }} disabled={loading}>
+                Annuler
+              </Button>
+            </div>
+          </>
+        )}
       </Card>
     </div>
   );
