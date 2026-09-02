@@ -30,7 +30,8 @@ function ParentCatalogue() {
   const [unlocking, setUnlocking] = useState<string | null>(null);
   const unlockFn = useServerFn(unlockEncadreurContact);
   const notifyInterestFn = useServerFn(notifyInterestBeforePayment);
-  const autoAlertedMatches = useRef(new Set<string>());
+  const notifyMatchesFn = useServerFn(notifyMatchAlerts);
+  const autoAlertedMatches = useRef(false);
 
 
   const reload = async () => {
