@@ -12,6 +12,7 @@ import { ZONES } from "@/lib/constants";
 import { toast } from "sonner";
 import { unlockEncadreurContact } from "@/lib/unlock-contact.functions";
 import { notifyInterestBeforePayment } from "@/lib/notify-interest.functions";
+import { notifyMatchAlerts } from "@/lib/notify-matches.functions";
 
 export const Route = createFileRoute("/dashboard/parent/catalogue")({
   component: ParentCatalogue,
