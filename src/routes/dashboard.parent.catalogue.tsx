@@ -97,24 +97,12 @@ function ParentCatalogue() {
   }, [apprenant, encadreurs]);
 
   useEffect(() => {
-    if (!apprenant || sorted.length === 0) return;
-
-    const newMatches = sorted.filter(({ enc }) => {
-      const key = `${apprenant.id}:${enc.profile_id}`;
-      if (autoAlertedMatches.current.has(key)) return false;
-      autoAlertedMatches.current.add(key);
-      return true;
-    });
-
-    if (newMatches.length === 0) return;
-    void Promise.allSettled(
-      newMatches.map(({ enc }) =>
-        notifyInterestFn({
-          data: { encadreur_id: enc.profile_id, apprenant_id: apprenant.id },
-        }),
-      ),
+    if (!apprenant || sorted.length === 0 || autoAlertedMatches.current) return;
+    autoAlertedMatches.current = true;
+    void notifyMatchesFn({ data: {} }).catch((e) =>
+      console.error("[notify-matches]", e),
     );
-  }, [apprenant, notifyInterestFn, sorted]);
+  }, [apprenant, notifyMatchesFn, sorted]);
 
   const showInterest = async (enc: any) => {
     if (!user || !apprenant) return;
