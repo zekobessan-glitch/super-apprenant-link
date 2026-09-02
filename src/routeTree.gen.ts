@@ -31,6 +31,7 @@ import { Route as DashboardEncadreurCatalogueRouteImport } from './routes/dashbo
 import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
 import { Route as DashboardAdminSupportRouteImport } from './routes/dashboard.admin.support'
+import { Route as DashboardAdminSuiviRouteImport } from './routes/dashboard.admin.suivi'
 import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.admin.profil'
 import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
 import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
@@ -157,6 +158,11 @@ const DashboardAdminSupportRoute = DashboardAdminSupportRouteImport.update({
   path: '/admin/support',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAdminSuiviRoute = DashboardAdminSuiviRouteImport.update({
+  id: '/admin/suivi',
+  path: '/admin/suivi',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAdminProfilRoute = DashboardAdminProfilRouteImport.update({
   id: '/admin/profil',
   path: '/admin/profil',
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
+  '/dashboard/admin/suivi': typeof DashboardAdminSuiviRoute
   '/dashboard/admin/support': typeof DashboardAdminSupportRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
@@ -226,6 +233,7 @@ export interface FileRoutesByTo {
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
+  '/dashboard/admin/suivi': typeof DashboardAdminSuiviRoute
   '/dashboard/admin/support': typeof DashboardAdminSupportRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
@@ -256,6 +264,7 @@ export interface FileRoutesById {
   '/dashboard/admin/paiements': typeof DashboardAdminPaiementsRoute
   '/dashboard/admin/parametres': typeof DashboardAdminParametresRoute
   '/dashboard/admin/profil': typeof DashboardAdminProfilRoute
+  '/dashboard/admin/suivi': typeof DashboardAdminSuiviRoute
   '/dashboard/admin/support': typeof DashboardAdminSupportRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/admin/validations': typeof DashboardAdminValidationsRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
+    | '/dashboard/admin/suivi'
     | '/dashboard/admin/support'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
+    | '/dashboard/admin/suivi'
     | '/dashboard/admin/support'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/paiements'
     | '/dashboard/admin/parametres'
     | '/dashboard/admin/profil'
+    | '/dashboard/admin/suivi'
     | '/dashboard/admin/support'
     | '/dashboard/admin/users'
     | '/dashboard/admin/validations'
@@ -526,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminSupportRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/admin/suivi': {
+      id: '/dashboard/admin/suivi'
+      path: '/admin/suivi'
+      fullPath: '/dashboard/admin/suivi'
+      preLoaderRoute: typeof DashboardAdminSuiviRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/admin/profil': {
       id: '/dashboard/admin/profil'
       path: '/admin/profil'
@@ -572,6 +591,7 @@ interface DashboardRouteChildren {
   DashboardAdminPaiementsRoute: typeof DashboardAdminPaiementsRoute
   DashboardAdminParametresRoute: typeof DashboardAdminParametresRoute
   DashboardAdminProfilRoute: typeof DashboardAdminProfilRoute
+  DashboardAdminSuiviRoute: typeof DashboardAdminSuiviRoute
   DashboardAdminSupportRoute: typeof DashboardAdminSupportRoute
   DashboardAdminUsersRoute: typeof DashboardAdminUsersRoute
   DashboardAdminValidationsRoute: typeof DashboardAdminValidationsRoute
@@ -598,6 +618,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminPaiementsRoute: DashboardAdminPaiementsRoute,
   DashboardAdminParametresRoute: DashboardAdminParametresRoute,
   DashboardAdminProfilRoute: DashboardAdminProfilRoute,
+  DashboardAdminSuiviRoute: DashboardAdminSuiviRoute,
   DashboardAdminSupportRoute: DashboardAdminSupportRoute,
   DashboardAdminUsersRoute: DashboardAdminUsersRoute,
   DashboardAdminValidationsRoute: DashboardAdminValidationsRoute,

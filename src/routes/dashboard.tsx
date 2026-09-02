@@ -41,6 +41,7 @@ function DashboardLayout() {
           { to: `${base}/users`, icon: Users, label: "Utilisateurs" },
           { to: `${base}/validations`, icon: ShieldCheck, label: "Validations" },
           { to: `${base}/correspondances`, icon: Bell, label: "Correspondances" },
+          { to: `${base}/suivi`, icon: BarChart3, label: "Suivi & statistiques" },
           { to: `${base}/paiements`, icon: CreditCard, label: "Paiements" },
           { to: `/dashboard/messages`, icon: MessageSquare, label: "Messages" },
           { to: `${base}/emails`, icon: Mail, label: "E-mails envoyés" },
