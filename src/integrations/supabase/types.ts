@@ -99,6 +99,64 @@ export type Database = {
           },
         ]
       }
+      correspondance_email_alerts: {
+        Row: {
+          apprenant_id: string
+          created_at: string
+          encadreur_email_sent: boolean
+          encadreur_id: string
+          id: string
+          last_error: string | null
+          parent_email_sent: boolean
+          parent_id: string
+          updated_at: string
+        }
+        Insert: {
+          apprenant_id: string
+          created_at?: string
+          encadreur_email_sent?: boolean
+          encadreur_id: string
+          id?: string
+          last_error?: string | null
+          parent_email_sent?: boolean
+          parent_id: string
+          updated_at?: string
+        }
+        Update: {
+          apprenant_id?: string
+          created_at?: string
+          encadreur_email_sent?: boolean
+          encadreur_id?: string
+          id?: string
+          last_error?: string | null
+          parent_email_sent?: boolean
+          parent_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "correspondance_email_alerts_apprenant_id_fkey"
+            columns: ["apprenant_id"]
+            isOneToOne: false
+            referencedRelation: "apprenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "correspondance_email_alerts_encadreur_id_fkey"
+            columns: ["encadreur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "correspondance_email_alerts_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       correspondances: {
         Row: {
           apprenant_id: string | null

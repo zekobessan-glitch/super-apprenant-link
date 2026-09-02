@@ -29,7 +29,7 @@ export const notifyInterestBeforePayment = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!app) throw new Error("Apprenant introuvable");
 
-    // Anti-spam : une seule alerte par (parent, encadreur, apprenant)
+    // Crée la demande visible dans les tableaux de bord si elle n'existe pas.
     const { data: existing } = await context.supabase
       .from("correspondances")
       .select("id, statut, contact_debloque")
@@ -38,20 +38,62 @@ export const notifyInterestBeforePayment = createServerFn({ method: "POST" })
       .eq("apprenant_id", data.apprenant_id)
       .maybeSingle();
 
-    if (existing) return { success: true, alreadyNotified: true };
-
-    await context.supabase.from("correspondances").insert({
-      parent_id: parentId,
-      encadreur_id: data.encadreur_id,
-      apprenant_id: data.apprenant_id,
-      statut: "en_attente",
-      initiateur: "parent",
-      contact_debloque: false,
-    });
+    if (!existing) {
+      const { error: correspondenceError } = await context.supabase.from("correspondances").insert({
+        parent_id: parentId,
+        encadreur_id: data.encadreur_id,
+        apprenant_id: data.apprenant_id,
+        statut: "en_attente",
+        initiateur: "parent",
+        contact_debloque: false,
+      });
+      if (correspondenceError) throw new Error(correspondenceError.message);
+    }
 
     try {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       const { buildEmailHtml, sendResendEmail } = await import("./email-template.server");
+
+      // Le suivi serveur permet de reprendre un envoi partiellement échoué sans
+      // envoyer deux fois le même message à un destinataire déjà averti.
+      const { data: currentAlert } = await supabaseAdmin
+        .from("correspondance_email_alerts")
+        .select("id, parent_email_sent, encadreur_email_sent")
+        .eq("parent_id", parentId)
+        .eq("encadreur_id", data.encadreur_id)
+        .eq("apprenant_id", data.apprenant_id)
+        .maybeSingle();
+
+      let alert = currentAlert;
+      if (!alert) {
+        const { data: createdAlert, error: createAlertError } = await supabaseAdmin
+          .from("correspondance_email_alerts")
+          .insert({
+            parent_id: parentId,
+            encadreur_id: data.encadreur_id,
+            apprenant_id: data.apprenant_id,
+          })
+          .select("id, parent_email_sent, encadreur_email_sent")
+          .single();
+
+        if (createAlertError) {
+          const { data: racedAlert } = await supabaseAdmin
+            .from("correspondance_email_alerts")
+            .select("id, parent_email_sent, encadreur_email_sent")
+            .eq("parent_id", parentId)
+            .eq("encadreur_id", data.encadreur_id)
+            .eq("apprenant_id", data.apprenant_id)
+            .single();
+          alert = racedAlert;
+        } else {
+          alert = createdAlert;
+        }
+      }
+
+      if (!alert) throw new Error("Impossible d'enregistrer le suivi de l'alerte");
+      if (alert.parent_email_sent && alert.encadreur_email_sent) {
+        return { success: true, alreadyNotified: true };
+      }
 
       const { data: profils } = await supabaseAdmin
         .from("profiles")
@@ -63,8 +105,8 @@ export const notifyInterestBeforePayment = createServerFn({ method: "POST" })
       const base = process.env['PUBLIC_SITE_URL'] ?? "https://superapprenant-i.com";
       const encNom = `${enc?.prenoms ?? ""} ${enc?.nom ?? ""}`.trim();
 
-      const msgEnc = `Un parent s'intéresse à votre profil pour ${app.prenoms} ${app.nom} (${app.classe}). Le contact sera partagé dès la validation du paiement.`;
-      const msgParent = `Votre intérêt pour ${encNom || "cet encadreur"} a bien été enregistré. Achetez un pack de contacts pour débloquer ses coordonnées et lancer la mise en relation.`;
+      const msgEnc = `Une nouvelle correspondance a été trouvée avec ${app.prenoms} ${app.nom} (${app.classe}). Un parent recherche un encadreur correspondant à votre profil. Connectez-vous pour consulter la demande et finaliser la mise en relation.`;
+      const msgParent = `Bonne nouvelle : une correspondance a été trouvée avec ${encNom || "un encadreur compatible"}. Connectez-vous et achetez un pack de contacts pour débloquer la mise en relation.`;
 
       await supabaseAdmin.from("notifications").insert([
         {
@@ -81,31 +123,39 @@ export const notifyInterestBeforePayment = createServerFn({ method: "POST" })
         },
       ]);
 
-      if (enc?.email) {
+      if (enc?.email && !alert.encadreur_email_sent) {
         await sendResendEmail({
           to: enc.email,
-          subject: "Un parent s'intéresse à votre profil",
-          type: "interet_encadreur",
+          subject: "Une correspondance a été trouvée",
+          type: "correspondance_trouvee_encadreur",
           user_id: data.encadreur_id,
           html: buildEmailHtml(
-            "Un parent s'intéresse à votre profil",
+            "Une correspondance a été trouvée",
             msgEnc,
             `${base}/dashboard/encadreur/correspondances`,
           ),
         });
+        await supabaseAdmin
+          .from("correspondance_email_alerts")
+          .update({ encadreur_email_sent: true, last_error: null })
+          .eq("id", alert.id);
       }
-      if (parent?.email) {
+      if (parent?.email && !alert.parent_email_sent) {
         await sendResendEmail({
           to: parent.email,
-          subject: "Finalisez votre mise en relation",
-          type: "interet_parent",
+          subject: "Une correspondance a été trouvée",
+          type: "correspondance_trouvee_parent",
           user_id: parentId,
           html: buildEmailHtml(
-            "Finalisez votre mise en relation",
+            "Une correspondance a été trouvée",
             msgParent,
-            `${base}/dashboard/parent/paiements`,
+            `${base}/dashboard/parent/catalogue`,
           ),
         });
+        await supabaseAdmin
+          .from("correspondance_email_alerts")
+          .update({ parent_email_sent: true, last_error: null })
+          .eq("id", alert.id);
       }
     } catch (e) {
       console.error("[notify-interest] échec notification:", e);
