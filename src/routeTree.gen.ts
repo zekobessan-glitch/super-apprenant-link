@@ -9,43 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
-import { Route as DashboardParentIndexRouteImport } from './routes/dashboard.parent.index'
-import { Route as DashboardEncadreurIndexRouteImport } from './routes/dashboard.encadreur.index'
+import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard.admin.index'
-import { Route as DashboardParentProfilRouteImport } from './routes/dashboard.parent.profil'
-import { Route as DashboardParentParametresRouteImport } from './routes/dashboard.parent.parametres'
-import { Route as DashboardParentPaiementsRouteImport } from './routes/dashboard.parent.paiements'
-import { Route as DashboardParentCorrespondancesRouteImport } from './routes/dashboard.parent.correspondances'
-import { Route as DashboardParentCatalogueRouteImport } from './routes/dashboard.parent.catalogue'
-import { Route as DashboardEncadreurProfilRouteImport } from './routes/dashboard.encadreur.profil'
-import { Route as DashboardEncadreurParametresRouteImport } from './routes/dashboard.encadreur.parametres'
-import { Route as DashboardEncadreurPaiementsRouteImport } from './routes/dashboard.encadreur.paiements'
-import { Route as DashboardEncadreurCorrespondancesRouteImport } from './routes/dashboard.encadreur.correspondances'
-import { Route as DashboardEncadreurCatalogueRouteImport } from './routes/dashboard.encadreur.catalogue'
-import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
-import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
-import { Route as DashboardAdminSupportRouteImport } from './routes/dashboard.admin.support'
-import { Route as DashboardAdminSuiviRouteImport } from './routes/dashboard.admin.suivi'
-import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.admin.profil'
-import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
-import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
-import { Route as DashboardAdminEmailsRouteImport } from './routes/dashboard.admin.emails'
 import { Route as DashboardAdminCorrespondancesRouteImport } from './routes/dashboard.admin.correspondances'
+import { Route as DashboardAdminEmailsRouteImport } from './routes/dashboard.admin.emails'
+import { Route as DashboardAdminPaiementsRouteImport } from './routes/dashboard.admin.paiements'
+import { Route as DashboardAdminParametresRouteImport } from './routes/dashboard.admin.parametres'
+import { Route as DashboardAdminProfilRouteImport } from './routes/dashboard.admin.profil'
+import { Route as DashboardAdminSuiviRouteImport } from './routes/dashboard.admin.suivi'
+import { Route as DashboardAdminSupportRouteImport } from './routes/dashboard.admin.support'
+import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admin.users'
+import { Route as DashboardAdminValidationsRouteImport } from './routes/dashboard.admin.validations'
+import { Route as DashboardEncadreurIndexRouteImport } from './routes/dashboard.encadreur.index'
+import { Route as DashboardEncadreurCatalogueRouteImport } from './routes/dashboard.encadreur.catalogue'
+import { Route as DashboardEncadreurCorrespondancesRouteImport } from './routes/dashboard.encadreur.correspondances'
+import { Route as DashboardEncadreurPaiementsRouteImport } from './routes/dashboard.encadreur.paiements'
+import { Route as DashboardEncadreurParametresRouteImport } from './routes/dashboard.encadreur.parametres'
+import { Route as DashboardEncadreurProfilRouteImport } from './routes/dashboard.encadreur.profil'
+import { Route as DashboardParentIndexRouteImport } from './routes/dashboard.parent.index'
+import { Route as DashboardParentCatalogueRouteImport } from './routes/dashboard.parent.catalogue'
+import { Route as DashboardParentCorrespondancesRouteImport } from './routes/dashboard.parent.correspondances'
+import { Route as DashboardParentPaiementsRouteImport } from './routes/dashboard.parent.paiements'
+import { Route as DashboardParentParametresRouteImport } from './routes/dashboard.parent.parametres'
+import { Route as DashboardParentProfilRouteImport } from './routes/dashboard.parent.profil'
 
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConnexionRoute = ConnexionRouteImport.update({
@@ -53,135 +48,29 @@ const ConnexionRoute = ConnexionRouteImport.update({
   path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardSupportRoute = DashboardSupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => DashboardRoute,
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardParentIndexRoute = DashboardParentIndexRouteImport.update({
-  id: '/parent/',
-  path: '/parent/',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardEncadreurIndexRoute = DashboardEncadreurIndexRouteImport.update({
-  id: '/encadreur/',
-  path: '/encadreur/',
+const DashboardSupportRoute = DashboardSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardParentProfilRoute = DashboardParentProfilRouteImport.update({
-  id: '/parent/profil',
-  path: '/parent/profil',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardParentParametresRoute =
-  DashboardParentParametresRouteImport.update({
-    id: '/parent/parametres',
-    path: '/parent/parametres',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardParentPaiementsRoute =
-  DashboardParentPaiementsRouteImport.update({
-    id: '/parent/paiements',
-    path: '/parent/paiements',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardParentCorrespondancesRoute =
-  DashboardParentCorrespondancesRouteImport.update({
-    id: '/parent/correspondances',
-    path: '/parent/correspondances',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardParentCatalogueRoute =
-  DashboardParentCatalogueRouteImport.update({
-    id: '/parent/catalogue',
-    path: '/parent/catalogue',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardEncadreurProfilRoute =
-  DashboardEncadreurProfilRouteImport.update({
-    id: '/encadreur/profil',
-    path: '/encadreur/profil',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardEncadreurParametresRoute =
-  DashboardEncadreurParametresRouteImport.update({
-    id: '/encadreur/parametres',
-    path: '/encadreur/parametres',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardEncadreurPaiementsRoute =
-  DashboardEncadreurPaiementsRouteImport.update({
-    id: '/encadreur/paiements',
-    path: '/encadreur/paiements',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardEncadreurCorrespondancesRoute =
-  DashboardEncadreurCorrespondancesRouteImport.update({
-    id: '/encadreur/correspondances',
-    path: '/encadreur/correspondances',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardEncadreurCatalogueRoute =
-  DashboardEncadreurCatalogueRouteImport.update({
-    id: '/encadreur/catalogue',
-    path: '/encadreur/catalogue',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardAdminValidationsRoute =
-  DashboardAdminValidationsRouteImport.update({
-    id: '/admin/validations',
-    path: '/admin/validations',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardAdminUsersRoute = DashboardAdminUsersRouteImport.update({
-  id: '/admin/users',
-  path: '/admin/users',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardAdminSupportRoute = DashboardAdminSupportRouteImport.update({
-  id: '/admin/support',
-  path: '/admin/support',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardAdminSuiviRoute = DashboardAdminSuiviRouteImport.update({
-  id: '/admin/suivi',
-  path: '/admin/suivi',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardAdminProfilRoute = DashboardAdminProfilRouteImport.update({
-  id: '/admin/profil',
-  path: '/admin/profil',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardAdminParametresRoute =
-  DashboardAdminParametresRouteImport.update({
-    id: '/admin/parametres',
-    path: '/admin/parametres',
-    getParentRoute: () => DashboardRoute,
-  } as any)
-const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
-  id: '/admin/paiements',
-  path: '/admin/paiements',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardAdminEmailsRoute = DashboardAdminEmailsRouteImport.update({
-  id: '/admin/emails',
-  path: '/admin/emails',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardAdminCorrespondancesRoute =
@@ -190,6 +79,117 @@ const DashboardAdminCorrespondancesRoute =
     path: '/admin/correspondances',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardAdminEmailsRoute = DashboardAdminEmailsRouteImport.update({
+  id: '/admin/emails',
+  path: '/admin/emails',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminPaiementsRoute = DashboardAdminPaiementsRouteImport.update({
+  id: '/admin/paiements',
+  path: '/admin/paiements',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminParametresRoute =
+  DashboardAdminParametresRouteImport.update({
+    id: '/admin/parametres',
+    path: '/admin/parametres',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardAdminProfilRoute = DashboardAdminProfilRouteImport.update({
+  id: '/admin/profil',
+  path: '/admin/profil',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminSuiviRoute = DashboardAdminSuiviRouteImport.update({
+  id: '/admin/suivi',
+  path: '/admin/suivi',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminSupportRoute = DashboardAdminSupportRouteImport.update({
+  id: '/admin/support',
+  path: '/admin/support',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminUsersRoute = DashboardAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminValidationsRoute =
+  DashboardAdminValidationsRouteImport.update({
+    id: '/admin/validations',
+    path: '/admin/validations',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurIndexRoute = DashboardEncadreurIndexRouteImport.update({
+  id: '/encadreur/',
+  path: '/encadreur/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEncadreurCatalogueRoute =
+  DashboardEncadreurCatalogueRouteImport.update({
+    id: '/encadreur/catalogue',
+    path: '/encadreur/catalogue',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurCorrespondancesRoute =
+  DashboardEncadreurCorrespondancesRouteImport.update({
+    id: '/encadreur/correspondances',
+    path: '/encadreur/correspondances',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurPaiementsRoute =
+  DashboardEncadreurPaiementsRouteImport.update({
+    id: '/encadreur/paiements',
+    path: '/encadreur/paiements',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurParametresRoute =
+  DashboardEncadreurParametresRouteImport.update({
+    id: '/encadreur/parametres',
+    path: '/encadreur/parametres',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEncadreurProfilRoute =
+  DashboardEncadreurProfilRouteImport.update({
+    id: '/encadreur/profil',
+    path: '/encadreur/profil',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentIndexRoute = DashboardParentIndexRouteImport.update({
+  id: '/parent/',
+  path: '/parent/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardParentCatalogueRoute =
+  DashboardParentCatalogueRouteImport.update({
+    id: '/parent/catalogue',
+    path: '/parent/catalogue',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentCorrespondancesRoute =
+  DashboardParentCorrespondancesRouteImport.update({
+    id: '/parent/correspondances',
+    path: '/parent/correspondances',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentPaiementsRoute =
+  DashboardParentPaiementsRouteImport.update({
+    id: '/parent/paiements',
+    path: '/parent/paiements',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentParametresRoute =
+  DashboardParentParametresRouteImport.update({
+    id: '/parent/parametres',
+    path: '/parent/parametres',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardParentProfilRoute = DashboardParentProfilRouteImport.update({
+  id: '/parent/profil',
+  path: '/parent/profil',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -384,18 +384,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/connexion': {
@@ -405,19 +398,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/support': {
-      id: '/dashboard/support'
-      path: '/support'
-      fullPath: '/dashboard/support'
-      preLoaderRoute: typeof DashboardSupportRouteImport
-      parentRoute: typeof DashboardRoute
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/messages': {
       id: '/dashboard/messages'
@@ -426,18 +419,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardMessagesRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/parent/': {
-      id: '/dashboard/parent/'
-      path: '/parent'
-      fullPath: '/dashboard/parent/'
-      preLoaderRoute: typeof DashboardParentIndexRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/encadreur/': {
-      id: '/dashboard/encadreur/'
-      path: '/encadreur'
-      fullPath: '/dashboard/encadreur/'
-      preLoaderRoute: typeof DashboardEncadreurIndexRouteImport
+    '/dashboard/support': {
+      id: '/dashboard/support'
+      path: '/support'
+      fullPath: '/dashboard/support'
+      preLoaderRoute: typeof DashboardSupportRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/admin/': {
@@ -447,123 +433,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/parent/profil': {
-      id: '/dashboard/parent/profil'
-      path: '/parent/profil'
-      fullPath: '/dashboard/parent/profil'
-      preLoaderRoute: typeof DashboardParentProfilRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/parent/parametres': {
-      id: '/dashboard/parent/parametres'
-      path: '/parent/parametres'
-      fullPath: '/dashboard/parent/parametres'
-      preLoaderRoute: typeof DashboardParentParametresRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/parent/paiements': {
-      id: '/dashboard/parent/paiements'
-      path: '/parent/paiements'
-      fullPath: '/dashboard/parent/paiements'
-      preLoaderRoute: typeof DashboardParentPaiementsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/parent/correspondances': {
-      id: '/dashboard/parent/correspondances'
-      path: '/parent/correspondances'
-      fullPath: '/dashboard/parent/correspondances'
-      preLoaderRoute: typeof DashboardParentCorrespondancesRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/parent/catalogue': {
-      id: '/dashboard/parent/catalogue'
-      path: '/parent/catalogue'
-      fullPath: '/dashboard/parent/catalogue'
-      preLoaderRoute: typeof DashboardParentCatalogueRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/encadreur/profil': {
-      id: '/dashboard/encadreur/profil'
-      path: '/encadreur/profil'
-      fullPath: '/dashboard/encadreur/profil'
-      preLoaderRoute: typeof DashboardEncadreurProfilRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/encadreur/parametres': {
-      id: '/dashboard/encadreur/parametres'
-      path: '/encadreur/parametres'
-      fullPath: '/dashboard/encadreur/parametres'
-      preLoaderRoute: typeof DashboardEncadreurParametresRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/encadreur/paiements': {
-      id: '/dashboard/encadreur/paiements'
-      path: '/encadreur/paiements'
-      fullPath: '/dashboard/encadreur/paiements'
-      preLoaderRoute: typeof DashboardEncadreurPaiementsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/encadreur/correspondances': {
-      id: '/dashboard/encadreur/correspondances'
-      path: '/encadreur/correspondances'
-      fullPath: '/dashboard/encadreur/correspondances'
-      preLoaderRoute: typeof DashboardEncadreurCorrespondancesRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/encadreur/catalogue': {
-      id: '/dashboard/encadreur/catalogue'
-      path: '/encadreur/catalogue'
-      fullPath: '/dashboard/encadreur/catalogue'
-      preLoaderRoute: typeof DashboardEncadreurCatalogueRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/validations': {
-      id: '/dashboard/admin/validations'
-      path: '/admin/validations'
-      fullPath: '/dashboard/admin/validations'
-      preLoaderRoute: typeof DashboardAdminValidationsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/users': {
-      id: '/dashboard/admin/users'
-      path: '/admin/users'
-      fullPath: '/dashboard/admin/users'
-      preLoaderRoute: typeof DashboardAdminUsersRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/support': {
-      id: '/dashboard/admin/support'
-      path: '/admin/support'
-      fullPath: '/dashboard/admin/support'
-      preLoaderRoute: typeof DashboardAdminSupportRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/suivi': {
-      id: '/dashboard/admin/suivi'
-      path: '/admin/suivi'
-      fullPath: '/dashboard/admin/suivi'
-      preLoaderRoute: typeof DashboardAdminSuiviRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/profil': {
-      id: '/dashboard/admin/profil'
-      path: '/admin/profil'
-      fullPath: '/dashboard/admin/profil'
-      preLoaderRoute: typeof DashboardAdminProfilRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/parametres': {
-      id: '/dashboard/admin/parametres'
-      path: '/admin/parametres'
-      fullPath: '/dashboard/admin/parametres'
-      preLoaderRoute: typeof DashboardAdminParametresRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/admin/paiements': {
-      id: '/dashboard/admin/paiements'
-      path: '/admin/paiements'
-      fullPath: '/dashboard/admin/paiements'
-      preLoaderRoute: typeof DashboardAdminPaiementsRouteImport
+    '/dashboard/admin/correspondances': {
+      id: '/dashboard/admin/correspondances'
+      path: '/admin/correspondances'
+      fullPath: '/dashboard/admin/correspondances'
+      preLoaderRoute: typeof DashboardAdminCorrespondancesRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/admin/emails': {
@@ -573,11 +447,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminEmailsRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/admin/correspondances': {
-      id: '/dashboard/admin/correspondances'
-      path: '/admin/correspondances'
-      fullPath: '/dashboard/admin/correspondances'
-      preLoaderRoute: typeof DashboardAdminCorrespondancesRouteImport
+    '/dashboard/admin/paiements': {
+      id: '/dashboard/admin/paiements'
+      path: '/admin/paiements'
+      fullPath: '/dashboard/admin/paiements'
+      preLoaderRoute: typeof DashboardAdminPaiementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/parametres': {
+      id: '/dashboard/admin/parametres'
+      path: '/admin/parametres'
+      fullPath: '/dashboard/admin/parametres'
+      preLoaderRoute: typeof DashboardAdminParametresRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/profil': {
+      id: '/dashboard/admin/profil'
+      path: '/admin/profil'
+      fullPath: '/dashboard/admin/profil'
+      preLoaderRoute: typeof DashboardAdminProfilRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/suivi': {
+      id: '/dashboard/admin/suivi'
+      path: '/admin/suivi'
+      fullPath: '/dashboard/admin/suivi'
+      preLoaderRoute: typeof DashboardAdminSuiviRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/support': {
+      id: '/dashboard/admin/support'
+      path: '/admin/support'
+      fullPath: '/dashboard/admin/support'
+      preLoaderRoute: typeof DashboardAdminSupportRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/users': {
+      id: '/dashboard/admin/users'
+      path: '/admin/users'
+      fullPath: '/dashboard/admin/users'
+      preLoaderRoute: typeof DashboardAdminUsersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin/validations': {
+      id: '/dashboard/admin/validations'
+      path: '/admin/validations'
+      fullPath: '/dashboard/admin/validations'
+      preLoaderRoute: typeof DashboardAdminValidationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/': {
+      id: '/dashboard/encadreur/'
+      path: '/encadreur'
+      fullPath: '/dashboard/encadreur/'
+      preLoaderRoute: typeof DashboardEncadreurIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/catalogue': {
+      id: '/dashboard/encadreur/catalogue'
+      path: '/encadreur/catalogue'
+      fullPath: '/dashboard/encadreur/catalogue'
+      preLoaderRoute: typeof DashboardEncadreurCatalogueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/correspondances': {
+      id: '/dashboard/encadreur/correspondances'
+      path: '/encadreur/correspondances'
+      fullPath: '/dashboard/encadreur/correspondances'
+      preLoaderRoute: typeof DashboardEncadreurCorrespondancesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/paiements': {
+      id: '/dashboard/encadreur/paiements'
+      path: '/encadreur/paiements'
+      fullPath: '/dashboard/encadreur/paiements'
+      preLoaderRoute: typeof DashboardEncadreurPaiementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/parametres': {
+      id: '/dashboard/encadreur/parametres'
+      path: '/encadreur/parametres'
+      fullPath: '/dashboard/encadreur/parametres'
+      preLoaderRoute: typeof DashboardEncadreurParametresRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/encadreur/profil': {
+      id: '/dashboard/encadreur/profil'
+      path: '/encadreur/profil'
+      fullPath: '/dashboard/encadreur/profil'
+      preLoaderRoute: typeof DashboardEncadreurProfilRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/': {
+      id: '/dashboard/parent/'
+      path: '/parent'
+      fullPath: '/dashboard/parent/'
+      preLoaderRoute: typeof DashboardParentIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/catalogue': {
+      id: '/dashboard/parent/catalogue'
+      path: '/parent/catalogue'
+      fullPath: '/dashboard/parent/catalogue'
+      preLoaderRoute: typeof DashboardParentCatalogueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/correspondances': {
+      id: '/dashboard/parent/correspondances'
+      path: '/parent/correspondances'
+      fullPath: '/dashboard/parent/correspondances'
+      preLoaderRoute: typeof DashboardParentCorrespondancesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/paiements': {
+      id: '/dashboard/parent/paiements'
+      path: '/parent/paiements'
+      fullPath: '/dashboard/parent/paiements'
+      preLoaderRoute: typeof DashboardParentPaiementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/parametres': {
+      id: '/dashboard/parent/parametres'
+      path: '/parent/parametres'
+      fullPath: '/dashboard/parent/parametres'
+      preLoaderRoute: typeof DashboardParentParametresRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/parent/profil': {
+      id: '/dashboard/parent/profil'
+      path: '/parent/profil'
+      fullPath: '/dashboard/parent/profil'
+      preLoaderRoute: typeof DashboardParentProfilRouteImport
       parentRoute: typeof DashboardRoute
     }
   }
