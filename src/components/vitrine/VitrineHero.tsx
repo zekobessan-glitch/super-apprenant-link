@@ -51,28 +51,10 @@ export function VitrineHero() {
   }, [next, index]);
 
   return (
-    <section id="accueil" className="relative overflow-hidden">
-      {SLIDES.map((slide, i) => (
-        <div
-          key={i}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            i === index ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-          aria-hidden={i !== index}
-        >
-          <img
-            src={slide.image}
-            alt={slide.alt}
-            width={1600}
-            height={1000}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-black/95 via-black/75 to-black/40" />
-        </div>
-      ))}
-
-      <div className="container relative mx-auto px-4 py-20 md:py-28">
-        <div key={index} className="max-w-2xl space-y-6 text-primary-foreground animate-fade-in">
+    <section id="accueil" className="relative overflow-hidden bg-brand">
+      <div className="container mx-auto grid items-center gap-10 px-4 py-16 md:py-24 lg:grid-cols-2">
+        {/* Colonne texte */}
+        <div key={index} className="order-2 space-y-6 text-primary-foreground animate-fade-in lg:order-1">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             {SLIDES[index].kicker}
           </p>
@@ -97,40 +79,61 @@ export function VitrineHero() {
               <a href="#recherche">Comment ça marche</a>
             </Button>
           </div>
+
+          {/* Points de pagination */}
+          <div className="flex gap-2 pt-2">
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Aller au slide ${i + 1}`}
+                onClick={() => goTo(i)}
+                className={`h-2.5 rounded-full transition-all ${
+                  i === index
+                    ? "w-7 bg-accent"
+                    : "w-2.5 bg-primary-foreground/50 hover:bg-primary-foreground"
+                }`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Arrows */}
-      <button
-        type="button"
-        aria-label="Slide précédent"
-        onClick={prev}
-        className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-primary-foreground/30 bg-primary-foreground/10 p-2 text-primary-foreground backdrop-blur transition hover:bg-primary-foreground/20"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        type="button"
-        aria-label="Slide suivant"
-        onClick={next}
-        className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-primary-foreground/30 bg-primary-foreground/10 p-2 text-primary-foreground backdrop-blur transition hover:bg-primary-foreground/20"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
+        {/* Colonne image */}
+        <div className="relative order-1 lg:order-2">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-elegant">
+            {SLIDES.map((slide, i) => (
+              <img
+                key={i}
+                src={slide.image}
+                alt={slide.alt}
+                width={1200}
+                height={900}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                  i === index ? "opacity-100" : "opacity-0"
+                }`}
+                aria-hidden={i !== index}
+              />
+            ))}
+          </div>
 
-      {/* Dots */}
-      <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 gap-2">
-        {SLIDES.map((_, i) => (
+          {/* Flèches */}
           <button
-            key={i}
             type="button"
-            aria-label={`Aller au slide ${i + 1}`}
-            onClick={() => goTo(i)}
-            className={`h-2.5 rounded-full transition-all ${
-              i === index ? "w-7 bg-accent" : "w-2.5 bg-primary-foreground/50 hover:bg-primary-foreground"
-            }`}
-          />
-        ))}
+            aria-label="Slide précédent"
+            onClick={prev}
+            className="absolute -left-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-primary-foreground/30 bg-primary p-2 text-primary-foreground shadow-soft backdrop-blur transition hover:bg-primary/90 md:-left-5"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Slide suivant"
+            onClick={next}
+            className="absolute -right-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-primary-foreground/30 bg-primary p-2 text-primary-foreground shadow-soft backdrop-blur transition hover:bg-primary/90 md:-right-5"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </section>
   );
